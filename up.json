@@ -1,0 +1,20 @@
+{
+  "name": "bishack",
+  "profile": "default",
+  "error_pages": {
+    "disable": true
+  },
+  "regions": [
+    "ap-southeast-1"
+  ],
+  "stages": {
+    "staging": {
+      "domain": "staging.bishack.dev",
+      "zone": false
+    },
+    "production": {
+      "domain": "bishack.dev",
+      "zone": false
+    }
+  }
+}
