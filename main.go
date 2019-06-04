@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -14,5 +13,5 @@ func main() {
 }
 
 func mainHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "soon...")
+	http.ServeFile(w, r, "public/index.html")
 }

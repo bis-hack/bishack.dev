@@ -1,6 +1,9 @@
 {
   "name": "bishack",
   "profile": "default",
+  "static": {
+    "dir": "public"
+  },
   "error_pages": {
     "disable": true
   },
