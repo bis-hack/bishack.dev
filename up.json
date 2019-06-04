@@ -12,6 +12,10 @@
   ],
   "stages": {
     "staging": {
+      "domain": "stage.bishack.dev",
+      "zone": false
+    },
+    "production": {
       "domain": "bishack.dev",
       "zone": false
     }

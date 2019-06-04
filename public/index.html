@@ -19,17 +19,44 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #f4f4f4;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            background-color: #e3ebff;
+        }
+
+        h1, h2, h3, h4, p {
+            line-height: 2em;
         }
 
         .soon {
             width: 600px;
             height: 600px;
-            background: transparent url(/images/soon.jpg) center center no-repeat / cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            <!--background: transparent url(/images/soon.jpg) center center no-repeat / cover;-->
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .sub {
+            opacity: 0.5;
+            font-size: 1em;
+        }
+
+        .title {
+            letter-spacing: 1px;
+            opacity: 0.91;
         }
     </style>
 </head>
 <body>
-    <div class="soon" />
+    <div class="soon">
+        <div class="center">
+            <h1 class="title">Bisdak Dev Community</h1>
+            <p class="sub">CHECK BACK SOON</p>
+        </div>
+    </div>
 </body>
 </html>
