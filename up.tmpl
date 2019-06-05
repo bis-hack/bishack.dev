@@ -1,0 +1,58 @@
+{
+  "name": "bishack",
+  "profile": "default",
+  "static": {
+    "dir": "public"
+  },
+  "error_pages": {
+    "disable": true
+  },
+  "environment": {
+    "COGNITO_CLIENT_ID": "$COGNITO_CLIENT_ID",
+    "COGNITO_CLIENT_SECRET": "$COGNITO_CLIENT_SECRET",
+    "GITHUB_CLIENT_ID": "$GITHUB_CLIENT_ID",
+    "GITHUB_CLIENT_SECRET": "$GITHUB_CLIENT_SECRET",
+    "GITHUB_CALLBACK": "https://stage.bishack.dev/signup",
+    "GIN_MODE": "release"
+  },
+  "lambda": {
+    "memory": 1024,
+    "policy": [
+      {
+        "Effect": "Allow",
+        "Resource": "*",
+        "Action": [
+          "dynamodb:BatchGet*",
+          "dynamodb:DescribeStream",
+          "dynamodb:DescribeTable",
+          "dynamodb:Get*",
+          "dynamodb:Query",
+          "dynamodb:Scan",
+          "dynamodb:BatchWrite*",
+          "dynamodb:CreateTable",
+          "dynamodb:Delete*",
+          "dynamodb:Update*",
+          "dynamodb:PutItem"
+        ]
+      }
+    ]
+  },
+  "stages": {
+    "development": {
+      "proxy": {
+        "command": "gin --port $PORT"
+      }
+    },
+    "staging": {
+      "domain": "stage.bishack.dev",
+      "zone": false
+    },
+    "production": {
+      "domain": "bishack.dev",
+      "zone": false
+    }
+  },
+  "regions": [
+    "us-east-1"
+  ]
+}

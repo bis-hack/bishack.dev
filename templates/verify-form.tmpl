@@ -3,7 +3,7 @@
         margin-bottom: 1em;
     }
 
-    .signup {
+    .verify {
         border-radius: 5px;
         background-color: #fff;
         width: 460px;
@@ -92,38 +92,23 @@
 
 {{define "content"}}
     <div class="box">
-        <div class="signup">
+        <div class="verify">
             <div class="center">
-                <div class="avatar">
-                    <img style="border-radius: 100px" src="{{.GithubUser.AvatarURL}}" alt="avatar" height="100" width="100">
-                    <p>
-                        <strong><a href="https://github.com/{{.GithubUser.Login}}" target="_blank">@{{.GithubUser.Login}}</a></strong>
-                        <br>
-                        <small>{{.GithubUser.Name}}</small>
-                    </p>
-                </div>
                 <br>
+                <h4>Verify Account</h4>
                 <br>
-                <h4>FINISH SETTING UP ACCOUNT</h4>
+                <p>Check your email for code verification</p>
                 <br>
-                <br>
-                <form id="signup-form" action="/signup" method="post">
+                <form id="verify-form" action="" method="get">
+                    <input type="hidden" name="email" value="{{.Email}}"/>
                     <p>
-                        <input type="text" name="emailx" value="{{.GithubUser.Email}}" disabled />
-                    </p>
-                    <p>
-                        <input type="hidden" name="email" value="{{.GithubUser.Email}}"/>
-                    </p>
-                    <p>
-                        <input type="hidden" name="login" value="{{.GithubUser.Login}}"/>
-                    </p>
-                    <p>
-                        <input type="password" name="password" placeholder="Choose a password" />
+                        <input type="text" name="code" placeholder="Enter verification code" />
                     </p>
                     <br>
-                    <button type="submit" class="button">SUBMIT</button>
+                    <button type="submit" class="button">VERIFY</button>
                 </form>
             </div>
         </div>
     </div>
 {{end}}
+

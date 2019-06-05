@@ -24,6 +24,7 @@ func main() {
 
 	// handlers et al
 	r.Get("/signup", handler.Signup)
+	r.Get("/verify", handler.Verify)
 	r.Post("/signup", handler.FinishSignup)
 
 	// launch

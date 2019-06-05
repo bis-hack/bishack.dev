@@ -1,0 +1,43 @@
+{{define "style"}}
+    .sub {
+        opacity: 0.5;
+        font-size: 1em;
+    }
+
+    .title {
+        letter-spacing: 1px;
+        opacity: 0.91;
+    }
+
+    .box {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .notfound {
+        width: 400px;
+        height: 300px;
+        border-radius: 5px;
+        background-color: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .center {
+        text-align: center;
+    }
+{{end}}
+{{define "content"}}
+    <div class="box">
+        <div class="notfound">
+            <div class="center">
+                <h1 class="title">Congrats!</h1>
+                <p>Your account is now verified.</p>
+                <p class="sub">CLICK <a href="/">HERE</a> TO GO BACK.</p>
+            </div>
+        </div>
+    </div>
+{{end}}
