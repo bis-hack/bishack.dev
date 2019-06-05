@@ -40,4 +40,5 @@ up.json:
 		| sed "s/\$$COGNITO_CLIENT_SECRET/${COGNITO_CLIENT_SECRET}/g" \
 		| sed "s/\$$GITHUB_CLIENT_ID/${GITHUB_CLIENT_ID}/g" \
 		| sed "s/\$$GITHUB_CLIENT_SECRET/${GITHUB_CLIENT_SECRET}/g" \
+		| sed "s/\$$CSRF_KEY/${CSRF_KEY}/g" \
 		> up.json
