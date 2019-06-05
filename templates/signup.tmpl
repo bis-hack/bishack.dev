@@ -5,9 +5,9 @@
 
     .signup {
         border-radius: 5px;
-        background-color: #efefef;
+        background-color: #ffffff;
         width: 460px;
-        height: 320px;
+        height: 360px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -34,21 +34,6 @@
         align-items: center;
     }
 
-    .button {
-        text-decoration: none;
-        opacity: 1 !important;
-        padding: 5px 20px;
-        background-color: #333;
-        border-radius: 5px;
-        letter-spacing: 1px;
-        font-size: 14px;
-        display: inline-block;
-        border-bottom: solid 5px #000 !important;
-        color: #ffffff !important;
-    }
-    .button:hover {
-        background-color: #444;
-    }
     .cl {
         fill: white;
     }
@@ -56,6 +41,10 @@
         position: relative;
         top: 5px;
         margin-right: 8px;
+    }
+
+    .blue {
+        fill: blue;
     }
 {{end}}
 {{define "content"}}
@@ -90,9 +79,9 @@
                     </g>
                     </svg>
                 </p>
-                <p class="sub"><small>SIGN UP WITH YOUR GITHUB CREDENTIAL</small></p>
+                <p class="sub"><span>SIGN UP WITH YOUR GITHUB CREDENTIAL</span></p>
                 <p>
-                    <a href="{{.GithubURL}}" class="button">
+                    <a href="{{.GithubURL}}" class="button success">
                         <svg class="ic" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                              width="20px" height="20px" viewBox="0 0 438.549 438.549" style="enable-background:new 0 0 438.549 438.549;"
                              xml:space="preserve">

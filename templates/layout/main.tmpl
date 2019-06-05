@@ -28,15 +28,54 @@
         color: #333;
     }
 
-    a, a:visited, a:active {
+    a:not(.button), a:not(.button):visited, a:not(.button):active {
         text-decoration: none;
         color: blue;
         padding-bottom: 2px;
     }
-    a:hover {
+
+    a:not(.button):hover {
         border-bottom: 1px solid #3131ff;
         color: #3131ff;
     }
+
+    .button {
+        text-decoration: none;
+        opacity: 1 !important;
+        padding: 16px 20px;
+        border-radius: 5px;
+        letter-spacing: 1px;
+        width:300px;
+        font-weight: bold;
+        font-size: 16px;
+        display: inline-block;
+        color: #000000;
+        background-color: #777777;
+        border-bottom: solid 5px #333333 !important;
+        cursor: pointer;
+    }
+    .button:hover {
+        background-color: #999999;
+    }
+
+    .primary, .primary:active {
+        color: #ffffff !important;
+        border-color: darkblue !important;
+        background-color: blue;
+    }
+    .primary:hover {
+        background-color: #3131ff;
+    }
+
+    .success, .success:active {
+        color: #ffffff !important;
+        border-color: darkgreen !important;
+        background-color: green;
+    }
+    .success:hover {
+        background-color: #00a200;
+    }
+
     {{template "style" .}}
     </style>
 </head>
