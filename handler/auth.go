@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"bishack.dev/services/user"
+	"github.com/gorilla/csrf"
 )
 
 const (
@@ -58,10 +59,11 @@ func Verify(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	render(w, "main", "verify-form", struct {
-		Title string
-		Email string
-	}{"Verify", email})
+	render(w, "main", "verify-form", map[string]interface{}{
+		"Title":          "Verify",
+		"Email":          email,
+		csrf.TemplateTag: csrf.TemplateField(r),
+	})
 }
 
 // Signup ...
@@ -111,11 +113,12 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		render(w, "main", "signup-form", struct {
-			Title      string
-			GithubURL  string
-			GithubUser user
-		}{"Complete Signup", githubEndpoint(""), gu})
+		render(w, "main", "signup-form", map[string]interface{}{
+			"Title":          "Complete Signup",
+			"GithubEndpoint": githubEndpoint(""),
+			"GithubUser":     gu,
+			csrf.TemplateTag: csrf.TemplateField(r),
+		})
 		return
 	}
 

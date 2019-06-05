@@ -108,6 +108,7 @@
                 <br>
                 <br>
                 <form id="signup-form" action="/signup" method="post">
+                    {{ .csrfField }}
                     <p>
                         <input type="text" name="emailx" value="{{.GithubUser.Email}}" disabled />
                     </p>

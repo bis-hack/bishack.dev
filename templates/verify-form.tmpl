@@ -114,6 +114,7 @@
                 <p>Check your email for code verification</p>
                 <br>
                 <form id="verify-form" action="" method="get">
+                    {{ .csrfField }}
                     <input type="hidden" name="email" value="{{.Email}}"/>
                     <p>
                         <input type="text" name="code" placeholder="Enter verification code" />
