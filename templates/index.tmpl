@@ -1,0 +1,40 @@
+{{define "style"}}
+    .soon {
+        width: 600px;
+        height: 600px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .center {
+        text-align: center;
+    }
+
+    .sub {
+        opacity: 0.5;
+        font-size: 1em;
+    }
+
+    .title {
+        letter-spacing: 1px;
+        opacity: 0.91;
+    }
+
+    .box {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+{{end}}
+{{define "content"}}
+    <div class="box">
+        <div class="soon">
+            <div class="center">
+                <h1 class="title">Bisdak Dev Community</h1>
+                <p class="sub"><a href="/signup">Sign Up Here</a></p>
+            </div>
+        </div>
+    </div>
+{{end}}

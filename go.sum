@@ -1,0 +1,10 @@
+github.com/BottleNeckStudio/keepmotivat.in v0.0.0-20190527013402-e7ba776ad906 h1:rvYR1kAAQSMXJUfcJbesOliZ4VhvooO51QTKn2Aeb0U=
+github.com/BottleNeckStudio/keepmotivat.in v0.0.0-20190527013402-e7ba776ad906/go.mod h1:FzTj9A5WlFWA4cFmzZLz9vwi1ut9/oJYyhR60j3rHk8=
+github.com/BottleneckStudio/keepmotivat.in v0.0.0-20190527013402-e7ba776ad906 h1:+q4dr82TpEB2D3qXI1JM/kFXHDXdihdbygoIOYD+F6E=
+github.com/BottleneckStudio/keepmotivat.in v0.0.0-20190527013402-e7ba776ad906/go.mod h1:GeHhyqcEauSGIeevHDQEE55TblSl3G77wYuCTq4b7ps=
+github.com/gorilla/context v1.1.1 h1:AWwleXJkX/nhcU9bZSnZoi3h/qGYqQAGhq6zZe/aQW8=
+github.com/gorilla/context v1.1.1/go.mod h1:kBGZzfjB9CEq2AlWe17Uuf7NDRt0dE0s8S51q0aT7Yg=
+github.com/gorilla/mux v1.7.2 h1:zoNxOV7WjqXptQOVngLmcSQgXmgk4NMz1HibBchjl/I=
+github.com/gorilla/mux v1.7.2/go.mod h1:1lud6UwP+6orDFRuTfBEV8e9/aOM/c4fVVCaMa2zaAs=
+github.com/gorilla/pat v0.0.0-20180118222023-199c85a7f6d1 h1:LqbZZ9sNMWVjeXS4NN5oVvhMjDyLhmA1LG86oSo+IqY=
+github.com/gorilla/pat v0.0.0-20180118222023-199c85a7f6d1/go.mod h1:YeAe0gNeiNT5hoiZRI4yiOky6jVdNvfO2N6Kav/HmxY=

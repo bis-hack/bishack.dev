@@ -4,14 +4,29 @@ import (
 	"log"
 	"net/http"
 	"os"
+
+	"bishack.dev/handler"
+	"github.com/gorilla/pat"
 )
 
 func main() {
-	port := ":" + os.Getenv("PORT")
-	http.HandleFunc("/", mainHandler)
-	log.Fatal(http.ListenAndServe(port, nil))
-}
+	// init route
+	r := pat.New()
 
-func mainHandler(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "public/index.html")
+	// not found
+	r.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/" {
+			handler.Home(w, r)
+		} else {
+			handler.NotFound(w, r)
+		}
+	})
+
+	// handlers et al
+	r.Get("/signup", handler.Signup)
+	r.Post("/signup", handler.FinishSignup)
+
+	// launch
+	port := ":" + os.Getenv("PORT")
+	log.Fatal(http.ListenAndServe(port, r))
 }

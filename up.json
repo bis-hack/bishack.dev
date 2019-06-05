@@ -11,6 +11,11 @@
     "us-east-1"
   ],
   "stages": {
+    "development": {
+      "proxy": {
+        "command": "gin --port $PORT"
+      }
+    },
     "staging": {
       "domain": "stage.bishack.dev",
       "zone": false
