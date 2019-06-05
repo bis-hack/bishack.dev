@@ -90,6 +90,19 @@
     }
 {{end}}
 {{define "script"}}
+    const form = document.querySelector('form');
+    form.addEventListener('submit', (e) => {
+        const code = e.target.code;
+        const val = code.value.trim();
+
+        // check for password
+        code.style.borderColor = 'blue'; // reset color
+        if (!val.match(/.{5,}/) || val.match(/[a-zA-Z]/g)) {
+            code.style.borderColor = 'red';
+            code.focus();
+            e.preventDefault();
+        }
+    });
 {{end}}
 {{define "content"}}
     <div class="box">
