@@ -91,7 +91,7 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 		req.Header.Set("Authorization", "token "+accessToken)
 
 		resp, err := cl.Do(req)
-		if err != nil || resp.StatusCode != 200 {
+		if err != nil || resp.StatusCode != http.StatusOK {
 			http.Redirect(w, r, "/", 301)
 			return
 		}
