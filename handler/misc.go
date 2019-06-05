@@ -44,12 +44,12 @@ func render(w http.ResponseWriter, base, content string, ctx interface{}) {
 	)
 
 	if err != nil {
-		http.Error(w, err.Error(), 400)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	if content == "notfound" {
-		w.WriteHeader(404)
+		w.WriteHeader(http.StatusNotFound)
 	}
 	tmpl.ExecuteTemplate(w, "layout", ctx)
 }

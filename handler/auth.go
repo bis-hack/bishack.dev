@@ -29,11 +29,11 @@ func FinishSignup(w http.ResponseWriter, r *http.Request) {
 	u := user.New(id, secret)
 	_, err := u.Signup(email, password, email)
 	if err != nil {
-		http.Error(w, err.Error(), 400)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
 
 	r.Method = http.MethodGet
-	http.Redirect(w, r, "/verify?email="+email, 301)
+	http.Redirect(w, r, "/verify?email="+email, http.StatusPermanentRedirect)
 }
 
 // Verify ...
@@ -49,7 +49,7 @@ func Verify(w http.ResponseWriter, r *http.Request) {
 		_, err := u.Verify(email, code)
 
 		if err != nil {
-			http.Error(w, err.Error(), 400)
+			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
@@ -72,14 +72,14 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 	if code != "" {
 		resp, err := http.PostForm(githubEndpoint(code), url.Values{})
 		if err != nil {
-			http.Error(w, err.Error(), 400)
+			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 
 		b, _ := ioutil.ReadAll(resp.Body)
 		val, _ := url.ParseQuery(string(b))
 
-		http.Redirect(w, r, "/signup?access_token="+val.Get("access_token"), 301)
+		http.Redirect(w, r, "/signup?access_token="+val.Get("access_token"), http.StatusPermanentRedirect)
 		return
 	}
 
@@ -92,7 +92,7 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 
 		resp, err := cl.Do(req)
 		if err != nil || resp.StatusCode != http.StatusOK {
-			http.Redirect(w, r, "/", 301)
+			http.Redirect(w, r, "/", http.StatusPermanentRedirect)
 			return
 		}
 
@@ -108,7 +108,7 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 		gu := user{}
 		err = json.NewDecoder(resp.Body).Decode(&gu)
 		if err != nil {
-			http.Error(w, err.Error(), 400)
+			http.Error(w, err.Error(), http.StatusBadRequest)
 			return
 		}
 

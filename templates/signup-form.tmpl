@@ -53,7 +53,7 @@
         cursor: pointer;
     }
     .button:hover {
-        background-color: #1d1df7;
+        background-color: #3131ff;
     }
 
     .avatar {
@@ -76,13 +76,14 @@
         color: blue;
         border-bottom: 2px solid #ccc;
     }
-    input:hover {
+    input:hover:not(:disabled) {
         border-color: #aaa;
     }
 
     input:disabled {
         opacity: 0.7;
         background-color: #ccc;
+        color: #666;
     }
 
     input:focus {
@@ -104,7 +105,7 @@
                 </div>
                 <br>
                 <br>
-                <h4>FINISH SETTING UP ACCOUNT</h4>
+                <h4>SIGN UP</h4>
                 <br>
                 <br>
                 <form id="signup-form" action="/signup" method="post">
