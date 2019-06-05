@@ -32,8 +32,7 @@ func FinishSignup(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 	}
 
-	r.Method = http.MethodGet
-	http.Redirect(w, r, "/verify?email="+email, http.StatusPermanentRedirect)
+	http.Redirect(w, r, "/verify?email="+email, http.StatusSeeOther)
 }
 
 // Verify ...

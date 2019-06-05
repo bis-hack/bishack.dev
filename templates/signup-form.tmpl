@@ -76,7 +76,21 @@
         border-color: blue;
     }
 {{end}}
+{{define "script"}}
+    const form = document.querySelector('form');
+    form.addEventListener('submit', (e) => {
+        const pwd = e.target.password;
+        const val = pwd.value.trim();
 
+        // check for password
+        pwd.style.borderColor = 'blue'; // reset color
+        if (!val.match(/[0-9]/g) || !val.match(/[a-zA-Z]/g)) {
+            pwd.style.borderColor = 'red';
+            pwd.focus();
+            e.preventDefault();
+        }
+    });
+{{end}}
 {{define "content"}}
     <div class="box">
         <div class="signup">
