@@ -6,8 +6,8 @@ test:
 	@echo
 .PHONY: test
 
-dev:
-	@gin
+dev: up.json
+	@up start
 .PHONY: dev
 
 
