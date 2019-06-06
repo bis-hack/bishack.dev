@@ -12,13 +12,17 @@
     }
 
     .sub {
-        opacity: 0.5;
+        opacity: 0.3;
         font-size: 1em;
     }
 
     .title {
         letter-spacing: 1px;
+        width: 543px;
+        height: 182px;
         opacity: 0.91;
+        text-indent: -1000000px;
+        background: url(/images/bishack.png) center center no-repeat / cover;
     }
 
     .box {
@@ -27,6 +31,22 @@
         justify-content: center;
         align-items: center;
     }
+
+    .batman {
+        position: relative;
+        text-decoration: line-through;
+        color: #888888;
+    }
+    .batman:after {
+        text-decoration: none;
+        color: black;
+        top: -29px;
+        left: -1px;
+        display: inline-block;
+        content: "hipster/hacker";
+        position: absolute;
+    }
+
 {{end}}
 {{define "script"}}
 {{end}}
@@ -34,8 +54,11 @@
     <div class="box">
         <div class="soon">
             <div class="center">
-                <h1 class="title">Bisdak Dev Community</h1>
-                <p><a href="/signup">Sign Up Here</a></p>
+                <h1 class="title">bishack.dev</h1>
+                <br />
+                <p>Ka pundokan sa mga bangiitang <span class="batman">&nbsp;batman&nbsp;</span> sa <a href="https://en.wikipedia.org/wiki/Visayas">ka bisayaan</a>.</p>
+                <br />
+                <p><a href="/signup">Sign Up</a> <span class="sub">|</span> <a href="/login">Log In</a></p>
             </div>
         </div>
     </div>
