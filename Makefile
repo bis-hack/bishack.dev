@@ -38,7 +38,8 @@ up.json:
 	@echo "  -> creating up.json from template file"
 	@cat up.tmpl | sed "s/\$$COGNITO_CLIENT_ID/${COGNITO_CLIENT_ID}/g" \
 		| sed "s/\$$COGNITO_CLIENT_SECRET/${COGNITO_CLIENT_SECRET}/g" \
-		| sed "s/\$$GITHUB_CLIENT_ID/${GITHUB_CLIENT_ID}/g" \
 		| sed "s/\$$GITHUB_CLIENT_SECRET/${GITHUB_CLIENT_SECRET}/g" \
+		| sed "s/\$$GITHUB_CLIENT_ID/${GITHUB_CLIENT_ID}/g" \
+		| sed "s/\$$SESSION_KEY/${SESSION_KEY}/g" \
 		| sed "s/\$$CSRF_KEY/${CSRF_KEY}/g" \
 		> up.json
