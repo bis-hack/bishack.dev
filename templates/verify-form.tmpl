@@ -6,8 +6,8 @@
     .verify {
         border-radius: 5px;
         background-color: #fff;
-        width: 460px;
-        height: 500px;
+        width: 468px;
+        height: 400px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -17,12 +17,7 @@
         position: relative;
         width: 100%;
         text-align: center;
-        padding: 24px;
-    }
-
-    .sub {
-        opacity: 0.5;
-        font-size: 1em;
+        padding: 32px;
     }
 
     .title {
@@ -35,58 +30,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-    }
-
-    .button {
-        text-decoration: none;
-        opacity: 1 !important;
-        padding: 16px 20px;
-        background-color: blue;
-        border-radius: 5px;
-        letter-spacing: 1px;
-        width:300px;
-        font-weight: bold;
-        font-size: 16px;
-        display: inline-block;
-        border-bottom: solid 5px darkblue;
-        color: #ffffff;
-        cursor: pointer;
-    }
-    .button:hover {
-        background-color: #1d1df7;
-    }
-
-    .avatar {
-        position: absolute;
-        top: -140px;
-        left: 236px;
-        margin-left: -50px;
-        color: #666;
-    }
-    .avatar img {
-        border: 1px solid #fff;
-        box-shadow: 0 5px 20px 1px rgba(1,1,1,0.2);
-    }
-
-    input {
-        padding: 16px;
-        font-size: 16px;
-        background: #efefef;
-        width: 268px;
-        color: blue;
-        border-bottom: 2px solid #ccc;
-    }
-    input:hover {
-        border-color: #aaa;
-    }
-
-    input:disabled {
-        opacity: 0.7;
-        background-color: #ccc;
-    }
-
-    input:focus {
-        border-color: blue;
     }
 {{end}}
 {{define "script"}}
@@ -108,7 +51,6 @@
     <div class="box">
         <div class="verify">
             <div class="center">
-                <br>
                 <h4>Verify Account</h4>
                 <br>
                 <p>Check your email for code verification</p>
@@ -120,7 +62,7 @@
                         <input type="text" name="code" placeholder="Enter verification code" />
                     </p>
                     <br>
-                    <button type="submit" class="button">VERIFY</button>
+                    <button type="submit" class="button primary full">VERIFY</button>
                 </form>
             </div>
         </div>

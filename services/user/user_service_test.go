@@ -70,7 +70,9 @@ func TestSignUp(t *testing.T) {
 			}),
 		).Return(&cip.SignUpOutput{UserSub: aws.String("beep")}, nil)
 
-		o, err := client.Signup("beep", "boop", "beep@boop.com")
+		o, err := client.Signup("beep", "boop", map[string]string{
+			"beep": "boop",
+		})
 
 		assert.Equal(t, err, nil)
 		assert.Equal(t, "beep", *o.UserSub)

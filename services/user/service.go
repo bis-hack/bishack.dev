@@ -33,8 +33,8 @@ func New(id, secret string) *Client {
 // Signup ...
 func (c *Client) Signup(
 	username,
-	password,
-	email string,
+	password string,
+	meta map[string]string,
 ) (*cip.SignUpOutput, error) {
 	input := &cip.SignUpInput{}
 
@@ -43,13 +43,14 @@ func (c *Client) Signup(
 	input.SetUsername(username)
 	input.SetPassword(password)
 
-	emailAttribute := &cip.AttributeType{}
-	emailAttribute.SetName("email")
-	emailAttribute.SetValue(email)
-
-	input.SetUserAttributes([]*cip.AttributeType{
-		emailAttribute,
-	})
+	userAttributes := []*cip.AttributeType{}
+	for k, v := range meta {
+		a := &cip.AttributeType{}
+		a.SetName(k)
+		a.SetValue(v)
+		userAttributes = append(userAttributes, a)
+	}
+	input.SetUserAttributes(userAttributes)
 
 	return c.Provider.SignUp(input)
 }

@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
@@ -27,20 +28,32 @@ func FinishSignup(w http.ResponseWriter, r *http.Request) {
 	secret := os.Getenv("COGNITO_CLIENT_SECRET")
 
 	email := r.Form.Get("email")
+	locale := r.Form.Get("locale")
+	picture := r.Form.Get("picture")
+	website := r.Form.Get("website")
+	nickname := r.Form.Get("login")
 	password := r.Form.Get("password")
 
 	u := user.New(id, secret)
 
-	_, err := u.Signup(email, password, email)
+	meta := map[string]string{
+		"email":    email,
+		"locale":   locale,
+		"website":  website,
+		"picture":  picture,
+		"nickname": nickname,
+	}
+
+	_, err := u.Signup(email, password, meta)
 	if err != nil {
-		errMessage := "Could not sign you up. Try again later"
+		errMessage := "Could not sign you up. Try again!"
 
 		if regexp.MustCompile("exists").MatchString(err.Error()) {
-			errMessage = "Account exists. No need to sign up again, love!"
+			errMessage = "Account exists already"
 		}
 
 		session.SetFlash(w, r, "error", errMessage)
-		http.Redirect(w, r, r.RequestURI, http.StatusSeeOther)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 
 		return
 	}
@@ -61,20 +74,32 @@ func Verify(w http.ResponseWriter, r *http.Request) {
 		_, err := u.Verify(email, code)
 
 		if err != nil {
-			session.SetFlash(w, r, "error", "Failed to verify! Try again later")
-			http.Redirect(w, r, r.Header.Get("Origin"), http.StatusSeeOther)
+			log.Println(err.Error())
+			session.SetFlash(w, r, "error", "Verification failed. Try again!")
+			http.Redirect(w, r, "/verify?email="+email, http.StatusSeeOther)
 			return
 		}
 
-		render(w, "main", "verified", struct {
-			Title string
-		}{"User Verified"})
+		session.SetFlash(w, r, "success", "Account Verified!")
+		http.Redirect(w, r, "/verify", http.StatusSeeOther)
+		return
+	}
+
+	flash := session.GetFlash(w, r)
+
+	// horray!
+	if flash != nil && flash.Type == "success" {
+		render(w, "main", "verified", map[string]interface{}{
+			"Title": "Account Verified",
+			"Flash": flash,
+		})
 		return
 	}
 
 	render(w, "main", "verify-form", map[string]interface{}{
 		"Title":          "Verify",
 		"Email":          email,
+		"Flash":          flash,
 		csrf.TemplateTag: csrf.TemplateField(r),
 	})
 }
