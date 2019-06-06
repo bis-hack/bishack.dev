@@ -28,6 +28,31 @@
         color: #333;
     }
 
+    input {
+        padding: 16px;
+        font-size: 16px;
+        background: #efefef;
+        width: 100%;
+        box-sizing: border-box;
+        color: blue;
+        border-bottom: 2px solid #ccc;
+    }
+    input:hover:not(:disabled) {
+        border-color: blue;
+    }
+    input:disabled {
+        opacity: 0.7;
+        background-color: #ccc;
+        color: #666;
+    }
+    input:focus {
+        border-color: blue;
+    }
+    input::placeholder {
+        color: #777;
+        opacity: 0.5;
+    }
+
     a:not(.button), a:not(.button):visited, a:not(.button):active {
         text-decoration: none;
         color: blue;
@@ -42,10 +67,9 @@
     .button {
         text-decoration: none;
         opacity: 1 !important;
-        padding: 16px 20px;
         border-radius: 5px;
         letter-spacing: 1px;
-        width:300px;
+        padding: 6px 24px;
         font-weight: bold;
         font-size: 16px;
         display: inline-block;
@@ -53,6 +77,18 @@
         background-color: #777777;
         border-bottom: solid 5px #333333 !important;
         cursor: pointer;
+        position: relative;
+    }
+    button.button {
+        padding: 14px 20px;
+    }
+    .button.full {
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .button:active {
+        border-bottom-width: 0 !important;
+        border-top: 5px solid green !important;
     }
     .button:hover {
         background-color: #999999;
@@ -76,11 +112,40 @@
         background-color: #00a200;
     }
 
+    /* FLASH */
+    .flash {
+        position: fixed;
+        top: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 16px;
+        max-width: 400px;
+        padding: 12px 20px;
+        letter-spacing: 0.2px;
+        background-color: #ffffff;
+        box-shadow: 0px 5px 10px 1px rgba(0,0,0,0.2);
+    }
+    .flash.error {
+        background-color: #ff3333;
+        color: white;
+        box-shadow: 0px 5px 10px 1px rgb(255, 136, 136);
+    }
+    .flash.success {
+        background-color: #00bb00;
+        color: white;
+        box-shadow: 0px 5px 10px 1px rgba(0, 128, 0, 0.36);
+    }
+
     {{template "style" .}}
     </style>
 </head>
 
 <body>
+    {{if .Flash}}
+    <div class="flash {{.Flash.Type}}">
+        {{.Flash.Value}}
+    </div>
+    {{end}}
     {{template "content" .}}
 </body>
 

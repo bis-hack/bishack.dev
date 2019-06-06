@@ -6,9 +6,11 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"regexp"
 	"strings"
 
 	"bishack.dev/services/user"
+	"bishack.dev/utils/session"
 	"github.com/gorilla/csrf"
 )
 
@@ -28,9 +30,19 @@ func FinishSignup(w http.ResponseWriter, r *http.Request) {
 	password := r.Form.Get("password")
 
 	u := user.New(id, secret)
+
 	_, err := u.Signup(email, password, email)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		errMessage := "Could not sign you up. Try again later"
+
+		if regexp.MustCompile("exists").MatchString(err.Error()) {
+			errMessage = "Account exists. No need to sign up again, love!"
+		}
+
+		session.SetFlash(w, r, "error", errMessage)
+		http.Redirect(w, r, r.RequestURI, http.StatusSeeOther)
+
+		return
 	}
 
 	http.Redirect(w, r, "/verify?email="+email, http.StatusSeeOther)
@@ -49,7 +61,8 @@ func Verify(w http.ResponseWriter, r *http.Request) {
 		_, err := u.Verify(email, code)
 
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
+			session.SetFlash(w, r, "error", "Failed to verify! Try again later")
+			http.Redirect(w, r, r.Header.Get("Origin"), http.StatusSeeOther)
 			return
 		}
 
@@ -70,20 +83,30 @@ func Verify(w http.ResponseWriter, r *http.Request) {
 func Signup(w http.ResponseWriter, r *http.Request) {
 	code := r.URL.Query().Get("code")
 
+	// check for oauth code from github
 	if code != "" {
 		resp, err := http.PostForm(githubEndpoint(code), url.Values{})
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
+			session.SetFlash(w, r, "error", "Invalid or expired code!")
+			http.Redirect(w, r, r.RequestURI, http.StatusSeeOther)
 			return
 		}
 
 		b, _ := ioutil.ReadAll(resp.Body)
 		val, _ := url.ParseQuery(string(b))
 
-		http.Redirect(w, r, "/signup?access_token="+val.Get("access_token"), http.StatusPermanentRedirect)
+		token := val.Get("access_token")
+		if token == "" {
+			session.SetFlash(w, r, "error", "Invalid or expired code")
+			http.Redirect(w, r, "/signup", http.StatusSeeOther)
+			return
+		}
+
+		http.Redirect(w, r, "/signup?access_token="+val.Get("access_token"), http.StatusSeeOther)
 		return
 	}
 
+	// check for access token after code verification
 	accessToken := r.URL.Query().Get("access_token")
 	if accessToken != "" {
 		cl := http.Client{}
@@ -93,23 +116,17 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 
 		resp, err := cl.Do(req)
 		if err != nil || resp.StatusCode != http.StatusOK {
-			http.Redirect(w, r, "/", http.StatusPermanentRedirect)
+			// flash me baby!
+			session.SetFlash(w, r, "error", "Invalid or expired token!")
+			http.Redirect(w, r, "/signup", http.StatusSeeOther)
 			return
 		}
 
-		type user struct {
-			Email     string
-			Name      string
-			Login     string
-			AvatarURL string `json:"avatar_url"`
-			Location  string
-			Website   string `json:"blog"`
-		}
-
-		gu := user{}
+		gu := githubUser{}
 		err = json.NewDecoder(resp.Body).Decode(&gu)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
+			session.SetFlash(w, r, "error", "An error occured!")
+			http.Redirect(w, r, r.RequestURI, http.StatusSeeOther)
 			return
 		}
 
@@ -117,13 +134,16 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 			"Title":          "Complete Signup",
 			"GithubEndpoint": githubEndpoint(""),
 			"GithubUser":     gu,
+			"Flash":          session.GetFlash(w, r),
 			csrf.TemplateTag: csrf.TemplateField(r),
 		})
 		return
 	}
 
-	render(w, "main", "signup", struct {
-		Title     string
-		GithubURL string
-	}{"Sign Up", githubEndpoint("")})
+	// otherwise, render signup page
+	render(w, "main", "signup", map[string]interface{}{
+		"Title":     "Sign Up",
+		"Flash":     session.GetFlash(w, r),
+		"GithubURL": githubEndpoint(""),
+	})
 }

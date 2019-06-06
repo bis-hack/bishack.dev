@@ -17,7 +17,7 @@
         position: relative;
         width: 100%;
         text-align: center;
-        padding: 24px;
+        padding: 32px;
     }
 
     .sub {
@@ -28,11 +28,6 @@
     .title {
         letter-spacing: 1px;
         opacity: 0.91;
-    }
-
-    input::placeholder {
-        color: blue;
-        opacity: 0.5;
     }
 
     .box {
@@ -54,27 +49,6 @@
         box-shadow: 0 5px 20px 1px rgba(1,1,1,0.2);
     }
 
-    input {
-        padding: 16px;
-        font-size: 16px;
-        background: #efefef;
-        width: 268px;
-        color: blue;
-        border-bottom: 2px solid #ccc;
-    }
-    input:hover:not(:disabled) {
-        border-color: blue;
-    }
-
-    input:disabled {
-        opacity: 0.7;
-        background-color: #ccc;
-        color: #666;
-    }
-
-    input:focus {
-        border-color: blue;
-    }
 {{end}}
 {{define "script"}}
     const form = document.querySelector('form');
@@ -123,7 +97,7 @@
                     </p>
                     <br>
                     <p>
-                        <button type="submit" class="button primary"><span>SUBMIT</span></button>
+                        <button type="submit" class="button primary full"><span>SUBMIT</span></button>
                     </p>
                 </form>
             </div>

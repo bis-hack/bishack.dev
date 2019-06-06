@@ -39,12 +39,14 @@ Download and install tools and dependencies using the following command from you
 
 And then run:
 
-	$ COGNITO_CLIENT_ID=<key> \
-	COGNITO_CLIENT_SECRET=<secret> \
-	GITHUB_CLIENT_ID=<id> \
-	GITHUB_CLIENT_SECRET=<secret> \
-	GITHUB_CALLBACK=http://localhost:3000/signup \
-	make dev
+	$ SESSION_KEY=<32-bytes-key> \
+	  CSRF_KEY=<32-bytes-key> \
+	  COGNITO_CLIENT_ID=<key> \
+	  COGNITO_CLIENT_SECRET=<secret> \
+	  GITHUB_CLIENT_ID=<id> \
+	  GITHUB_CLIENT_SECRET=<secret> \
+	  GITHUB_CALLBACK=http://localhost:3000/signup \
+	  make dev
 
 Should see something like this...
 
