@@ -10,10 +10,7 @@ import (
 func Home(w http.ResponseWriter, r *http.Request) {
 	var user map[string]string
 
-	creds := session.GetUser(r)
-	if creds != nil {
-		user = sessionUser(creds["token"])
-	}
+	user = sessionUser(r)
 
 	render(w, "main", "index", map[string]interface{}{
 		"Title": "Home",

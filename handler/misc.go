@@ -3,11 +3,33 @@ package handler
 import (
 	"fmt"
 	"html/template"
+	"io/ioutil"
 	"net/http"
 	"os"
 
 	"bishack.dev/services/user"
+	"bishack.dev/utils/session"
 )
+
+const endpoint = "https://slack.com/api/users.admin.invite?token=%s&email=%s"
+
+// SlackInvite ...
+func SlackInvite(w http.ResponseWriter, r *http.Request) {
+	token := os.Getenv("SLACK_TOKEN")
+	email := r.URL.Query().Get("email")
+
+	u := fmt.Sprintf(endpoint, token, email)
+	w.Header().Set("content-type", "application/json")
+
+	resp, err := http.Get(u)
+	if err != nil {
+		fmt.Fprintln(w, `{"ok":false}`)
+		return
+	}
+
+	b, _ := ioutil.ReadAll(resp.Body)
+	fmt.Fprintln(w, string(b))
+}
 
 func githubEndpoint(code string) string {
 	// default method
@@ -39,9 +61,15 @@ func githubEndpoint(code string) string {
 	return ep
 }
 
-func sessionUser(token string) map[string]string {
+func sessionUser(r *http.Request) map[string]string {
 	u := user.New(cognitoID, cognitoSecret)
 
+	su := session.GetUser(r)
+	if su == nil {
+		return nil
+	}
+
+	token := su["token"]
 	o, err := u.AccountDetails(token)
 	if err != nil {
 		return nil
@@ -51,12 +79,12 @@ func sessionUser(token string) map[string]string {
 		return nil
 	}
 
-	su := map[string]string{}
+	ua := map[string]string{}
 	for _, v := range o.UserAttributes {
-		su[*v.Name] = *v.Value
+		ua[*v.Name] = *v.Value
 	}
 
-	return su
+	return ua
 }
 
 func render(w http.ResponseWriter, base, content string, ctx interface{}) {
