@@ -28,9 +28,16 @@ func main() {
 	})
 
 	// handlers et al
+
+	// GET
 	r.Get("/signup", handler.Signup)
 	r.Get("/verify", handler.Verify)
+	r.Get("/login", handler.LoginForm)
+	r.Get("/logout", handler.Logout)
+
+	// POST
 	r.Post("/signup", handler.FinishSignup)
+	r.Post("/login", handler.Login)
 
 	// csrf
 	csrfSecure := false

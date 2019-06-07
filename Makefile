@@ -18,7 +18,7 @@ deploy: test up clean
 destroy: up.json
 	@up stack delete
 	@rm -rf up.json
-	@echo "  -> done ✓"
+	@echo "  ✓ done"
 .PHONY: destroy
 
 

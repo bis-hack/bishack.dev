@@ -16,6 +16,12 @@
         font-size: 1em;
     }
 
+    .div {
+        opacity: 0.3;
+        font-size: 1em;
+        padding: 0 16px;
+    }
+
     .title {
         letter-spacing: 1px;
         width: 543px;
@@ -47,6 +53,14 @@
         position: absolute;
     }
 
+    .circle {
+        border-radius: 100px;
+    }
+
+    .div {
+        padding: 0 12px;
+    }
+
 {{end}}
 {{define "script"}}
 {{end}}
@@ -58,7 +72,20 @@
                 <br />
                 <p>Ka pundokan sa mga bangiitang <span class="batman">&nbsp;batman&nbsp;</span> sa <a href="https://en.wikipedia.org/wiki/Visayas">ka bisayaan</a>.</p>
                 <br />
-                <p><a href="/signup">Sign Up</a> <span class="sub">|</span> <a href="/login">Log In</a></p>
+                {{if .User}}
+                    <img class="circle" src="{{.User.picture}}" alt="{{.User.nickname}}" width="100" height="100" />
+                    <br>
+                    <br>
+                    <p>
+                        <a href="/dashboard">Dashboard</a>
+                        <span class="div">|</span>
+                        <a href="/profile">@{{.User.nickname}}</a>
+                        <span class="div">|</span>
+                        <a href="/logout">Log Out</a>
+                    </p>
+                {{else}}
+                    <p><a href="/signup">Sign Up</a> <span class="div">|</span> <a href="/login">Log In</a></p>
+                {{end}}
             </div>
         </div>
     </div>

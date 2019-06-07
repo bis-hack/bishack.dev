@@ -20,12 +20,14 @@ const (
 	userEndpoint  = "https://api.github.com/user"
 )
 
+var (
+	cognitoID     = os.Getenv("COGNITO_CLIENT_ID")
+	cognitoSecret = os.Getenv("COGNITO_CLIENT_SECRET")
+)
+
 // FinishSignup ...
 func FinishSignup(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-
-	id := os.Getenv("COGNITO_CLIENT_ID")
-	secret := os.Getenv("COGNITO_CLIENT_SECRET")
 
 	email := r.Form.Get("email")
 	locale := r.Form.Get("locale")
@@ -34,7 +36,7 @@ func FinishSignup(w http.ResponseWriter, r *http.Request) {
 	nickname := r.Form.Get("login")
 	password := r.Form.Get("password")
 
-	u := user.New(id, secret)
+	u := user.New(cognitoID, cognitoSecret)
 
 	meta := map[string]string{
 		"email":    email,
@@ -49,7 +51,7 @@ func FinishSignup(w http.ResponseWriter, r *http.Request) {
 		errMessage := "Could not sign you up. Try again!"
 
 		if regexp.MustCompile("exists").MatchString(err.Error()) {
-			errMessage = "Account exists already"
+			errMessage = "Account already exists. You can log in if you want to"
 		}
 
 		session.SetFlash(w, r, "error", errMessage)
@@ -67,10 +69,7 @@ func Verify(w http.ResponseWriter, r *http.Request) {
 	email := r.URL.Query().Get("email")
 
 	if code != "" {
-		id := os.Getenv("COGNITO_CLIENT_ID")
-		secret := os.Getenv("COGNITO_CLIENT_SECRET")
-
-		u := user.New(id, secret)
+		u := user.New(cognitoID, cognitoSecret)
 		_, err := u.Verify(email, code)
 
 		if err != nil {
@@ -170,5 +169,43 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 		"Title":     "Sign Up",
 		"Flash":     session.GetFlash(w, r),
 		"GithubURL": githubEndpoint(""),
+	})
+}
+
+// Logout ...
+func Logout(w http.ResponseWriter, r *http.Request) {
+	session.DeleteUser(w, r)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+// Login ...
+func Login(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+
+	email := r.Form.Get("email")
+	password := r.Form.Get("password")
+
+	u := user.New(cognitoID, cognitoSecret)
+
+	out, err := u.Login(email, password)
+	if err != nil {
+		session.SetFlash(w, r, "error", "Wrong email or password")
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	token := out.AuthenticationResult.AccessToken
+	session.SetUser(w, r, email, *token)
+
+	session.SetFlash(w, r, "success", "Welcome Back!")
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+// LoginForm ...
+func LoginForm(w http.ResponseWriter, r *http.Request) {
+	render(w, "main", "login-form", map[string]interface{}{
+		"Title":          "User Login",
+		"Flash":          session.GetFlash(w, r),
+		csrf.TemplateTag: csrf.TemplateField(r),
 	})
 }

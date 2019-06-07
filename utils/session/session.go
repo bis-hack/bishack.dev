@@ -16,6 +16,44 @@ func Get(r *http.Request, name string) (*sessions.Session, error) {
 	return store.Get(r, name)
 }
 
+// SetUser ...
+func SetUser(w http.ResponseWriter, r *http.Request, email, token string) {
+	session, _ := store.Get(r, "user")
+	session.Values["email"] = email
+	session.Values["token"] = token
+	session.Save(r, w)
+}
+
+// GetUser ...
+func GetUser(r *http.Request) map[string]string {
+	session, err := store.Get(r, "user")
+	if err != nil {
+		return nil
+	}
+
+	email := session.Values["email"]
+	token := session.Values["token"]
+
+	if email == nil || token == nil {
+		return nil
+	}
+
+	return map[string]string{
+		"email": email.(string),
+		"token": token.(string),
+	}
+}
+
+// DeleteUser ...
+func DeleteUser(w http.ResponseWriter, r *http.Request) {
+	session, _ := store.Get(r, "user")
+
+	session.Values["email"] = nil
+	session.Values["token"] = nil
+
+	session.Save(r, w)
+}
+
 // SetFlash sets the flash message with the given
 // type and value
 func SetFlash(w http.ResponseWriter, r *http.Request, t, v string) {

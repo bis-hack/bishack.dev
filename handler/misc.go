@@ -5,6 +5,8 @@ import (
 	"html/template"
 	"net/http"
 	"os"
+
+	"bishack.dev/services/user"
 )
 
 func githubEndpoint(code string) string {
@@ -35,6 +37,26 @@ func githubEndpoint(code string) string {
 	}
 
 	return ep
+}
+
+func sessionUser(token string) map[string]string {
+	u := user.New(cognitoID, cognitoSecret)
+
+	o, err := u.AccountDetails(token)
+	if err != nil {
+		return nil
+	}
+
+	if len(o.UserAttributes) == 0 {
+		return nil
+	}
+
+	su := map[string]string{}
+	for _, v := range o.UserAttributes {
+		su[*v.Name] = *v.Value
+	}
+
+	return su
 }
 
 func render(w http.ResponseWriter, base, content string, ctx interface{}) {
