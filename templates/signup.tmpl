@@ -8,7 +8,7 @@
         background-color: #ffffff;
         box-sizing: border-box;
         width: 460px;
-        height: 360px;
+        padding: 24px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -52,6 +52,8 @@
     <div class="box">
         <div class="signup">
             <div class="center">
+                <h2>Sign Up</h2>
+                <br/>
                 <p>
                     <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                          width="100px" height="100px" viewBox="0 0 438.549 438.549" style="enable-background:new 0 0 438.549 438.549;"
@@ -80,9 +82,13 @@
                     </g>
                     </svg>
                 </p>
-                <p class="sub"><span>SIGN UP WITH YOUR GITHUB CREDENTIAL</span></p>
+                <p class="ub">
+                    This is a community of developers and hipster hackers. So it's only logical
+                    to use Github as the starting point of the Signup process.
+                </p>
+                <br/>
                 <p>
-                    <a href="{{.GithubURL}}" class="button success full">
+                    <a href="{{.GithubURL}}" class="button primary full">
                         <svg class="ic" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                              width="20px" height="20px" viewBox="0 0 438.549 438.549" style="enable-background:new 0 0 438.549 438.549;"
                              xml:space="preserve">
@@ -109,9 +115,10 @@
                                 C438.536,184.851,428.728,148.168,409.132,114.573z"/>
                         </g>
                         </svg>
-                        <span> AUTHORIZE NOW </span>
+                        <span>Let's Get Started</span>
                     </a>
                 </p>
+                <p><a href="/login">Log In</a> <span class="div">|</span> <a href="/">Home</a></p>
             </div>
         </div>
     </div>

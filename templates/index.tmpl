@@ -46,21 +46,19 @@
     .batman:after {
         text-decoration: none;
         color: black;
-        top: -29px;
+        top: -42px;
         left: -1px;
+        transform: rotate(-10deg);
         display: inline-block;
         content: "hipster/hacker";
+        background-color: yellow;
+        padding: 0 10px;
         position: absolute;
     }
 
     .circle {
         border-radius: 100px;
     }
-
-    .div {
-        padding: 0 12px;
-    }
-
 {{end}}
 {{define "script"}}
 {{end}}
@@ -70,7 +68,7 @@
             <div class="center">
                 <h1 class="title">bishack.dev</h1>
                 <br />
-                <p>Ka pundokan sa mga bangiitang <span class="batman">&nbsp;batman&nbsp;</span> sa <a href="https://en.wikipedia.org/wiki/Visayas">ka bisayaan</a>.</p>
+                <p>Ka pundokan sa mga bangiitang <span class="batman">&nbsp;batman&nbsp;</span> sa <a href="https://en.wikipedia.org/wiki/Visayas">Kabisayaan</a>.</p>
                 <br />
                 {{if .User}}
                     <img class="circle" src="{{.User.picture}}" alt="{{.User.nickname}}" width="100" height="100" />
