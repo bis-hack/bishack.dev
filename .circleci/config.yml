@@ -10,8 +10,8 @@ jobs:
       - checkout
       - run: mdkir -p $TEST_DIR
       - restore_cache:
-        keys:
-          - v1-pkg-cache
+          keys:
+            - v1-pkg-cache
       - run:
           name: Install deps
           comand: |
