@@ -2,7 +2,7 @@ GO ?= go
 
 test:
 	@echo '  -> running test'
-	@$(GO) test -race -coverprofile=coverage.txt -covermode=atomic ./...
+	@$(GO) test -v -race -coverprofile=coverage.txt -covermode=atomic ./...
 	@echo
 .PHONY: test
 
