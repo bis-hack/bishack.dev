@@ -194,6 +194,13 @@
     window.onload = () => {
         if (document.readyState === 'complete') {
             {{template "script" .}}
+            // remove flash message after 6 seconds
+            const flash = document.querySelector('body > div.flash')
+            if (flash) {
+                setTimeout(() => {
+                    flash.style.display = 'none'
+                }, 6000);
+            }
         }
     };
 </script>
