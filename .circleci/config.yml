@@ -9,15 +9,15 @@ jobs:
     steps:
       - checkout
       - run: mdkir -p $TEST_DIR
+
       - restore_cache:
           keys:
             - v1-pkg-cache
-      - run:
-          name: Install deps
-          comand: curl -sf https://up.apex.sh/install | sh && go mod download
-      - run:
-          name: Run tests
-          command: make test
+
+      - run: curl -sf https://up.apex.sh/install | sh && go mod download
+
+      - run: make test
+
       - store_artifacts:
           path: /tmp/tests
           destination: out
