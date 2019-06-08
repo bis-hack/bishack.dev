@@ -7,12 +7,21 @@ import (
 	"regexp"
 
 	"bishack.dev/handler"
+	"bishack.dev/services/user"
+	"bishack.dev/utils/session"
+
+	"github.com/gorilla/context"
 	"github.com/gorilla/csrf"
 	"github.com/gorilla/pat"
 )
 
 // PUBLICFOLDER ...
 const PUBLICFOLDER = "public"
+
+var (
+	cognitoID     = os.Getenv("COGNITO_CLIENT_ID")
+	cognitoSecret = os.Getenv("COGNITO_CLIENT_SECRET")
+)
 
 func main() {
 	// init route
@@ -50,6 +59,24 @@ func main() {
 	port := ":" + os.Getenv("PORT")
 	log.Fatal(http.ListenAndServe(
 		port,
-		protect(r),
+		protect(svc(r)),
 	))
+}
+
+func svc(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// user service
+		u := user.New(cognitoID, cognitoSecret)
+		context.Set(r, "userService", u)
+
+		// session
+		s := session.New()
+		context.Set(r, "session", s)
+
+		// http client
+		c := &http.Client{}
+		context.Set(r, "client", c)
+
+		h.ServeHTTP(w, r)
+	})
 }

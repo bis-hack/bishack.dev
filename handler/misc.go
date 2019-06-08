@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"os"
 
-	"bishack.dev/services/user"
-	"bishack.dev/utils/session"
+	cip "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
+	"github.com/gorilla/context"
 )
 
 const endpoint = "https://slack.com/api/users.admin.invite?token=%s&email=%s"
@@ -21,7 +21,10 @@ func SlackInvite(w http.ResponseWriter, r *http.Request) {
 	u := fmt.Sprintf(endpoint, token, email)
 	w.Header().Set("content-type", "application/json")
 
-	resp, err := http.Get(u)
+	client := context.Get(r, "client").(interface {
+		Get(url string) (*http.Response, error)
+	})
+	resp, err := client.Get(u)
 	if err != nil {
 		fmt.Fprintln(w, `{"ok":false}`)
 		return
@@ -62,12 +65,18 @@ func githubEndpoint(code string) string {
 }
 
 func sessionUser(r *http.Request) map[string]string {
-	u := user.New(cognitoID, cognitoSecret)
+	ss := context.Get(r, "session").(interface {
+		GetUser(r *http.Request) map[string]string
+	})
 
-	su := session.GetUser(r)
+	su := ss.GetUser(r)
 	if su == nil {
 		return nil
 	}
+
+	u := context.Get(r, "userService").(interface {
+		AccountDetails(token string) (*cip.GetUserOutput, error)
+	})
 
 	token := su["token"]
 	o, err := u.AccountDetails(token)
