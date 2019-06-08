@@ -2,9 +2,11 @@ package main
 
 import (
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"regexp"
+	"time"
 
 	"bishack.dev/handler"
 	"bishack.dev/services/user"
@@ -73,8 +75,19 @@ func svc(h http.Handler) http.Handler {
 		s := session.New()
 		context.Set(r, "session", s)
 
-		// http client
-		c := &http.Client{}
+		var netTransport = &http.Transport{
+			Dial: (&net.Dialer{
+				Timeout: 5 * time.Second,
+			}).Dial,
+			TLSHandshakeTimeout: 5 * time.Second,
+		}
+
+		// support timeout and net transport.
+		c := &http.Client{
+			Timeout:   time.Second * 10,
+			Transport: netTransport,
+		}
+
 		context.Set(r, "client", c)
 
 		h.ServeHTTP(w, r)
