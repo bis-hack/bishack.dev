@@ -182,8 +182,13 @@
         left: 6px;
     }
 
+    .turbolinks-progress-bar {
+      height: 5px;
+      background-color: blue;
+    }
     {{template "style" .}}
     </style>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/turbolinks/5.2.0/turbolinks.js"></script>
 </head>
 
 <body>
@@ -204,7 +209,7 @@
             if (flash) {
                 setTimeout(() => {
                     flash.style.display = 'none'
-                }, 6000);
+                }, 5000);
             }
         }
     };
