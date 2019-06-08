@@ -1,4 +1,6 @@
 version: 2
+orbs:
+  codecov: codecov/codecov@1.0.2
 jobs:
   build:
     docker:
@@ -9,15 +11,14 @@ jobs:
     steps:
       - checkout
       - run: mkdir -p $TEST_DIR
-
       - restore_cache:
           keys:
             - v1-pkg-cache
-
       - run: curl -sf https://up.apex.sh/install | sudo sh && go mod download
-
       - run: make test
-
+      - run: mv coverage.txt /tmp/tests/coverage.txt
+      - codecov/upload:
+          file: /tmp/tests/coverage.txt
       - store_artifacts:
           path: /tmp/tests
           destination: out
