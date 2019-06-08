@@ -7,7 +7,6 @@
         border-radius: 5px;
         background-color: #fff;
         width: 468px;
-        height: 400px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -57,12 +56,21 @@
                 <br>
                 <form id="verify-form" action="" method="get">
                     {{ .csrfField }}
-                    <input type="hidden" name="email" value="{{.Email}}"/>
                     <p>
-                        <input type="text" name="code" placeholder="Enter verification code" />
+                    {{if not .Email}}
+                        <input type="text" name="email" placeholder="Email"/>
+                    {{else}}
+                        <input type="hidden" name="email" value="{{.Email}}"/>
+                    {{end}}
+                    </p>
+                    <p>
+                        <input type="text" name="code" placeholder="Code" />
                     </p>
                     <br>
-                    <button type="submit" class="button primary full">VERIFY</button>
+                    <p>
+                        <button type="submit" class="button primary full">VERIFY</button>
+                    </p>
+                    <p><a href="/login">Log In</a> <span class="div">|</span> <a href="/">Home</a></p>
                 </form>
             </div>
         </div>
