@@ -14,9 +14,7 @@ jobs:
             - v1-pkg-cache
       - run:
           name: Install deps
-          comand: |
-            curl -sf https://up.apex.sh/install | sh \
-            && go mod download
+          comand: curl -sf https://up.apex.sh/install | sh && go mod download
       - run:
           name: Run tests
           command: make test
