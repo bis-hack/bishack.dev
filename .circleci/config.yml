@@ -8,7 +8,7 @@ jobs:
       TEST_DIR: /tmp/tests
     steps:
       - checkout
-      - run: mdkir -p $TEST_DIR
+      - run: mkdir -p $TEST_DIR
 
       - restore_cache:
           keys:
