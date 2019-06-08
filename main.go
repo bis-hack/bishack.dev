@@ -4,6 +4,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	_ "net/http/pprof"
 	"os"
 	"regexp"
 	"time"
@@ -17,15 +18,17 @@ import (
 	"github.com/gorilla/pat"
 )
 
-// PUBLICFOLDER ...
-const PUBLICFOLDER = "public"
-
 var (
 	cognitoID     = os.Getenv("COGNITO_CLIENT_ID")
 	cognitoSecret = os.Getenv("COGNITO_CLIENT_SECRET")
+	rxEnv         = regexp.MustCompile("`(?i)stag|prod")
 )
 
 func main() {
+	// csrf
+	csrfSecure := true
+	isLive := rxEnv.MatchString(os.Getenv("UP_STAGE"))
+
 	// init route
 	r := pat.New()
 
@@ -51,27 +54,34 @@ func main() {
 	r.Post("/signup", handler.FinishSignup)
 	r.Post("/login", handler.Login)
 
-	// csrf
-	csrfSecure := false
-	if regexp.MustCompile("`(?i)stag|prod").MatchString(os.Getenv("UP_STAGE")) {
-		csrfSecure = true
+	// localhost
+	if !isLive {
+		// set secure to false
+		csrfSecure = false
+
+		// launch nerdy stuff(pprof) server
+		go func() {
+			http.ListenAndServe(":6060", nil)
+		}()
 	}
+
 	protect := csrf.Protect([]byte(os.Getenv("CSRF_KEY")), csrf.Secure(csrfSecure))
 
 	port := ":" + os.Getenv("PORT")
 	log.Fatal(http.ListenAndServe(
 		port,
-		protect(svc(r)),
+		protect(ctxMw(r)),
 	))
 }
 
-func svc(h http.Handler) http.Handler {
+// context middleware
+func ctxMw(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// user service
 		u := user.New(cognitoID, cognitoSecret)
 		context.Set(r, "userService", u)
 
-		// session
+		// session helper
 		s := session.New()
 		context.Set(r, "session", s)
 
@@ -88,6 +98,7 @@ func svc(h http.Handler) http.Handler {
 			Transport: netTransport,
 		}
 
+		// http client
 		context.Set(r, "client", c)
 
 		h.ServeHTTP(w, r)
