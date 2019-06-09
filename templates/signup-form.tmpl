@@ -38,14 +38,14 @@
 
     .avatar {
         position: absolute;
-        top: -116px;
+        top: -90px;
         left: 212px;
         margin-left: -50px;
         color: #666;
     }
     .avatar img {
         border: 1px solid #fff;
-        box-shadow: 0 5px 20px 1px rgba(1,1,1,0.2);
+        margin-bottom: 12px;
     }
 
 {{end}}
@@ -75,34 +75,33 @@
                         <br>
                     </p>
                 </div>
-                <br>
-                <br>
-                <h4>{{.GithubUser.Name}}</h4>
-                <br>
-                <br>
-                <form id="signup-form" action="/signup" method="post">
-                    {{ .csrfField }}
-                    <p>
-                        <input type="text" name="emailx" value="{{.GithubUser.Email}}" disabled />
-                    </p>
-                    <p>
-                        <input type="hidden" name="email" value="{{.GithubUser.Email}}"/>
-                        <input type="hidden" name="nickname" value="{{.GithubUser.Login}}"/>
-                        <input type="hidden" name="picture" value="{{.GithubUser.AvatarURL}}"/>
-                        <input type="hidden" name="locale" value="{{.GithubUser.Location}}"/>
-                        <input type="hidden" name="website" value="{{.GithubUser.Website}}"/>
-                    </p>
-                    <p>
-                        <input type="hidden" name="login" value="{{.GithubUser.Login}}"/>
-                    </p>
-                    <p>
-                        <input type="password" name="password" placeholder="Choose a password" />
-                    </p>
-                    <br>
-                    <p>
-                        <button type="submit" class="button primary full"><span>SUBMIT</span></button>
-                    </p>
-                </form>
+                <p><br><br></p>
+                <h3>Finish Setup</h3>
+                <p>
+                    <form id="signup-form" action="/signup" method="post">
+                        {{ .csrfField }}
+                        <p>
+                            <input type="text" name="emailx" value="{{.GithubUser.Email}}" disabled />
+                        </p>
+                        <p>
+                            <input type="hidden" name="email" value="{{.GithubUser.Email}}"/>
+                            <input type="hidden" name="nickname" value="{{.GithubUser.Login}}"/>
+                            <input type="hidden" name="picture" value="{{.GithubUser.AvatarURL}}"/>
+                            <input type="hidden" name="locale" value="{{.GithubUser.Location}}"/>
+                            <input type="hidden" name="website" value="{{.GithubUser.Website}}"/>
+                        </p>
+                        <p>
+                            <input type="hidden" name="login" value="{{.GithubUser.Login}}"/>
+                        </p>
+                        <p>
+                            <input type="password" name="password" placeholder="Choose a password" />
+                        </p>
+                        <br>
+                        <p style="margin-bottom: 2em">
+                            <button type="submit" class="button primary full"><span>SUBMIT</span></button>
+                        </p>
+                    </form>
+                </p>
                 <p><a href="/login">Log In</a> <span class="div">|</span> <a href="/">Home</a></p>
             </div>
         </div>
