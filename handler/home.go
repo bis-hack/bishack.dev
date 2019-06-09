@@ -16,7 +16,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 
 	user = sessionUser(r)
 
-	render(w, "main", "index", map[string]interface{}{
+	render(w, "main", "home", map[string]interface{}{
 		"Title": "Home",
 		"Flash": sess.GetFlash(w, r),
 		"User":  user,

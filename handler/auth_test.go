@@ -33,7 +33,7 @@ func TestLoginForm(t *testing.T) {
 
 	LoginForm(w, r)
 
-	assert.Regexp(t, regexp.MustCompile("bishack.dev - User Login"), w.Body.String())
+	assert.Regexp(t, regexp.MustCompile("User Login"), w.Body.String())
 	assert.Regexp(t, regexp.MustCompile("login-form"), w.Body.String())
 	s.AssertExpectations(t)
 }
@@ -226,7 +226,7 @@ func TestVerify(t *testing.T) {
 		Verify(w, r)
 
 		assert.Equal(t, http.StatusOK, w.Code)
-		assert.Regexp(t, regexp.MustCompile("bishack.dev - Verify"), w.Body.String())
+		assert.Regexp(t, regexp.MustCompile("Verify"), w.Body.String())
 
 		s.AssertExpectations(t)
 	})

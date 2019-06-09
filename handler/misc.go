@@ -98,8 +98,12 @@ func sessionUser(r *http.Request) map[string]string {
 
 func render(w http.ResponseWriter, base, content string, ctx interface{}) {
 	tmpl, err := template.New("").ParseFiles(
-		fmt.Sprintf("templates/layout/%s.tmpl", base),
-		fmt.Sprintf("templates/%s.tmpl", content),
+		fmt.Sprintf("assets/templates/layout/%s.tmpl", base),
+		fmt.Sprintf("assets/templates/%s.tmpl", content),
+		// main css file
+		fmt.Sprintf("assets/css/main.css"),
+		// main javascript file
+		fmt.Sprintf("assets/scripts/main.js"),
 	)
 
 	if err != nil {

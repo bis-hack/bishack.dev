@@ -1,0 +1,196 @@
+* {
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  background-color: #efefef;
+  font-size: 18px;
+}
+
+h1, h2, h3, h4, p {
+  line-height: 1.5em;
+  margin-bottom: 1em;
+  color: #333;
+}
+
+/* Inputs */
+input {
+  padding: 16px;
+  font-size: 16px;
+  background: #efefef;
+  width: 100%;
+  box-sizing: border-box;
+  color: blue;
+  border-bottom: 2px solid #ccc;
+}
+input:hover:not(:disabled) {
+  border-color: blue;
+}
+input:disabled {
+  opacity: 0.7;
+  background-color: #ccc;
+  color: #666;
+}
+input:focus {
+  border-color: blue;
+}
+input::placeholder {
+  color: #777;
+  opacity: 0.5;
+}
+
+/* Links */
+a:not(.button), a:not(.button):visited, a:not(.button):active {
+  text-decoration: none;
+  color: blue;
+  padding-bottom: 2px;
+}
+
+a:not(.button):hover {
+  border-bottom: 1px solid #3131ff;
+  transition: color .3s;
+}
+
+/* Buttons */
+.button {
+  text-decoration: none;
+  opacity: 1 !important;
+  border-radius: 5px;
+  letter-spacing: 1px;
+  padding: 6px 24px;
+  font-weight: bold;
+  font-size: 16px;
+  display: inline-block;
+  color: #666;
+  background-color: #aaa;
+  border-bottom: solid 5px #888;
+  cursor: pointer;
+  position: relative;
+  transition: background-color .5s;
+}
+button.button {
+  padding: 14px 20px;
+}
+.button.full {
+  width: 100%;
+  box-sizing: border-box;
+}
+.button:active {
+  border-bottom-width: 0 !important;
+  border-top: 5px solid #888;
+}
+.button:hover {
+  background-color: #bbbbbb;
+  transition: background-color 1s;
+}
+.primary, .primary:active {
+  color: #ffffff !important;
+  border-color: darkblue;
+  background-color: blue;
+}
+.primary:hover {
+  background-color: #3131ff;
+}
+.success, .success:active {
+  color: #ffffff !important;
+  border-color: darkgreen;
+  background-color: green;
+}
+.success:hover {
+  background-color: #00a200;
+}
+.button:disabled {
+  background-color: #cccccc;
+  border-color: #aaaaaa;
+  color: #aaaaaa;
+  cursor: default;
+}
+
+/* Flash */
+.flash {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px;
+  max-width: 400px;
+  padding: 12px 20px;
+  letter-spacing: 0.2px;
+  background-color: #ffffff;
+  box-shadow: 0px 5px 10px 1px rgba(0,0,0,0.2);
+}
+.flash.error {
+  background-color: #ff3333;
+  color: white;
+  box-shadow: 0px 5px 10px 1px rgb(255, 136, 136);
+}
+.flash.success {
+  background-color: #00bb00;
+  color: white;
+  box-shadow: 0px 5px 10px 1px rgba(0, 128, 0, 0.36);
+}
+
+/* Layout */
+.center-flex-box {
+  position: relative;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.card {
+  position: relative;
+  padding: 32px;
+  background-color: #FFFFFF;
+}
+.kahon {
+  width: 500px;
+  box-sizing: border-box;
+}
+
+/* Orientation */
+.center {
+  text-align: center;
+}
+.right {
+  float: right;
+}
+.left {
+  float: left;
+}
+
+/* Misc */
+.turbolinks-progress-bar {
+  height: 5px;
+  background-color: blue;
+}
+
+.div {
+  opacity: 0.3;
+  font-size: 1em;
+  padding: 0 16px;
+}
+
+.sub {
+  opacity: 0.3;
+  font-size: 1em;
+}
+
+.join {
+  position: relative;
+  display: inline-block;
+  top: -10px;
+  left: 6px;
+}
+
+.circle {
+  border-radius: 100px;
+}

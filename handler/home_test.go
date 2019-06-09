@@ -89,5 +89,5 @@ func TestNotFound(t *testing.T) {
 
 	NotFound(w, r)
 
-	assert.Regexp(t, regexp.MustCompile("bishack.dev - Not Found"), w.Body.String())
+	assert.Regexp(t, regexp.MustCompile("Not Found"), w.Body.String())
 }

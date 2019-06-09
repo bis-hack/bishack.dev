@@ -5,6 +5,29 @@
 [![CircleCI](https://circleci.com/gh/bis-hack/bishack.dev.svg?style=svg)](https://circleci.com/gh/bis-hack/bishack.dev)
 [![codecov](https://codecov.io/gh/bis-hack/bishack.dev/branch/master/graph/badge.svg)](https://codecov.io/gh/bis-hack/bishack.dev)
 
+&nbsp;
+
+### Folder Structure
+
+	├── assets/             // Static files (go-bindatable/private)
+	│   ├── css/
+	│   ├── scripts/
+	│   └── templates/
+	│
+	├── handler/            // Handler package.
+	│
+	├── public/             // For publicly available static content.
+	│   └── images/
+	│
+	├── services/           // All external service packages. Anything that talks to the network should go here.
+	│   └── user/
+	│
+	├── testing/            // Includes a nifty little tricks for testing.
+	│
+	└── utils/              // None service related stuff like: session, crypto, etc...
+	    └── session/
+&nbsp;
+
 
 ### Foreword
 

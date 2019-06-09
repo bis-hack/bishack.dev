@@ -1,0 +1,40 @@
+{{define "style"}}
+{{end}}
+{{define "script"}}
+    const form = document.querySelector('form');
+    form.addEventListener('submit', (e) => {
+        const code = e.target.code;
+        const val = code.value.trim();
+
+        // check for password
+        code.style.borderColor = 'blue'; // reset color
+        if (!val.match(/.{5,}/) || val.match(/[a-zA-Z]/g)) {
+            code.style.borderColor = 'red';
+            code.focus();
+            e.preventDefault();
+        }
+    });
+{{end}}
+{{define "content"}}
+    <div class="center-flex-box">
+        <div class="kahon card center">
+            <h2>Verify Account</h2>
+            <p>Check your email for code verification</p>
+            <br>
+            <form id="verify-form" action="" method="get">
+                {{ .csrfField }}
+                <p>
+                {{if not .Email}}
+                    <input type="text" name="email" placeholder="Email"/>
+                {{else}}
+                    <input type="hidden" name="email" value="{{.Email}}"/>
+                {{end}}
+                </p>
+                <p><input type="text" name="code" placeholder="Code" /></p>
+                <br>
+                <p><button type="submit" class="button primary full">VERIFY</button></p>
+                <p><a href="/login">Log In</a> <span class="div">|</span> <a href="/">Home</a></p>
+            </form>
+        </div>
+    </div>
+{{end}}

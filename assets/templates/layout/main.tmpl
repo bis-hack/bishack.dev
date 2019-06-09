@@ -1,0 +1,37 @@
+{{define "layout"}}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{.Title}}</title>
+    <meta property="og:title" content="{{.Title}}" />
+    <meta property="og:description" content="Bisdak Dev Community" />
+    <meta property="og:image" content="/images/bishack.png" />
+    <link rel="icon" type="image/jpg" href="/images/bishack.jpg" />
+    <style>
+    {{template "main.css"}}
+    {{template "style" .}}
+    </style>
+</head>
+
+<body>
+    {{if .Flash}}
+    <div class="flash {{.Flash.Type}}">
+        {{.Flash.Value}}
+    </div>
+    {{end}}
+    {{template "content" .}}
+    <script>
+        window.onload = () => {
+            if (document.readyState === 'complete') {
+                {{template "main.js" }}
+                {{template "script" .}}
+            }
+        };
+    </script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/turbolinks/5.2.0/turbolinks.js"></script>
+</body>
+
+</html>
+{{end}}
