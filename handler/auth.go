@@ -47,7 +47,7 @@ func FinishSignup(w http.ResponseWriter, r *http.Request) {
 		errMessage := "Could not sign you up. Try again!"
 
 		if regexp.MustCompile("exists").MatchString(err.Error()) {
-			errMessage = "Account already exists. You can log in if you want to"
+			errMessage = "Account already exists. Try to log in instead."
 		}
 
 		sess := context.Get(r, "session").(interface {

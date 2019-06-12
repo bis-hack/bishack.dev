@@ -16,16 +16,28 @@
 </head>
 
 <body>
-    {{if .Flash}}
-    <div class="flash {{.Flash.Type}}">
-        {{.Flash.Value}}
+    <div class="wrapper">
+        {{if .Flash}}
+        <div class="flash {{.Flash.Type}}">
+            {{.Flash.Value}}
+        </div>
+        {{end}}
+        <header>
+            <div class="wrap">
+                <div class="left">
+                    <a class="logo" href="/">.bishack()</a>
+                </div>
+                <div class="right">
+                    {{template "main-nav" .User}}
+                </div>
+            </div>
+        </header>
+        {{template "content" .}}
     </div>
-    {{end}}
-    {{template "content" .}}
     <script>
         window.onload = () => {
             if (document.readyState === 'complete') {
-                {{template "main.js" }}
+                {{template "main.js" .}}
                 {{template "script" .}}
             }
         };

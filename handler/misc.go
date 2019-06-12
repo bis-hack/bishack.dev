@@ -100,6 +100,7 @@ func render(w http.ResponseWriter, base, content string, ctx interface{}) {
 	tmpl, err := template.New("").ParseFiles(
 		fmt.Sprintf("assets/templates/layout/%s.tmpl", base),
 		fmt.Sprintf("assets/templates/%s.tmpl", content),
+		fmt.Sprintf("assets/templates/main-nav.tmpl"),
 		// main css file
 		fmt.Sprintf("assets/css/main.css"),
 		// main javascript file

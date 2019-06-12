@@ -287,7 +287,7 @@ func TestFinishSignup(t *testing.T) {
 			return true
 		}), mock.MatchedBy(func(r *http.Request) bool {
 			return true
-		}), "error", "Account already exists. You can log in if you want to")
+		}), "error", "Account already exists. Try to log in instead.")
 
 		FinishSignup(w, r)
 
@@ -512,6 +512,6 @@ func TestSignup(t *testing.T) {
 
 		Signup(w, r)
 		assert.Equal(t, http.StatusOK, w.Code)
-		assert.Regexp(t, regexp.MustCompile("Let's Get Started"), w.Body.String())
+		assert.Regexp(t, regexp.MustCompile("(?i)connect"), w.Body.String())
 	})
 }

@@ -59,6 +59,42 @@ a:not(.button):hover {
   transition: color .3s;
 }
 
+header {
+  width: 100%;
+  background-color: #EFEFEF;
+  box-sizing: border-box;
+  position: fixed;
+  z-index: 20;
+  top: 0;
+  left: 0;
+  padding: 24px 24px 8px;
+  overflow: auto;
+}
+
+header .wrap {
+  width: 1040px;
+  margin: 0 auto;
+}
+
+header a.logo {
+  display: block;
+  text-indent: -100000px;
+  background: transparent url(/images/bishack.svg) center center /contain no-repeat;
+  width: 156px;
+  border: 0 !important;
+}
+header a.logo:hover {
+  opacity: 0.7;
+}
+
+header .left, header .right {
+  width: 50%;
+}
+
+header nav.main-nav {
+  text-align: right;
+}
+
 /* Buttons */
 .button {
   text-decoration: none;
@@ -70,11 +106,12 @@ a:not(.button):hover {
   font-size: 16px;
   display: inline-block;
   color: #666;
-  background-color: #aaa;
+  background-color: #CCCCCC;
   border-bottom: solid 5px #888;
   cursor: pointer;
   position: relative;
-  transition: background-color .5s;
+  bottom: 0;
+  transition: all .5s;
 }
 button.button {
   padding: 14px 20px;
@@ -83,13 +120,9 @@ button.button {
   width: 100%;
   box-sizing: border-box;
 }
-.button:active {
-  border-bottom-width: 0 !important;
-  border-top: 5px solid #888;
-}
 .button:hover {
   background-color: #bbbbbb;
-  transition: background-color 1s;
+  transition: all 1s;
 }
 .primary, .primary:active {
   color: #ffffff !important;
@@ -126,6 +159,7 @@ button.button {
   letter-spacing: 0.2px;
   background-color: #ffffff;
   box-shadow: 0px 5px 10px 1px rgba(0,0,0,0.2);
+  z-index: 30;
 }
 .flash.error {
   background-color: #ff3333;
@@ -187,10 +221,19 @@ button.button {
 .join {
   position: relative;
   display: inline-block;
-  top: -10px;
+  top: -4px;
   left: 6px;
 }
 
 .circle {
   border-radius: 100px;
 }
+
+.wrapper {
+  position: relative;
+  margin: 0 auto;
+  box-sizing: border-box;
+  height: 100%;
+  width: 1040px;
+}
+

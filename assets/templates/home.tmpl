@@ -6,19 +6,22 @@
         border: 1px solid #eeeeee;
         box-sizing: border-box;
         right: 10px;
-        bottom: -171px;
+        bottom: -160px;
         transition: bottom .3s;
         transition-delay: 5s;
         padding: 24px;
         border: 1px solid #aaaaaa;
-        background-color: #fff;
+        background-color: #723a7b;
         box-shadow: -3px -3px 10px 1px rgba(0,0,0,0.1);
     }
     .slack:hover {
         transition: bottom .3s;
         bottom: 10px;
     }
-    .slack p { margin-bottom: 0 }
+    .slack p {
+        margin-bottom: 0;
+        color: white;
+    }
 
     .title {
         letter-spacing: 1px;
@@ -89,61 +92,76 @@
     });
 {{end}}
 {{define "content"}}
-    <div class="center-flex-box">
-        <div class="center">
-            <h1 class="title">bishack.dev</h1>
-            <br />
-            <p>Ka pundokan sa mga bangiitang <span class="batman">&nbsp;batman&nbsp;</span> sa <a href="https://en.wikipedia.org/wiki/Visayas">Kabisayaan</a>.</p>
-            <br />
-            {{if .User}}
-                <img class="circle" src="{{.User.picture}}" alt="{{.User.nickname}}" width="100" height="100" />
-                <br>
-                <br>
+    {{if .User}}
+        <div class="center-flex-box">
+            <div class="center">
                 <p>
-                    <a href="/dashboard">Dashboard</a>
-                    <span class="div">|</span>
-                    <a href="/profile">@{{.User.nickname}}</a>
-                    <span class="div">|</span>
-                    <a href="/logout">Log Out</a>
+                    <img width="128" style="border-radius:100px" src="{{.User.picture}}" alt="{{.User.nickname}}">
                 </p>
-            {{else}}
-                <p><a href="/signup">Sign Up</a> <span class="div">|</span> <a href="/login">Log In</a></p>
-            {{end}}
+                <p>
+                    {{.User.locale}}
+                    <span class="div">|</span>
+                    <a href="{{.User.website}}">@{{.User.nickname}}</a>
+                    <span class="div">|</span>
+                    {{.User.email}}
+                </p>
+            </div>
         </div>
-    </div>
-    <div class="slack">
-        <p style="text-align:center;">
-            <svg width="32" height="32" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                 viewBox="0 0 512.005 512.005" style="enable-background:new 0 0 512.005 512.005;" xml:space="preserve">
-            <path style="fill:#FFC107;" d="M332.034,31.529c-7.776-23.936-33.504-37.056-57.472-29.28s-37.056,33.504-29.28,57.472
-                l117.92,362.848c8.096,22.368,32.256,34.944,55.488,28.288c24.192-6.976,38.976-32.672,31.232-56.448
-                C449.634,393.481,332.034,31.529,332.034,31.529z"/>
-            <path style="fill:#4CAF50;" d="M149.314,90.921c-7.808-23.968-33.536-37.088-57.472-29.28s-37.088,33.504-29.28,57.472
-                l117.92,362.816c8.096,22.368,32.256,34.944,55.488,28.288c24.192-6.976,38.976-32.672,31.232-56.448
-                C266.914,452.873,149.314,90.921,149.314,90.921z"/>
-            <path style="fill:#EC407A;" d="M480.482,332.041c23.968-7.776,37.056-33.504,29.28-57.472s-33.504-37.056-57.472-29.28
-                L89.442,363.241c-22.368,8.096-34.944,32.256-28.288,55.488c6.976,24.192,32.672,38.976,56.448,31.232
-                C118.53,449.641,480.482,332.041,480.482,332.041z"/>
-            <path style="fill:#472A49;" d="M165.058,434.537c23.616-7.68,54.048-17.568,86.72-28.192c-7.68-23.616-17.568-54.048-28.192-86.72
-                l-86.72,28.192L165.058,434.537z"/>
-            <path style="fill:#CC2027;" d="M347.81,375.145c32.8-10.656,63.264-20.544,86.72-28.192c-7.68-23.616-17.568-54.08-28.192-86.752
-                l-86.72,28.192L347.81,375.145z"/>
-            <path style="fill:#2196F3;" d="M421.09,149.321c23.968-7.776,37.056-33.504,29.28-57.472s-33.504-37.056-57.472-29.28
-                L30.082,180.489c-22.4,8.096-34.976,32.256-28.288,55.488c6.976,24.192,32.672,38.944,56.448,31.232
-                C59.138,266.921,421.09,149.321,421.09,149.321z"/>
-            <path style="fill:#1A937D;" d="M105.666,251.785c23.616-7.68,54.08-17.568,86.752-28.192c-10.656-32.768-20.544-63.232-28.192-86.72
-                l-86.72,28.192L105.666,251.785z"/>
-            <path style="fill:#65863A;" d="M288.418,192.425c32.8-10.656,63.264-20.544,86.752-28.192c-10.656-32.8-20.576-63.264-28.192-86.752
-                l-86.752,28.192L288.418,192.425z"/>
-            </svg>
+    {{else}}
+        <div class="center-flex-box">
+            <div class="center">
+                <p style="opacity:0.5">
+                    <small>PUSLAN MANG WAY NAGMAHAL, BEER PA DAY!</small>
+                    <br>
+                    <br>
+                    <br>
+                </p>
+                <h1 style="width:500px;font-weight:normal;opacity:0.7">
+                    We are a community of bisdak developers, designers, tinkerers,
+                    and hackers.
+                </h1>
+                <br />
+                <p style="box-sizing:border-box">
+                    <a class="button primary" href="/signup">Sign Up Now</a>
+                    <span class="div">or</span>
+                    <a href="/login">Log In Here</a>
+                </p>
+            </div>
+        </div>
+        <div class="slack">
+            <p style="text-align:center;">
+                <svg width="20" height="20" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                     viewBox="0 0 512.005 512.005" style="enable-background:new 0 0 512.005 512.005;" xml:space="preserve">
+                <path style="fill:#FFC107;" d="M332.034,31.529c-7.776-23.936-33.504-37.056-57.472-29.28s-37.056,33.504-29.28,57.472
+                    l117.92,362.848c8.096,22.368,32.256,34.944,55.488,28.288c24.192-6.976,38.976-32.672,31.232-56.448
+                    C449.634,393.481,332.034,31.529,332.034,31.529z"/>
+                <path style="fill:#4CAF50;" d="M149.314,90.921c-7.808-23.968-33.536-37.088-57.472-29.28s-37.088,33.504-29.28,57.472
+                    l117.92,362.816c8.096,22.368,32.256,34.944,55.488,28.288c24.192-6.976,38.976-32.672,31.232-56.448
+                    C266.914,452.873,149.314,90.921,149.314,90.921z"/>
+                <path style="fill:#EC407A;" d="M480.482,332.041c23.968-7.776,37.056-33.504,29.28-57.472s-33.504-37.056-57.472-29.28
+                    L89.442,363.241c-22.368,8.096-34.944,32.256-28.288,55.488c6.976,24.192,32.672,38.976,56.448,31.232
+                    C118.53,449.641,480.482,332.041,480.482,332.041z"/>
+                <path style="fill:#472A49;" d="M165.058,434.537c23.616-7.68,54.048-17.568,86.72-28.192c-7.68-23.616-17.568-54.048-28.192-86.72
+                    l-86.72,28.192L165.058,434.537z"/>
+                <path style="fill:#CC2027;" d="M347.81,375.145c32.8-10.656,63.264-20.544,86.72-28.192c-7.68-23.616-17.568-54.08-28.192-86.752
+                    l-86.72,28.192L347.81,375.145z"/>
+                <path style="fill:#2196F3;" d="M421.09,149.321c23.968-7.776,37.056-33.504,29.28-57.472s-33.504-37.056-57.472-29.28
+                    L30.082,180.489c-22.4,8.096-34.976,32.256-28.288,55.488c6.976,24.192,32.672,38.944,56.448,31.232
+                    C59.138,266.921,421.09,149.321,421.09,149.321z"/>
+                <path style="fill:#1A937D;" d="M105.666,251.785c23.616-7.68,54.08-17.568,86.752-28.192c-10.656-32.768-20.544-63.232-28.192-86.72
+                    l-86.72,28.192L105.666,251.785z"/>
+                <path style="fill:#65863A;" d="M288.418,192.425c32.8-10.656,63.264-20.544,86.752-28.192c-10.656-32.8-20.576-63.264-28.192-86.752
+                    l-86.752,28.192L288.418,192.425z"/>
+                </svg>
 
-            <span class="join">Join us on slack</span>
-        </p>
-        <br/>
-        <form id="slack-form" action="#">
-            <p><input name="email" type="text" placeholder="Enter your email for invites"/></p>
+                <span class="join">Join us on slack</span>
+            </p>
             <br/>
-            <p><button type="submit" class="full right success button">Send Invite</button></p>
-        </form>
-    </div>
+            <form id="slack-form" action="#">
+                <p><input name="email" type="text" placeholder="Enter your email for invites"/></p>
+                <br/>
+                <p><button type="submit" class="full right success button">Send Invite</button></p>
+            </form>
+        </div>
+    {{end}}
 {{end}}

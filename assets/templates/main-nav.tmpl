@@ -1,0 +1,15 @@
+{{define "main-nav"}}
+<nav class="main-nav">
+    {{if .}}
+        <p>
+            <a href="/logout">Log Out</a>
+        </p>
+    {{else}}
+        <p>
+            <a href="/signup">Sign Up</a>
+            <span class="div">|</span>
+            <a href="/login">Log In</a>
+        </p>
+    {{end}}
+</nav>
+{{end}}
