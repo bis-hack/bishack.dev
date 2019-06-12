@@ -1,4 +1,4 @@
-![bishack](./public/images/bishack.png)
+![bishack](./public/images/bishack.svg)
 
 &nbsp;
 
@@ -43,18 +43,18 @@ If you want to contribute to this project, do let me know. So I can assist you o
 - [**Go**](https://golang.org) - 1.12 or higher
 
 - **AWS buffet** - you can always sign up for a free tier
-	
+
 	- **IAM Key Pair** - to be loaded into your `~/.aws/credentials` config file.
-	
+
 		> On mac you can actually just `$ brew install aws-cli` and then run `$ aws config` from your terminal. The prompt will ask you to input the credentials and will load them to the file I mentioned above.
-		
+
 	- **Cognito User Pool (with client key and secret)** - you can create one from AWS console.
-		
+
 		> Ping me on slack if you need help on this one.
-		
+
 	- **DynamoDB Tables** - TBA
-	
-	
+
+
 - **Github oauth credentials** this one is easy
 - **Slack token** (optional)
 
@@ -65,8 +65,8 @@ If you want to contribute to this project, do let me know. So I can assist you o
 Install a live-reload command line utility called [**Gin**](https://github.com/codegangsta/gin) with the following command:
 
 	$ https://github.com/codegangsta/gin
-	
-	
+
+
 And then install [**up**](https://up.docs.apex.sh/).
 
 	$ curl -sf https://up.apex.sh/install | sh
