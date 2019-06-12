@@ -33,19 +33,20 @@
         background: url(/images/bishack.svg) center center /contain no-repeat;
     }
 
-    .batman {
+    .jira {
         position: relative;
         text-decoration: line-through;
         color: #888888;
     }
-    .batman:after {
+    .jira:after {
         text-decoration: none;
         color: black;
-        top: -42px;
+        top: -32px;
         left: -1px;
-        transform: rotate(-10deg);
+        width: 140px;
+        transform: rotate(-4deg);
         display: inline-block;
-        content: "hipster/hacker";
+        content: attr(data);
         background-color: yellow;
         padding: 0 10px;
         position: absolute;
@@ -105,13 +106,14 @@
                     <span class="div">|</span>
                     {{.User.email}}
                 </p>
+                <p><br><small class="sub">This page is currently under development. Check back soon.</small></p>
             </div>
         </div>
     {{else}}
         <div class="center-flex-box">
             <div class="center">
                 <p style="opacity:0.5">
-                    <small>PUSLAN MANG WAY NAGMAHAL, BEER PA DAY!</small>
+                    <small>PUSLAN MANG WAY NAGMAHAL, <span class="jira" data="MORE JIRA TICKET">BEER</span> PA DAY!</small>
                     <br>
                     <br>
                     <br>
