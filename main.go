@@ -70,7 +70,7 @@ func main() {
 	port := ":" + os.Getenv("PORT")
 	log.Fatal(http.ListenAndServe(
 		port,
-		protect(ctxMw(r)),
+		protect(ctxMw(authMw(r))),
 	))
 }
 
@@ -100,6 +100,28 @@ func ctxMw(h http.Handler) http.Handler {
 
 		// http client
 		context.Set(r, "client", c)
+
+		h.ServeHTTP(w, r)
+	})
+}
+
+// auth middleware
+// checks for authenticated user and the path names
+// i.e: authenticated /login should redirect to /
+func authMw(h http.Handler) http.Handler {
+	rx := regexp.MustCompile(`(?i)^/(signup|login|verify)`)
+
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		sess := context.Get(r, "session").(interface {
+			GetUser(r *http.Request) map[string]string
+		})
+
+		user := sess.GetUser(r)
+
+		if r.URL.Path != "/" && rx.MatchString(r.URL.Path) && user != nil {
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+			return
+		}
 
 		h.ServeHTTP(w, r)
 	})

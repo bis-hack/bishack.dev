@@ -25,7 +25,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 
 // NotFound ...
 func NotFound(w http.ResponseWriter, r *http.Request) {
-	render(w, "main", "notfound", map[string]interface{}{
-		"Title": "Not Found",
+	render(w, "error", "notfound", map[string]interface{}{
+		"Title": "404 - Not Found",
 	})
 }

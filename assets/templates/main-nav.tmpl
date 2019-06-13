@@ -1,15 +1,19 @@
 {{define "main-nav"}}
 <nav class="main-nav">
     {{if .}}
-        <p>
-            <a href="/logout">Log Out</a>
-        </p>
+        <div class="dropdown">
+            <img class="circle" width="32px" src="{{.picture}}" alt="avatar">
+            <ul>
+                <li><a href="/profile">Profile</a></li>
+                <li><a href="/logout">Log Out</a></li>
+            </ul>
+        </div>
     {{else}}
-        <p>
+        <div>
             <a href="/signup">Sign Up</a>
             <span class="div">|</span>
             <a href="/login">Log In</a>
-        </p>
+        </div>
     {{end}}
 </nav>
 {{end}}

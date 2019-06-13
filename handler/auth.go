@@ -23,8 +23,10 @@ const (
 func FinishSignup(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
+	name := r.Form.Get("name")
 	email := r.Form.Get("email")
 	locale := r.Form.Get("locale")
+	profile := r.Form.Get("profile")
 	picture := r.Form.Get("picture")
 	website := r.Form.Get("website")
 	nickname := r.Form.Get("login")
@@ -35,8 +37,10 @@ func FinishSignup(w http.ResponseWriter, r *http.Request) {
 	})
 
 	meta := map[string]string{
+		"name":     name,
 		"email":    email,
 		"locale":   locale,
+		"profile":  profile,
 		"website":  website,
 		"picture":  picture,
 		"nickname": nickname,

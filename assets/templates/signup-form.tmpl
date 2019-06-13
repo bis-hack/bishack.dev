@@ -45,11 +45,15 @@
             <div class="avatar">
                 <img style="border-radius: 100px" src="{{.GithubUser.AvatarURL}}" alt="avatar" height="128" width="128">
                 <p>
-                    <strong><a href="https://github.com/{{.GithubUser.Login}}" target="_blank">@{{.GithubUser.Login}}</a></strong>
+                    {{if .GithubUser.Name}}
+                    <strong>{{.GithubUser.Name}}</strong>
+                    <br>
+                    {{end}}
+                    <cite><a href="https://github.com/{{.GithubUser.Login}}" target="_blank">@{{.GithubUser.Login}}</a></cite>
                     <br>
                 </p>
             </div>
-            <p><br><br></p>
+            <p><br><br><br><br></p>
             <h3>Let's finish up</h3>
             <p>
                 <form id="signup-form" action="/signup" method="post">
@@ -67,16 +71,16 @@
                         <input type="hidden" name="picture" value="{{.GithubUser.AvatarURL}}"/>
                         <input type="hidden" name="locale" value="{{.GithubUser.Location}}"/>
                         <input type="hidden" name="website" value="{{.GithubUser.Website}}"/>
-                    </p>
-                    <p>
                         <input type="hidden" name="login" value="{{.GithubUser.Login}}"/>
+                        <input type="hidden" name="name" value="{{.GithubUser.Name}}"/>
+                        <input type="hidden" name="profile" value="{{.GithubUser.Bio}}"/>
                     </p>
                     <p>
                         <input type="password" name="password" placeholder="Choose a password" />
                     </p>
                     <br>
                     <p style="margin-bottom: 2em">
-                        <button type="submit" class="button primary full"><span>Create Account</span></button>
+                        <button type="submit" class="button primary full"><span>Submit</span></button>
                     </p>
                 </form>
             </p>

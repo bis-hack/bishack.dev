@@ -1,0 +1,26 @@
+{{define "layout"}}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{.Title}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="{{.Title}}" />
+    <meta property="og:description" content="Bisdak Dev Community" />
+    <meta property="og:image" content="/images/bishack.png" />
+    <link rel="icon" type="image/jpg" href="/images/bishack.jpg" />
+    <style>
+    {{template "main.css"}}
+    {{template "style" .}}
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        {{template "content" .}}
+    </div>
+</body>
+
+</html>
+{{end}}

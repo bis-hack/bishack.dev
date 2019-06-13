@@ -68,7 +68,7 @@ header {
   top: 0;
   left: 0;
   padding: 24px 24px 8px;
-  overflow: auto;
+  overflow: visible;
 }
 
 header .wrap {
@@ -101,7 +101,7 @@ header nav.main-nav {
   opacity: 1 !important;
   border-radius: 5px;
   letter-spacing: 1px;
-  padding: 6px 24px;
+  padding: 8px 24px;
   font-weight: bold;
   font-size: 16px;
   display: inline-block;
@@ -111,10 +111,10 @@ header nav.main-nav {
   cursor: pointer;
   position: relative;
   bottom: 0;
-  transition: all .5s;
+  transition: all .3s;
 }
 button.button {
-  padding: 14px 20px;
+  padding: 13px 20px;
 }
 .button.full {
   width: 100%;
@@ -122,7 +122,7 @@ button.button {
 }
 .button:hover {
   background-color: #bbbbbb;
-  transition: all 1s;
+  transition: all .3s;
 }
 .primary, .primary:active {
   color: #ffffff !important;
@@ -130,7 +130,7 @@ button.button {
   background-color: blue;
 }
 .primary:hover {
-  background-color: #3131ff;
+  background-color: #0064ff;
 }
 .success, .success:active {
   color: #ffffff !important;
@@ -237,3 +237,47 @@ button.button {
   width: 1040px;
 }
 
+.dropdown {
+  position: relative;
+  display: inline-block;
+  overflow: visible;
+  box-sizing: border-box;
+}
+.dropdown > ul {
+  display: none;
+  list-style-type: : none;
+  position: absolute;
+  min-width: 128px;
+  right: 0;
+  top: 35px;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+}
+.dropdown > ul:before {
+  content: '';
+  position: absolute;
+  top: -30px;
+  left: 0px;
+  display: block;
+  height: 30px;
+  width: 100%;
+}
+.dropdown > ul > li {
+  text-align: left;
+  list-style-type: none;
+}
+.dropdown > ul > li > a, .dropdown > ul > li > a:active {
+  position: relative;
+  display: block;
+  text-decoration: none;
+  color: #666666 !important;
+  border: 0 !important;
+  padding: 16px 24px;
+}
+.dropdown > ul > li > a:hover {
+  background-color: rgba(0,0,0,0.05);
+}
+.dropdown:hover > ul {
+  display: block;
+}

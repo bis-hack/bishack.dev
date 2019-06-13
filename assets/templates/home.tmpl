@@ -43,7 +43,7 @@
         color: black;
         top: -32px;
         left: -1px;
-        width: 140px;
+        width: 150px;
         transform: rotate(-4deg);
         display: inline-block;
         content: attr(data);
@@ -51,46 +51,56 @@
         padding: 0 10px;
         position: absolute;
     }
+    .sign-icon {
+        position: relative;
+        top: 5px;
+        margin-right: 12px;
+    }
+    .sign-icon path {
+        fill: #FFFFFF;
+    }
 {{end}}
 {{define "script"}}
-    const form = document.querySelector('form');
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
+    {{if not .User }}
+        const form = document.querySelector('form');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
 
-        const email = e.target.email;
-        const val = email.value.trim();
+            const email = e.target.email;
+            const val = email.value.trim();
 
-        // reset and disabled load
-        email.style.borderColor = 'blue';
+            // reset and disabled load
+            email.style.borderColor = 'blue';
 
-        const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if (!val.match(pattern)) {
-            email.style.borderColor = 'red';
-            email.focus();
-            return;
-        }
-
-        email.style.borderColor = '#aaa';
-        email.setAttribute('disabled', true);
-        form.querySelector('button').setAttribute('disabled', true);
-
-        (async () => {
-            const resp = await fetch(`/slack-invite?email=${val}`);
-            const type = resp.headers.get('content-type');
-
-            if (resp.status == 200 && type.match(/json/i)) {
-                const content = await resp.json();
-                if (content.ok) {
-                    document.querySelector('.join').innerText = 'Invitation Sent!';
-                }
+            const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            if (!val.match(pattern)) {
+                email.style.borderColor = 'red';
+                email.focus();
+                return;
             }
 
-            email.style.borderColor = 'blue';
-            email.value = '';
-            email.removeAttribute('disabled');
-            form.querySelector('button').removeAttribute('disabled')
-        })()
-    });
+            email.style.borderColor = '#aaa';
+            email.setAttribute('disabled', true);
+            form.querySelector('button').setAttribute('disabled', true);
+
+            (async () => {
+                const resp = await fetch(`/slack-invite?email=${val}`);
+                const type = resp.headers.get('content-type');
+
+                if (resp.status == 200 && type.match(/json/i)) {
+                    const content = await resp.json();
+                    if (content.ok) {
+                        document.querySelector('.join').innerText = 'Invitation Sent!';
+                    }
+                }
+
+                email.style.borderColor = 'blue';
+                email.value = '';
+                email.removeAttribute('disabled');
+                form.querySelector('button').removeAttribute('disabled')
+            })()
+        });
+    {{end}}
 {{end}}
 {{define "content"}}
     {{if .User}}
@@ -100,33 +110,61 @@
                     <img width="128" style="border-radius:100px" src="{{.User.picture}}" alt="{{.User.nickname}}">
                 </p>
                 <p>
+                    {{.User.name}}
+                    <span class="div">|</span>
                     {{.User.locale}}
                     <span class="div">|</span>
                     <a href="{{.User.website}}">@{{.User.nickname}}</a>
                     <span class="div">|</span>
                     {{.User.email}}
                 </p>
-                <p><br><small class="sub">This page is currently under development. Check back soon.</small></p>
+                <p><br><small class="sub">{{.User.profile}}</small></p>
             </div>
         </div>
     {{else}}
         <div class="center-flex-box">
             <div class="center">
-                <p style="opacity:0.5">
+                <p style="color: red;opacity:0.7;font-weight:bold;letter-spacing:.5px">
                     <small>PUSLAN MANG WAY NAGMAHAL, <span class="jira" data="MORE JIRA TICKET">BEER</span> PA DAY!</small>
                     <br>
                     <br>
                     <br>
                 </p>
-                <h1 style="width:500px;font-weight:normal;opacity:0.7">
+                <h1 style="width:700px;font-weight:normal">
                     We are a community of bisdak developers, designers, tinkerers,
                     and hackers.
                 </h1>
                 <br />
                 <p style="box-sizing:border-box">
-                    <a class="button primary" href="/signup">Sign Up Now</a>
+                    <a class="button primary" href="/signup">
+                        <svg class="sign-icon" width="20" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                             viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+                        <g>
+                            <g>
+                                <g>
+                                    <path d="M352.459,220c0-11.046-8.954-20-20-20h-206c-11.046,0-20,8.954-20,20s8.954,20,20,20h206
+                                        C343.505,240,352.459,231.046,352.459,220z"/>
+                                    <path d="M126.459,280c-11.046,0-20,8.954-20,20c0,11.046,8.954,20,20,20H251.57c11.046,0,20-8.954,20-20c0-11.046-8.954-20-20-20
+                                        H126.459z"/>
+                                    <path d="M173.459,472H106.57c-22.056,0-40-17.944-40-40V80c0-22.056,17.944-40,40-40h245.889c22.056,0,40,17.944,40,40v123
+                                        c0,11.046,8.954,20,20,20c11.046,0,20-8.954,20-20V80c0-44.112-35.888-80-80-80H106.57c-44.112,0-80,35.888-80,80v352
+                                        c0,44.112,35.888,80,80,80h66.889c11.046,0,20-8.954,20-20C193.459,480.954,184.505,472,173.459,472z"/>
+                                    <path d="M467.884,289.572c-23.394-23.394-61.458-23.395-84.837-0.016l-109.803,109.56c-2.332,2.327-4.052,5.193-5.01,8.345
+                                        l-23.913,78.725c-2.12,6.98-0.273,14.559,4.821,19.78c3.816,3.911,9,6.034,14.317,6.034c1.779,0,3.575-0.238,5.338-0.727
+                                        l80.725-22.361c3.322-0.92,6.35-2.683,8.79-5.119l109.573-109.367C491.279,351.032,491.279,312.968,467.884,289.572z
+                                         M333.776,451.768l-40.612,11.25l11.885-39.129l74.089-73.925l28.29,28.29L333.776,451.768z M439.615,346.13l-3.875,3.867
+                                        l-28.285-28.285l3.862-3.854c7.798-7.798,20.486-7.798,28.284,0C447.399,325.656,447.399,338.344,439.615,346.13z"/>
+                                    <path d="M332.459,120h-206c-11.046,0-20,8.954-20,20s8.954,20,20,20h206c11.046,0,20-8.954,20-20S343.505,120,332.459,120z"/>
+                                </g>
+                            </g>
+                        </g>
+                        </svg>
+                        <span>
+                            Sign Up Here
+                        </span>
+                    </a>
                     <span class="div">or</span>
-                    <a href="/login">Log In Here</a>
+                    <a href="/login">Login Page</a>
                 </p>
             </div>
         </div>

@@ -1,10 +1,11 @@
 package handler
 
 type githubUser struct {
-	Email     string
+	Bio       string
 	Name      string
+	Email     string
 	Login     string
-	AvatarURL string `json:"avatar_url"`
-	Location  string
 	Website   string `json:"blog"`
+	Location  string
+	AvatarURL string `json:"avatar_url"`
 }

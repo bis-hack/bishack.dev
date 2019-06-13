@@ -1,4 +1,8 @@
-![bishack](./public/images/bishack.png)
+<p style="text-align:center;padding:32px 0">
+<img src="./public/images/bishack.png" width="200"/>
+<br/><br/>
+<span style="opacity:0.5">JOIN US ON SLACK</span>
+</p>
 
 &nbsp;
 
@@ -19,7 +23,7 @@
 	├── public/             // For publicly available static content.
 	│   └── images/
 	│
-	├── services/           // All external service packages. Anything that talks to the network should go here.
+	├── services/           // Anything that does i/o goes here.
 	│   └── user/
 	│
 	├── testing/            // Includes a nifty little tricks for testing.
@@ -33,7 +37,7 @@
 
 This application heavily relies on managed external services like: Cognito, DynamoDB, Lambda et cetera. So setting up a local development environment for this project needs a bit of an extra work.
 
-If you want to contribute to this project, do let me know. So I can assist you on setting up credentials and what not.
+If you want to contribute to this project, do **[let me know](https://github.com/penzur)** so I can assist you on setting up credentials and what not.
 
 &nbsp;
 
