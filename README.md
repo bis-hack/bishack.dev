@@ -1,4 +1,4 @@
-![bishack](./public/images/bishack.svg)
+![bishack](./public/images/bishack.png)
 
 &nbsp;
 
