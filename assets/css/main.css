@@ -80,7 +80,7 @@ header a.logo {
   display: block;
   text-indent: -100000px;
   background: transparent url(/images/bishack.png) center center /contain no-repeat;
-  width: 156px;
+  width: 200px;
   border: 0 !important;
 }
 header a.logo:hover {
