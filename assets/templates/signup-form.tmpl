@@ -15,12 +15,24 @@
 {{define "script"}}
     const form = document.querySelector('form');
     form.addEventListener('submit', (e) => {
+        const rx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         const pwd = e.target.password;
-        const val = pwd.value.trim();
+        const email = e.target.email;
+        const pwdVal = pwd.value.trim();
+        const emailVal = email.value.trim();
+
+        // check for email
+        email.style.borderColor = 'blue'; // reset color
+        if(!emailVal.match(rx)) {
+            email.style.borderColor = 'red';
+            email.focus();
+            e.preventDefault();
+            return
+        }
 
         // check for password
         pwd.style.borderColor = 'blue'; // reset color
-        if (!val.match(/[0-9]/g) || !val.match(/[a-zA-Z]/g)) {
+        if (!pwdVal.match(/[0-9]/g) || !pwdVal.match(/[a-zA-Z]/g)) {
             pwd.style.borderColor = 'red';
             pwd.focus();
             e.preventDefault();
@@ -43,10 +55,14 @@
                 <form id="signup-form" action="/signup" method="post">
                     {{ .csrfField }}
                     <p>
-                        <input type="text" name="emailx" value="{{.GithubUser.Email}}" disabled />
+                        {{if .GithubUser.Email}}
+                            <input type="text" name="emailx" value="{{.GithubUser.Email}}" disabled />
+                            <input type="hidden" name="email" value="{{.GithubUser.Email}}"/>
+                        {{else}}
+                            <input type="text" name="email" placeholder="Input your email"/>
+                        {{end}}
                     </p>
                     <p>
-                        <input type="hidden" name="email" value="{{.GithubUser.Email}}"/>
                         <input type="hidden" name="nickname" value="{{.GithubUser.Login}}"/>
                         <input type="hidden" name="picture" value="{{.GithubUser.AvatarURL}}"/>
                         <input type="hidden" name="locale" value="{{.GithubUser.Location}}"/>
