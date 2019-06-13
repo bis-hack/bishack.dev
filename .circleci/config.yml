@@ -29,6 +29,7 @@ jobs:
       - image: circleci/golang:1.12
     working_directory: ~/bishack.dev
     steps:
+      - checkout
       - run: |
           SLACK_TOKEN=$SLACK_TOKEN \
           SESSION_KEY=$SESSION_KEY \
@@ -43,6 +44,7 @@ jobs:
       - image: circleci/golang:1.12
     working_directory: ~/bishack.dev
     steps:
+      - checkout
       - run: |
           SLACK_TOKEN=$SLACK_TOKEN \
           SESSION_KEY=$SESSION_KEY \
