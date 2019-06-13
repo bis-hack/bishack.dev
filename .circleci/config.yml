@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   codecov: codecov/codecov@1.0.2
 jobs:
-  test:
+  stage:
     docker:
       - image: circleci/golang:1.12
     working_directory: ~/bishack.dev
@@ -15,21 +15,6 @@ jobs:
           keys:
             - v1-pkg-cache
       - run: curl -sf https://up.apex.sh/install | sudo sh && go mod download
-      - run: make test
-      - run: mv coverage.txt /tmp/tests/coverage.txt
-      - codecov/upload:
-          file: /tmp/tests/coverage.txt
-      - store_artifacts:
-          path: /tmp/tests
-          destination: out
-      - store_test_results:
-          path: /tmp/tests
-  deploy-stage:
-    docker:
-      - image: circleci/golang:1.12
-    working_directory: ~/bishack.dev
-    steps:
-      - checkout
       - run: |
           SLACK_TOKEN=$SLACK_TOKEN \
           SESSION_KEY=$SESSION_KEY \
@@ -39,12 +24,27 @@ jobs:
           GITHUB_CLIENT_ID=$GITHUB_CLIENT_ID \
           GITHUB_CLIENT_SECRET=$GITHUB_CLIENT_SECRET \
           make deploy
-  deploy-prod:
+      - run: mv coverage.txt /tmp/tests/coverage.txt
+      - codecov/upload:
+          file: /tmp/tests/coverage.txt
+      - store_artifacts:
+          path: /tmp/tests
+          destination: out
+      - store_test_results:
+          path: /tmp/tests
+  prod:
     docker:
       - image: circleci/golang:1.12
     working_directory: ~/bishack.dev
+    environment:
+      TEST_DIR: /tmp/tests
     steps:
       - checkout
+      - run: mkdir -p $TEST_DIR
+      - restore_cache:
+          keys:
+            - v1-pkg-cache
+      - run: curl -sf https://up.apex.sh/install | sudo sh && go mod download
       - run: |
           SLACK_TOKEN=$SLACK_TOKEN \
           SESSION_KEY=$SESSION_KEY \
@@ -55,20 +55,23 @@ jobs:
           GITHUB_CLIENT_SECRET=$GITHUB_CLIENT_SECRET_PROD \
           GITHUB_CALLBACK=$GITHUB_CALLBACK_PROD \
           make deploy.prod
+      - run: mv coverage.txt /tmp/tests/coverage.txt
+      - codecov/upload:
+          file: /tmp/tests/coverage.txt
+      - store_artifacts:
+          path: /tmp/tests
+          destination: out
+      - store_test_results:
+          path: /tmp/tests
 workflows:
   version: 2.1
   build-deploy:
     jobs:
-      - test
-      - deploy-stage:
-          requires:
-            - test
+      - stage:
           filters:
             branches:
               only: master
-      - deploy-prod:
-          requires:
-            - test
+      - prod:
           filters:
             branches:
               only: production
