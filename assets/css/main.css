@@ -79,12 +79,12 @@ header .wrap {
 header a.logo {
   display: block;
   text-indent: -100000px;
-  background: transparent url(/images/bishack.png) center center /contain no-repeat;
+  background: transparent url(/images/bishack.svg) center center /contain no-repeat;
   width: 200px;
+  height: 44px;
+  position: relative;
+  top: -14px;
   border: 0 !important;
-}
-header a.logo:hover {
-  opacity: 0.7;
 }
 
 header .left, header .right {
