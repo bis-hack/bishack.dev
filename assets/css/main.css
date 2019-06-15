@@ -79,7 +79,7 @@ header .wrap {
 header a.logo {
   display: block;
   text-indent: -100000px;
-  background: transparent url(/images/bishack.svg) center center /contain no-repeat;
+  background: transparent url(/images/bishack.svg) center left /contain no-repeat;
   width: 200px;
   height: 32px;
   position: relative;
