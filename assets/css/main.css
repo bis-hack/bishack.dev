@@ -61,14 +61,14 @@ a:not(.button):hover {
 
 header {
   width: 100%;
-  background-color: #EFEFEF;
+  background-color: #FFFFFF;
   box-sizing: border-box;
   position: fixed;
   z-index: 20;
   top: 0;
   left: 0;
-  padding: 24px 24px 8px;
   overflow: visible;
+  border-bottom: 1px solid blue;
 }
 
 header .wrap {
@@ -83,12 +83,19 @@ header a.logo {
   width: 200px;
   height: 44px;
   position: relative;
-  top: -14px;
   border: 0 !important;
 }
 
 header .left, header .right {
-  width: 50%;
+  display: flex;
+  align-items: center;
+  height: 64px;
+}
+header .left {
+  text-align: left;
+}
+header .right {
+  text-align: right;
 }
 
 header nav.main-nav {
@@ -150,7 +157,7 @@ button.button {
 /* Flash */
 .flash {
   position: fixed;
-  top: 24px;
+  top: 68px;
   left: 50%;
   transform: translateX(-50%);
   font-size: 16px;
@@ -205,6 +212,7 @@ button.button {
 .turbolinks-progress-bar {
   height: 5px;
   background-color: blue;
+  z-index: 100;
 }
 
 .div {
@@ -242,14 +250,15 @@ button.button {
   display: inline-block;
   overflow: visible;
   box-sizing: border-box;
+  cursor: pointer;
 }
 .dropdown > ul {
   display: none;
   list-style-type: : none;
   position: absolute;
-  min-width: 128px;
+  min-width: 144px;
   right: 0;
-  top: 35px;
+  top: 55px;
   border-radius: 5px;
   background-color: #fff;
   box-shadow: 0 5px 10px rgba(0,0,0,0.1);
@@ -257,10 +266,10 @@ button.button {
 .dropdown > ul:before {
   content: '';
   position: absolute;
-  top: -30px;
+  top: -64px;
   left: 0px;
   display: block;
-  height: 30px;
+  height: 64px;
   width: 100%;
 }
 .dropdown > ul > li {
@@ -272,10 +281,11 @@ button.button {
   display: block;
   text-decoration: none;
   color: #666666 !important;
-  border: 0 !important;
-  padding: 16px 24px;
+  padding: 12px 24px;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
 }
 .dropdown > ul > li > a:hover {
+  border-color: rgba(0,0,0,0.1);
   background-color: rgba(0,0,0,0.05);
 }
 .dropdown:hover > ul {
