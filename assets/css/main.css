@@ -81,7 +81,7 @@ header a.logo {
   text-indent: -100000px;
   background: transparent url(/images/bishack.svg) center center /contain no-repeat;
   width: 200px;
-  height: 44px;
+  height: 32px;
   position: relative;
   border: 0 !important;
 }
