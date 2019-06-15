@@ -1,5 +1,5 @@
 <p style="text-align:center;padding:32px 0">
-<img src="./public/images/bishack.png" width="200"/>
+<img src="./public/images/bishack.svg" width="200"/>
 <br/><br/>
 <span style="opacity:0.5">JOIN US ON SLACK</span>
 </p>
