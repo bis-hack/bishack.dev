@@ -1,7 +1,7 @@
 package post
 
 import (
-	"log"
+	"fmt"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -63,7 +63,8 @@ func (c *Client) GetCount() int64 {
 
 	resp, err := c.Provider.DescribeTable(in)
 	if err != nil {
-		log.Println(c.TableName, err.Error())
+		// we log non-actionable errors
+		fmt.Println("DescribeTable Error:", c.TableName, err.Error())
 		return 0
 	}
 
