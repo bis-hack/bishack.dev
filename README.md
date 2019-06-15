@@ -1,7 +1,7 @@
-<p style="text-align:center;padding:32px 0">
+<p>
 <img src="./public/images/bishack.svg" width="200"/>
 <br/><br/>
-<span style="opacity:0.5">JOIN US ON SLACK</span>
+<span>JOIN US ON SLACK</span>
 </p>
 
 &nbsp;
@@ -19,6 +19,8 @@
 	│   └── templates/
 	│
 	├── handler/            // Handler package.
+	|
+	├── middleware/         // Middleware central :D
 	│
 	├── public/             // For publicly available static content.
 	│   └── images/
