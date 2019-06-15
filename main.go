@@ -45,12 +45,12 @@ func main() {
 	r.Get("/login", handler.LoginForm)
 	r.Get("/logout", handler.Logout)
 	r.Get("/slack-invite", handler.SlackInvite)
-	r.Get("/profile", handler.ProfileForm)
+	r.Get("/profile", handler.UserForm)
 
 	// POST
 	r.Post("/signup", handler.FinishSignup)
 	r.Post("/login", handler.Login)
-	r.Post("/update", handler.UpdateProfile)
+	r.Post("/update", handler.UserUpdate)
 
 	// slack
 	r.Get("/slack-invite", handler.SlackInvite)
