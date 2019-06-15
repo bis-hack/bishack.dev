@@ -13,8 +13,8 @@
 
 {{end}}
 {{define "script"}}
-    const form = document.querySelector('form');
-    form.addEventListener('submit', (e) => {
+    const form = document.querySelector('form#signup-form');
+    form && form.addEventListener('submit', (e) => {
         const rx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         const pwd = e.target.password;
         const email = e.target.email;

@@ -62,8 +62,8 @@
 {{end}}
 {{define "script"}}
     {{if not .User }}
-        const form = document.querySelector('form');
-        form.addEventListener('submit', (e) => {
+        const form = document.querySelector('form#slack-form');
+        form && form.addEventListener('submit', (e) => {
             e.preventDefault();
 
             const email = e.target.email;

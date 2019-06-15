@@ -14,6 +14,14 @@
     {{template "main.css"}}
     {{template "style" .}}
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/turbolinks/5.2.0/turbolinks.js"></script>
+    <script>
+        document.addEventListener('turbolinks:load', () => {
+            console.log('loaded!');
+            {{template "main.js" .}}
+            {{template "script" .}}
+        });
+    </script>
 </head>
 
 <body>
@@ -35,15 +43,6 @@
         </header>
         {{template "content" .}}
     </div>
-    <script>
-        window.onload = () => {
-            if (document.readyState === 'complete') {
-                {{template "main.js" .}}
-                {{template "script" .}}
-            }
-        };
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/turbolinks/5.2.0/turbolinks.js"></script>
 </body>
 
 </html>

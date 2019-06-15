@@ -1,8 +1,8 @@
 {{define "style"}}
 {{end}}
 {{define "script"}}
-    const form = document.querySelector('form');
-    form.addEventListener('submit', (e) => {
+    const form = document.querySelector('form#login-form');
+    form && form.addEventListener('submit', (e) => {
         const em = e.target.email;
         const pwd = e.target.password;
         const email = em.value.trim();
