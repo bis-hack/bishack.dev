@@ -154,3 +154,13 @@ func (c *clientMock) Get(url string) (*http.Response, error) {
 
 	return resp.(*http.Response), args.Error(1)
 }
+
+type postMock struct {
+	mock.Mock
+}
+
+func (p *postMock) GetCount() int64 {
+	args := p.Called()
+	resp := args.Get(0)
+	return resp.(int64)
+}

@@ -16,12 +16,15 @@ func TestHome(t *testing.T) {
 
 	t.Run("normal", func(t *testing.T) {
 		s := new(sessionMock)
+		p := new(postMock)
 
 		w := httptest.NewRecorder()
 		r, _ := http.NewRequest(http.MethodGet, "/", nil)
 
+		context.Set(r, "postService", p)
 		context.Set(r, "session", s)
 
+		p.On("GetCount").Return(int64(0))
 		s.On("GetFlash", mock.MatchedBy(func(w http.ResponseWriter) bool {
 			return true
 		}), mock.MatchedBy(func(r *http.Request) bool {
@@ -36,6 +39,8 @@ func TestHome(t *testing.T) {
 
 	t.Run("authenticated", func(t *testing.T) {
 		s := new(sessionMock)
+		p := new(postMock)
+
 		w := httptest.NewRecorder()
 		r, _ := http.NewRequest(http.MethodGet, "/", nil)
 
@@ -43,8 +48,11 @@ func TestHome(t *testing.T) {
 			"email":    "test@user.com",
 			"nickname": "tibur",
 		})
+
+		context.Set(r, "postService", p)
 		context.Set(r, "session", s)
 
+		p.On("GetCount").Return(int64(31337))
 		s.On("GetFlash", mock.MatchedBy(func(w http.ResponseWriter) bool {
 			return true
 		}), mock.MatchedBy(func(r *http.Request) bool {
@@ -54,6 +62,8 @@ func TestHome(t *testing.T) {
 		Home(w, r)
 
 		assert.Regexp(t, regexp.MustCompile("@tibur"), w.Body.String())
+		assert.Regexp(t, regexp.MustCompile("31337"), w.Body.String())
+
 		s.AssertExpectations(t)
 	})
 }

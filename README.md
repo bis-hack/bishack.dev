@@ -66,11 +66,11 @@ If you want to contribute to this project, do **[let me know](https://github.com
 
 &nbsp;
 
-### Setup
+### Dev Setup
 
 Install a live-reload command line utility called [**Gin**](https://github.com/codegangsta/gin) with the following command:
 
-	$ https://github.com/codegangsta/gin
+	$ go get -u github.com/codegangsta/gin
 
 
 And then install [**up**](https://up.docs.apex.sh/).
@@ -88,6 +88,8 @@ Start the server with this command:
 	  GITHUB_CLIENT_ID=<id> \
 	  GITHUB_CLIENT_SECRET=<secret> \
 	  GITHUB_CALLBACK=http://localhost:3000/signup \
+	  DYNAMO_TABLE_POSTS=posts \
+	  DYNAMO_ENDPOINT=http://localhost:8000 \
 	  make dev
 
 
@@ -96,8 +98,29 @@ Head to `http://localhost:3000/` on your browser.
 
 &nbsp;
 
-> Write your test and submit a pull-request. 🖖 🤓
+### DynamoDB Setup (local)
+
+> Before you start you need to have **[docker](https://docker.io)** installed on your system first.
+
+1. **Run the the following command:**
+
+	`$ docker run -d -p 8000:8000 amazon/dynamodb-local -jar DynamoDBLocal.jar -inMemory -sharedDb`
+
+	> The above command will run a localized version of dynamodb with shared database.
+
+
+2. **Go to `http://localhost:8000/shell` and copy, paste and run every files inside the `./assets/dynamo` folder.**
+
+	> See example below:
+
+	![ss](https://cl.ly/2143f27589f7/Screen%252520Recording%2525202019-06-16%252520at%25252001.30%252520AM.gif)
+
 
 &nbsp;
 
-Happy Hacking!
+
+Happy Hacking! 🖖 🤓
+
+&nbsp;
+
+

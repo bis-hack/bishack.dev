@@ -21,10 +21,15 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		user = user.(map[string]string)
 	}
 
+	post := context.Get(r, "postService").(interface {
+		GetCount() int64
+	})
+
 	utils.Render(w, "main", "home", map[string]interface{}{
 		"Title": "Bisdak Tech Community",
 		"Flash": sess.GetFlash(w, r),
 		"User":  user,
+		"Count": post.GetCount(),
 	})
 }
 
