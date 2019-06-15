@@ -27,7 +27,10 @@ func main() {
 	r := pat.New()
 
 	// not found
-	r.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	r.NotFoundHandler = http.HandlerFunc(func(
+		w http.ResponseWriter,
+		r *http.Request,
+	) {
 		if r.URL.Path == "/" {
 			handler.Home(w, r)
 		} else {
@@ -59,7 +62,10 @@ func main() {
 		}()
 	}
 
-	protect := csrf.Protect([]byte(os.Getenv("CSRF_KEY")), csrf.Secure(csrfSecure))
+	protect := csrf.Protect([]byte(
+		os.Getenv("CSRF_KEY")),
+		csrf.Secure(csrfSecure),
+	)
 
 	port := ":" + os.Getenv("PORT")
 	log.Fatal(http.ListenAndServe(

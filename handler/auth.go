@@ -33,7 +33,11 @@ func FinishSignup(w http.ResponseWriter, r *http.Request) {
 	password := r.Form.Get("password")
 
 	u := context.Get(r, "userService").(interface {
-		Signup(username, password string, meta map[string]string) (*cip.SignUpOutput, error)
+		Signup(
+			username,
+			password string,
+			meta map[string]string,
+		) (*cip.SignUpOutput, error)
 	})
 
 	meta := map[string]string{
@@ -144,7 +148,13 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		http.Redirect(w, r, "/signup?access_token="+val.Get("access_token"), http.StatusSeeOther)
+		http.Redirect(
+			w,
+			r,
+			"/signup?access_token="+val.Get("access_token"),
+			http.StatusSeeOther,
+		)
+
 		return
 	}
 
@@ -155,7 +165,11 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 			Do(r *http.Request) (*http.Response, error)
 		})
 
-		req, _ := http.NewRequest(http.MethodGet, userEndpoint, strings.NewReader(""))
+		req, _ := http.NewRequest(
+			http.MethodGet,
+			userEndpoint,
+			strings.NewReader(""),
+		)
 		req.Header.Set("Authorization", "token "+accessToken)
 
 		resp, err := client.Do(req)

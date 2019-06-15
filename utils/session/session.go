@@ -17,7 +17,12 @@ func New() *Client {
 }
 
 // SetUser ...
-func (s *Client) SetUser(w http.ResponseWriter, r *http.Request, email, token string) {
+func (s *Client) SetUser(
+	w http.ResponseWriter,
+	r *http.Request,
+	email,
+	token string,
+) {
 	session, _ := s.Store.Get(r, "user")
 	session.Values["email"] = email
 	session.Values["token"] = token
@@ -53,7 +58,12 @@ func (s *Client) DeleteUser(w http.ResponseWriter, r *http.Request) {
 
 // SetFlash sets the flash message with the given
 // type and value
-func (s *Client) SetFlash(w http.ResponseWriter, r *http.Request, t, v string) {
+func (s *Client) SetFlash(
+	w http.ResponseWriter,
+	r *http.Request,
+	t,
+	v string,
+) {
 	session, _ := s.Store.Get(r, "notification")
 	session.AddFlash(fmt.Sprintf("%s<>%s", t, v))
 	session.Save(r, w)
