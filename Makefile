@@ -52,6 +52,7 @@ up.json:
 		| sed "s/\$$SESSION_KEY/${SESSION_KEY}/g" \
 		| sed "s/\$$CSRF_KEY/${CSRF_KEY}/g" \
 		| sed "s|\$$GITHUB_CALLBACK|${GITHUB_CALLBACK}|g" \
+		| sed "s/\$$DYNAMO_TABLE_POSTS/${DYNAMO_TABLE_POSTS}/g" \
 		> up.json
 # parse up template for prod
 up.json.prod:
@@ -64,4 +65,5 @@ up.json.prod:
 		| sed "s/\$$SESSION_KEY/${SESSION_KEY}/g" \
 		| sed "s/\$$CSRF_KEY/${CSRF_KEY}/g" \
 		| sed "s|\$$GITHUB_CALLBACK|${GITHUB_CALLBACK_PROD}|g" \
+		| sed "s/\$$DYNAMO_TABLE_POSTS/${DYNAMO_TABLE_POSTS_PROD}/g" \
 		> up.json
