@@ -8,6 +8,7 @@ import (
 	"regexp"
 	"strings"
 
+	"bishack.dev/utils"
 	"bishack.dev/utils/session"
 	cip "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 	"github.com/gorilla/context"
@@ -15,8 +16,7 @@ import (
 )
 
 const (
-	oauthEndpoint = "https://github.com/login/oauth"
-	userEndpoint  = "https://api.github.com/user"
+	userEndpoint = "https://api.github.com/user"
 )
 
 // FinishSignup ...
@@ -98,14 +98,14 @@ func Verify(w http.ResponseWriter, r *http.Request) {
 
 	// horray!
 	if flash != nil && flash.Type == "success" {
-		render(w, "main", "verified", map[string]interface{}{
+		utils.Render(w, "main", "verified", map[string]interface{}{
 			"Title": "Account Verified",
 			"Flash": flash,
 		})
 		return
 	}
 
-	render(w, "main", "verify-form", map[string]interface{}{
+	utils.Render(w, "main", "verify-form", map[string]interface{}{
 		"Title":          "Verify",
 		"Email":          email,
 		"Flash":          flash,
@@ -127,7 +127,7 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 
 	// check for oauth code from github
 	if code != "" {
-		resp, err := client.PostForm(githubEndpoint(code), url.Values{})
+		resp, err := client.PostForm(utils.GithubEndpoint(code), url.Values{})
 		if err != nil {
 			sess.SetFlash(w, r, "error", "Invalid or expired code")
 			http.Redirect(w, r, r.RequestURI, http.StatusSeeOther)
@@ -174,9 +174,9 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		render(w, "main", "signup-form", map[string]interface{}{
+		utils.Render(w, "main", "signup-form", map[string]interface{}{
 			"Title":          "Complete Signup",
-			"GithubEndpoint": githubEndpoint(""),
+			"GithubEndpoint": utils.GithubEndpoint(""),
 			"GithubUser":     gu,
 			"Flash":          sess.GetFlash(w, r),
 			csrf.TemplateTag: csrf.TemplateField(r),
@@ -184,11 +184,11 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// otherwise, render signup page
-	render(w, "main", "signup", map[string]interface{}{
+	// otherwise, utils.Render signup page
+	utils.Render(w, "main", "signup", map[string]interface{}{
 		"Title":     "Sign Up",
 		"Flash":     sess.GetFlash(w, r),
-		"GithubURL": githubEndpoint(""),
+		"GithubURL": utils.GithubEndpoint(""),
 	})
 }
 
@@ -238,7 +238,7 @@ func LoginForm(w http.ResponseWriter, r *http.Request) {
 		GetFlash(w http.ResponseWriter, r *http.Request) *session.Flash
 	})
 
-	render(w, "main", "login-form", map[string]interface{}{
+	utils.Render(w, "main", "login-form", map[string]interface{}{
 		"Title":          "User Login",
 		"Flash":          sess.GetFlash(w, r),
 		csrf.TemplateTag: csrf.TemplateField(r),

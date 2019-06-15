@@ -207,6 +207,9 @@ button.button {
 .left {
   float: left;
 }
+.clear {
+  clear: both;
+}
 
 /* Misc */
 .turbolinks-progress-bar {
@@ -253,12 +256,12 @@ button.button {
   cursor: pointer;
 }
 .dropdown > ul {
-  display: none;
+  visibility: hidden;
   list-style-type: : none;
   position: absolute;
   min-width: 144px;
   right: 0;
-  top: 55px;
+  top: 40px;
   border-radius: 5px;
   background-color: #fff;
   box-shadow: 0 5px 10px rgba(0,0,0,0.1);
@@ -289,5 +292,31 @@ button.button {
   background-color: rgba(0,0,0,0.05);
 }
 .dropdown:hover > ul {
-  display: block;
+  visibility: visible;
+  top: 60px;
+  transition: all .5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.container {
+  height: 100%;
+  box-sizing: border-box;
+  padding-top: 108px;
+}
+.container .profile {
+  width: 320px;
+  float: left;
+  box-sizing: border-box;
+}
+.container .content {
+  width: 720px;
+  float: right;
+  padding-left: 32px;
+  box-sizing: border-box;
+}
+
+.user-card {
+  box-sizing: border-box;
+  padding: 24px;
+  background-color: #fff;
+  border: 1px solid blue;
 }

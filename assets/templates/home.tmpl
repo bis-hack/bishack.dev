@@ -104,21 +104,26 @@
 {{end}}
 {{define "content"}}
     {{if .User}}
-        <div class="center-flex-box">
-            <div class="center">
-                <p>
-                    <img width="128" style="border-radius:100px" src="{{.User.picture}}" alt="{{.User.nickname}}">
+        <div class="container">
+            <div class="profile">
+                {{template "user-card.tmpl" .User}}
+                <p style="margin-bottom:0;margin-top:32px">
+                    <a style="text-align:center" class="button primary full" href="/new">WRITE SOMETHING</a>
                 </p>
-                <p>
-                    {{.User.name}}
-                    <span class="div">|</span>
-                    {{.User.locale}}
-                    <span class="div">|</span>
-                    <a href="{{.User.website}}">@{{.User.nickname}}</a>
-                    <span class="div">|</span>
-                    {{.User.email}}
-                </p>
-                <p><br><small class="sub">{{.User.profile}}</small></p>
+            </div>
+            <div class="content">
+                {{if not .Posts}}
+                    <div style="text-align:center;padding:96px;border: 1px solid #ccc;background-color:#ddd;opacity:0.7">
+                        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                             width="64px"viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+                        <g>
+                            <path d="M480,320v128H32V320h78.859l64.016,96h162.25l64-96H480 M384,32H128L0,288v192h512V288L384,32L384,32z M35.781,288l112-224
+                                h216.438l112,224H384l-64,96H192l-64.016-96H35.781L35.781,288z"/>
+                        </g>
+                        </svg>
+                        <p style="margin-top:20px"><small>NO POST YET. CHECK BACK AGAIN LATER. OR CREATE ONE</small></p>
+                    </div>
+                {{end}}
             </div>
         </div>
     {{else}}

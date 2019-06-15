@@ -7,7 +7,7 @@
     <title>{{.Title}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta property="og:title" content="{{.Title}}" />
-    <meta property="og:description" content="Bisdak Dev Community" />
+    <meta property="og:description" content="{{if .Description}}{{.Description}}{{else}}We are a community of bisdak developers, designers, tinkerers, and hackers{{end}}" />
     <meta property="og:image" content="/images/ss.png" />
     <link rel="icon" type="image/svg" href="/images/icon.png" />
     <style>
@@ -17,7 +17,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/turbolinks/5.2.0/turbolinks.js"></script>
     <script>
         document.addEventListener('turbolinks:load', () => {
-            console.log('loaded!');
             {{template "main.js" .}}
             {{template "script" .}}
         });

@@ -1,3 +1,7 @@
+github.com/BottleNeckStudio/keepmotivat.in v0.0.0-20190608100846-67949599ff1b h1:HnLQx3AszkfmER5bMyLQs0D97FOSNZ6LVouNyns9mZs=
+github.com/BottleNeckStudio/keepmotivat.in v0.0.0-20190608100846-67949599ff1b/go.mod h1:FzTj9A5WlFWA4cFmzZLz9vwi1ut9/oJYyhR60j3rHk8=
+github.com/BottleneckStudio/keepmotivat.in v0.0.0-20190608100846-67949599ff1b h1:9KOkFkH1gTfeJMS2UZjzvQfL8ImD/+mzia9bvI5eE8M=
+github.com/BottleneckStudio/keepmotivat.in v0.0.0-20190608100846-67949599ff1b/go.mod h1:GeHhyqcEauSGIeevHDQEE55TblSl3G77wYuCTq4b7ps=
 github.com/aws/aws-sdk-go v1.19.43 h1:fr8lZ7qdQqWHBCJ4CpsZN3jjtw2jaISKx5L7gcJZYog=
 github.com/aws/aws-sdk-go v1.19.43/go.mod h1:KmX6BPdI08NWTb3/sm4ZGu5ShLoqVDhKgpiN924inxo=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=

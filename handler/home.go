@@ -3,21 +3,26 @@ package handler
 import (
 	"net/http"
 
+	"bishack.dev/utils"
 	"bishack.dev/utils/session"
 	"github.com/gorilla/context"
 )
 
 // Home ...
 func Home(w http.ResponseWriter, r *http.Request) {
-	var user map[string]string
 	sess := context.Get(r, "session").(interface {
 		GetFlash(w http.ResponseWriter, r *http.Request) *session.Flash
 	})
 
-	user = sessionUser(r)
+	// get user details from context and cast it as map[string]string if
+	// not nil
+	user := context.Get(r, "user")
+	if user != nil {
+		user = user.(map[string]string)
+	}
 
-	render(w, "main", "home", map[string]interface{}{
-		"Title": "Home",
+	utils.Render(w, "main", "home", map[string]interface{}{
+		"Title": "Bisdak Tech Community",
 		"Flash": sess.GetFlash(w, r),
 		"User":  user,
 	})
@@ -25,7 +30,8 @@ func Home(w http.ResponseWriter, r *http.Request) {
 
 // NotFound ...
 func NotFound(w http.ResponseWriter, r *http.Request) {
-	render(w, "error", "notfound", map[string]interface{}{
-		"Title": "404 - Not Found",
+	utils.Render(w, "error", "notfound", map[string]interface{}{
+		"Title":       "404 - Not Found",
+		"Description": "The page you're looking for could not be found",
 	})
 }

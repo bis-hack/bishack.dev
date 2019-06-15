@@ -3,6 +3,8 @@ module bishack.dev
 go 1.12
 
 require (
+	github.com/BottleNeckStudio/keepmotivat.in v0.0.0-20190608100846-67949599ff1b // indirect
+	github.com/BottleneckStudio/keepmotivat.in v0.0.0-20190608100846-67949599ff1b // indirect
 	github.com/aws/aws-sdk-go v1.19.43
 	github.com/gogo/protobuf v1.2.1
 	github.com/gorilla/context v1.1.1
