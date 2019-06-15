@@ -1,0 +1,61 @@
+{{define "style"}}
+{{end}}
+{{define "script"}}
+    const form = document.querySelector('form#login-form');
+    form && form.addEventListener('submit', (e) => {
+        const em = e.target.email;
+        const pwd = e.target.password;
+        const email = em.value.trim();
+        const password = pwd.value.trim();
+
+        // check for password
+        em.style.borderColor = 'blue'; // reset color
+        const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (!email.match(pattern)) {
+            em.style.borderColor = 'red';
+            em.focus();
+            e.preventDefault();
+            return false;
+        }
+
+        // check for password
+        pwd.style.borderColor = 'blue'; // reset color
+        if (!password.match(/[0-9]/g) || !password.match(/[a-zA-Z]/g)) {
+            pwd.style.borderColor = 'red';
+            pwd.focus();
+            e.preventDefault();
+            return false;
+        }
+    });
+{{end}}
+{{define "content"}}
+    <div class="center-flex-box">
+        <div class="kahon card center">
+            <h2>{{.Title}}</h2>
+						{{.User.email}}
+            <br>
+            <br>
+            <form id="login-form" action="/update" method="post">
+                {{ .csrfField }}
+                <p>
+                    <input type="text" name="email" value="{{.User.email}}" />
+                </p>
+                <p>
+                    <input type="password" name="old_password" placeholder="Old password" />
+                </p>
+
+                <p>
+                    <input type="password" name="new_password" placeholder="New password" />
+                </p>
+
+                <p>
+                    <input type="password" name="confirm_new_password" placeholder="Confirm new password" />
+                </p>
+                <br>
+                <p>
+                    <button type="submit" class="button primary full"><span>Update Profile</span></button>
+                </p>
+            </form>
+        </div>
+    </div>
+{{end}}
