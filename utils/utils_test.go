@@ -42,6 +42,6 @@ func TestMD(t *testing.T) {
 }
 
 func TestDate(t *testing.T) {
-	d := date("Jan 02", 1560096000)
-	assert.Equal(t, "Jun 10", d)
+	d := date("Jan", 1560096000)
+	assert.Equal(t, "Jun", d)
 }
