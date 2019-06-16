@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 
+	"bishack.dev/services/post"
 	"bishack.dev/utils"
 	"bishack.dev/utils/session"
 	"github.com/gorilla/context"
@@ -21,15 +22,15 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		user = user.(map[string]string)
 	}
 
-	post := context.Get(r, "postService").(interface {
-		GetCount() int64
+	ps := context.Get(r, "postService").(interface {
+		GetAll() []*post.Post
 	})
 
 	utils.Render(w, "main", "home", map[string]interface{}{
 		"Title": "Bisdak Tech Community",
 		"Flash": sess.GetFlash(w, r),
 		"User":  user,
-		"Count": post.GetCount(),
+		"Posts": ps.GetAll(),
 	})
 }
 

@@ -40,16 +40,21 @@ func main() {
 
 	// handlers et al
 
-	// GET
+	// Auth
 	r.Get("/signup", handler.Signup)
 	r.Get("/verify", handler.Verify)
 	r.Get("/login", handler.LoginForm)
 	r.Get("/logout", handler.Logout)
-	r.Get("/slack-invite", handler.SlackInvite)
-
-	// POST
 	r.Post("/signup", handler.FinishSignup)
 	r.Post("/login", handler.Login)
+
+	// Slack
+	r.Get("/slack-invite", handler.SlackInvite)
+
+	// Post
+	r.Get("/p/{id}", handler.GetPost)
+	r.Get("/new", handler.New)
+	r.Post("/new", handler.CreatePost)
 
 	// localhost
 	if !isLive {

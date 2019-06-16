@@ -59,6 +59,27 @@
     .sign-icon path {
         fill: #FFFFFF;
     }
+    .post {
+        background-color: #ffffff;
+        margin-bottom: 2em;
+        border: 1px solid #aaa;
+        border-bottom: 2px solid #aaa;
+        border-right: 2px solid #aaa;
+        box-sizing: border-box;
+        padding: 24px;
+    }
+    .post a.post-title {
+        color: #333333 !important;
+        font-weight: bold;
+        text-transform: capitalize;
+        font-size: 1.2em;
+    }
+    .post a.post-title:hover {
+        border-bottom: 1px solid #EEE !important;
+    }
+    .x path {
+        fill: rgba(1,1,1,0.2);
+    }
 {{end}}
 {{define "script"}}
     {{if not .User }}
@@ -108,21 +129,40 @@
             <div class="profile">
                 {{template "user-card.tmpl" .User}}
                 <p style="margin-bottom:0;margin-top:32px">
-                    <a style="text-align:center" class="button primary full" href="/new">WRITE SOMETHING</a>
+                    <a class="button primary full" href="/new">
+                        <svg class="new-reverse" style="position:relative;top:3px;margin-right:6px" height="20px" viewBox="0 -1 401.52289 401" width="20px" xmlns="http://www.w3.org/2000/svg"><path d="m370.589844 250.972656c-5.523438 0-10 4.476563-10 10v88.789063c-.019532 16.5625-13.4375 29.984375-30 30h-280.589844c-16.5625-.015625-29.980469-13.4375-30-30v-260.589844c.019531-16.558594 13.4375-29.980469 30-30h88.789062c5.523438 0 10-4.476563 10-10 0-5.519531-4.476562-10-10-10h-88.789062c-27.601562.03125-49.96875 22.398437-50 50v260.59375c.03125 27.601563 22.398438 49.96875 50 50h280.589844c27.601562-.03125 49.96875-22.398437 50-50v-88.792969c0-5.523437-4.476563-10-10-10zm0 0"/><path d="m376.628906 13.441406c-17.574218-17.574218-46.066406-17.574218-63.640625 0l-178.40625 178.40625c-1.222656 1.222656-2.105469 2.738282-2.566406 4.402344l-23.460937 84.699219c-.964844 3.472656.015624 7.191406 2.5625 9.742187 2.550781 2.546875 6.269531 3.527344 9.742187 2.566406l84.699219-23.464843c1.664062-.460938 3.179687-1.34375 4.402344-2.566407l178.402343-178.410156c17.546875-17.585937 17.546875-46.054687 0-63.640625zm-220.257812 184.90625 146.011718-146.015625 47.089844 47.089844-146.015625 146.015625zm-9.40625 18.875 37.621094 37.625-52.039063 14.417969zm227.257812-142.546875-10.605468 10.605469-47.09375-47.09375 10.609374-10.605469c9.761719-9.761719 25.589844-9.761719 35.351563 0l11.738281 11.734375c9.746094 9.773438 9.746094 25.589844 0 35.359375zm0 0"/></svg>
+                        <span>Write Something</span>
+                    </a>
                 </p>
             </div>
             <div class="content">
                 {{if not .Posts}}
-                    <div style="text-align:center;padding:96px;border: 1px solid #ccc;background-color:#ddd;opacity:0.7">
-                        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                    <div style="text-align:center;padding:64px;">
+                        <svg class="x" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                              width="64px"viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
                         <g>
                             <path d="M480,320v128H32V320h78.859l64.016,96h162.25l64-96H480 M384,32H128L0,288v192h512V288L384,32L384,32z M35.781,288l112-224
                                 h216.438l112,224H384l-64,96H192l-64.016-96H35.781L35.781,288z"/>
-                        </g>
+                        <g>
                         </svg>
-                        <p style="margin-top:20px"><small>{{.Count}} Posts Found.</small></p>
+                        <p style="margin-top:20px"><small>No Post Yet.</small></p>
                     </div>
+                {{else}}
+                    {{range .Posts}}
+                    <div class="post">
+                        <div class="left" style="width:60px;top:3px;position:relative">
+                            <img width="44p" style="border-radius:100px" src="{{.UserPic}}" alt="avatar">
+                        </div>
+                        <div class="right" style="width:570px">
+                            <a class="post-title" href="/p/{{.ID}}">{{.Title}}</a>
+                            <br><br>
+                            <span><a href="/{{.Username}}">@{{.Username}}</a></span>
+                            <span class="div">|</span>
+                            <span class="sub">Posted on {{date "Jan 02" .Created}}</span>
+                        </div>
+                        <p class="clear"></p>
+                    </div>
+                    {{end}}
                 {{end}}
             </div>
         </div>

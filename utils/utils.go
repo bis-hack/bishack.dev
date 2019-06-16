@@ -5,16 +5,36 @@ import (
 	"html/template"
 	"net/http"
 	"os"
+	"time"
+
+	"gitlab.com/golang-commonmark/markdown"
 )
 
 const (
 	oauthEndpoint = "https://github.com/login/oauth"
 )
 
+func md(input string) template.HTML {
+	md := markdown.New()
+	out := template.HTML(md.RenderToString(
+		[]byte(input),
+	))
+	return out
+}
+
+func date(fmt string, input int64) string {
+	t := time.Unix(input, 0)
+	return t.Format(fmt)
+}
+
 // Render parses templates and writes them into the the passed in ResponseWriter
 // interface
 func Render(w http.ResponseWriter, base, content string, ctx interface{}) {
-	tmpl, err := template.New("").ParseFiles(
+	fns := template.FuncMap{
+		"md":   md,
+		"date": date,
+	}
+	tmpl, err := template.New("").Funcs(fns).ParseFiles(
 		fmt.Sprintf("assets/templates/layout/%s.tmpl", base),
 		fmt.Sprintf("assets/templates/%s.tmpl", content),
 		fmt.Sprintf("assets/templates/main-nav.tmpl"),

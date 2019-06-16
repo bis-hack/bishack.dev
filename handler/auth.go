@@ -212,7 +212,7 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 		DeleteUser(w http.ResponseWriter, r *http.Request)
 	})
 	sess.DeleteUser(w, r)
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	http.Redirect(w, r, "/login", http.StatusSeeOther)
 }
 
 // Login ...

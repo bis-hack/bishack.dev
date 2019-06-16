@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"net/url"
 
+	"bishack.dev/services/post"
 	"bishack.dev/utils/session"
 	cip "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 	"github.com/stretchr/testify/mock"
@@ -163,4 +164,37 @@ func (p *postMock) GetCount() int64 {
 	args := p.Called()
 	resp := args.Get(0)
 	return resp.(int64)
+}
+
+func (p *postMock) Create(vals map[string]interface{}) *post.Post {
+	args := p.Called(vals)
+	resp := args.Get(0)
+
+	if resp == nil {
+		return nil
+	}
+
+	return resp.(*post.Post)
+}
+
+func (p *postMock) GetAll() []*post.Post {
+	args := p.Called()
+	resp := args.Get(0)
+
+	if resp == nil {
+		return nil
+	}
+
+	return resp.([]*post.Post)
+}
+
+func (p *postMock) Get(id string) *post.Post {
+	args := p.Called()
+	resp := args.Get(0)
+
+	if resp == nil {
+		return nil
+	}
+
+	return resp.(*post.Post)
 }

@@ -20,6 +20,10 @@ var params = {
       AttributeType: 'S', // (S | N | B) for string, number, binary
     },
     {
+      AttributeName: 'publish',
+      AttributeType: 'N', // (S | N | B) for string, number, binary
+    },
+    {
       AttributeName: 'created',
       AttributeType: 'N', // (S | N | B) for string, number, binary
     },
@@ -30,7 +34,7 @@ var params = {
   },
   GlobalSecondaryIndexes: [ // optional (list of GlobalSecondaryIndex)
     {
-      IndexName: 'username',
+      IndexName: 'username_index',
       KeySchema: [
         { // Required HASH type attribute
           AttributeName: 'username',
@@ -42,11 +46,27 @@ var params = {
         }
       ],
       Projection: { // attributes to project into the index
-        ProjectionType: 'INCLUDE', // (ALL | KEYS_ONLY | INCLUDE)
-        NonKeyAttributes: [ // required / allowed only for INCLUDE
-          'attribute_name_1',
-          // ... more attribute names ...
-        ],
+        ProjectionType: 'ALL', // (ALL | KEYS_ONLY | INCLUDE)
+      },
+      ProvisionedThroughput: { // throughput to provision to the index
+        ReadCapacityUnits: 1,
+        WriteCapacityUnits: 1,
+      },
+    },
+    {
+      IndexName: 'publish_index',
+      KeySchema: [
+        { // Required HASH type attribute
+          AttributeName: 'publish',
+          KeyType: 'HASH',
+        },
+        { // Optional RANGE key type for HASH + RANGE secondary indexes
+          AttributeName: 'created',
+          KeyType: 'RANGE',
+        }
+      ],
+      Projection: { // attributes to project into the index
+        ProjectionType: 'ALL', // (ALL | KEYS_ONLY | INCLUDE)
       },
       ProvisionedThroughput: { // throughput to provision to the index
         ReadCapacityUnits: 1,

@@ -22,7 +22,7 @@ h1, h2, h3, h4, p {
 }
 
 /* Inputs */
-input {
+input, textarea {
   padding: 16px;
   font-size: 16px;
   background: #efefef;
@@ -30,19 +30,23 @@ input {
   box-sizing: border-box;
   color: blue;
   border-bottom: 2px solid #ccc;
+  tab-size: 1em;
 }
-input:hover:not(:disabled) {
+textarea {
+  line-height: 1.5em;
+}
+input:hover:not(:disabled), textarea:hover:not(:disabled) {
   border-color: blue;
 }
-input:disabled {
+input:disabled, textarea:disabled {
   opacity: 0.7;
   background-color: #ccc;
   color: #666;
 }
-input:focus {
+input:focus, textarea:focus {
   border-color: blue;
 }
-input::placeholder {
+input::placeholder, textarea::placeholder {
   color: #777;
   opacity: 0.5;
 }
@@ -100,16 +104,32 @@ header .right {
 
 header nav.main-nav {
   text-align: right;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+table {
+  width: 100%;
+  box-sizing: border-box;
+  text-align: left;
+  border: 1px solid #CCCCCC;
+}
+table td, table th {
+  padding: 12px;
+  border: 1px solid rgba(1,1,1,0.1);
+  margin: 0;
+}
+table thead {
+  background-color: lightyellow;
 }
 
 /* Buttons */
 .button {
   text-decoration: none;
   opacity: 1 !important;
-  border-radius: 5px;
   letter-spacing: 1px;
   padding: 8px 24px;
-  font-weight: bold;
   font-size: 16px;
   display: inline-block;
   color: #666;
@@ -125,6 +145,7 @@ button.button {
 }
 .button.full {
   width: 100%;
+  text-align: center;
   box-sizing: border-box;
 }
 .button:hover {
@@ -157,7 +178,7 @@ button.button {
 /* Flash */
 .flash {
   position: fixed;
-  top: 68px;
+  top: 6px;
   left: 50%;
   transform: translateX(-50%);
   font-size: 16px;
@@ -313,10 +334,70 @@ button.button {
   padding-left: 32px;
   box-sizing: border-box;
 }
+.container img {
+  max-width: 100%;
+}
+
+.container .article {
+  margin-bottom: 2em;
+}
+
+.container .article p {
+  line-height: 2em;
+  margin-bottom: 2em;
+  color: #666666;
+}
+
+.container .article p code {
+  padding: 3px 12px;
+  background-color: lightyellow;
+}
+
+.container .article h1,
+.container .article h2,
+.container .article h3,
+.container .article h4,
+.container .article h5,
+.container .article h6,
+.container .article table {
+  font-weight: normal;
+  margin-bottom: 1.2em;
+  color: #000000 !important;
+}
+.container h1.main-title {
+  font-weight: bold;
+}
+
+.container .article pre {
+  padding: 24px;
+  border: 1px solid rgba(1,1,1,0.06);
+  margin-bottom: 2em;
+}
+.container .article pre code {
+  tab-size: 2em;
+}
+
+.container .article ul, .container .article ol {
+  margin-left: 2em;
+  margin-bottom: 2em;
+}
+.container .article ul li p, .container .article ol li p {
+  margin-bottom: .5em;
+}
+.container .article ul li, .container .article ol li {
+  margin-bottom: .5em
+}
 
 .user-card {
   box-sizing: border-box;
   padding: 24px;
   background-color: #fff;
   border: 1px solid blue;
+}
+
+svg.new path {
+  fill: blue;
+}
+svg.new-reverse path {
+  fill: white;
 }
