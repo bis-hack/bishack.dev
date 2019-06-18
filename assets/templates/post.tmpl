@@ -1,5 +1,16 @@
 {{define "style"}}
+.social {
+    position: fixed;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 12px 32px;
+    box-sizing: border-box;
+    text-align: right;
+    font-size: 2em;
+}
 .main-content {
+    position: relative;
     width: 784px;
     box-sizing: border-box;
     float: left;
@@ -48,13 +59,21 @@ pre code {
         <article class="article">
             <h1 class="main-title">{{.Post.Title}}</h1>
             <p>
-                <strong>
-                    <a href="/{{.Post.Username}}">@{{.Post.Username}}</a>
-                </strong>
+                <small>
+                    <a href="/{{.Post.Username}}" style="border:0">
+                        <img width="32px" src="{{.Post.UserPic}}" alt="avatar" style="border-radius:100px;position:relative;top:10px">
+                        &nbsp;&nbsp;@{{.Post.Username}}
+                    </a>
+                </small>
                 <small class="div">|</small>
-                <strong class="sub">{{date "Jan 02, 2006" .Post.Created}}</strong>
+                <small><span style="font-size:1.5em;position:relative;top:3px;margin:0 4px 0 0;">♥</span> 42</small>
+                <small class="div">|</small>
+                <small>Posted {{date "Jan 02" .Post.Created}}</small>
             </p>
             <div class="main-content">
+                <div class="social">
+                    <a href="#" style="font-size:64px;color:#a99191;border:0">♥</a>
+                </div>
                 {{.Post.Content | md}}
             </div>
             <div class="right-pane" style="">

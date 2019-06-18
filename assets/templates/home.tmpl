@@ -151,16 +151,18 @@
                     {{range .Posts}}
                     <div class="post">
                         <div class="left" style="width:60px;top:3px;position:relative">
-                            <img width="44p" style="border-radius:100px" src="{{.UserPic}}" alt="avatar">
+                            <a style="border:0 !important;" href="/{{.Username}}">
+                                <img width="44p" style="border-radius:100px" src="{{.UserPic}}" alt="avatar">
+                            </a>
                         </div>
                         <div class="right" style="width:570px">
                             <a class="post-title" href="/p/{{.ID}}">{{.Title}}</a>
                             <br><br>
-                            <span><a href="/{{.Username}}">@{{.Username}}</a></span>
-                            <span class="div">|</span>
-                            <span class="sub">Posted on {{date "Jan 02" .Created}}</span>
+                            <small style="opacity:0.6">
+                                <span style="">♥ 4<span class="div">|</span>💬 2</span><span class="div">|</span><span>Posted {{date "Jan 02" .Created}}</span>
+                            </small>
                         </div>
-                        <p class="clear"></p>
+                        <div class="clear"></div>
                     </div>
                     {{end}}
                 {{end}}
