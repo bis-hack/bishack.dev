@@ -113,8 +113,8 @@ func TestQuery(t *testing.T) {
 			return true
 		})).Return(nil, errors.New(""))
 
-		posts := c.query("x", "", map[string]interface{}{}, false)
-		assert.Nil(t, posts)
+		_, err := c.Query("x", "", "", map[string]interface{}{}, false, 0)
+		assert.NotNil(t, err)
 	})
 
 	t.Run("0 items", func(t *testing.T) {
@@ -127,8 +127,9 @@ func TestQuery(t *testing.T) {
 			return true
 		})).Return(out, nil)
 
-		posts := c.query("x", "", map[string]interface{}{}, false)
-		assert.Nil(t, posts)
+		out, err := c.Query("x", "", "", map[string]interface{}{}, false, 0)
+		assert.Nil(t, err)
+		assert.Empty(t, out.Items)
 	})
 
 	t.Run("found items", func(t *testing.T) {
@@ -148,30 +149,45 @@ func TestQuery(t *testing.T) {
 			return true
 		})).Return(out, nil)
 
-		posts := c.query("x", "", map[string]interface{}{}, false)
-		assert.NotNil(t, posts)
+		out, err := c.Query("x", "", "", map[string]interface{}{}, false, 0)
+		assert.Nil(t, err)
+		assert.NotNil(t, out)
 	})
 }
 
 func TestGetAll(t *testing.T) {
-	p := new(providerMock)
-	c := New("bee", "boop", p)
+	t.Run("0 item", func(t *testing.T) {
+		p := new(providerMock)
+		c := New("bee", "boop", p)
 
-	out := &dynamodb.QueryOutput{}
-	item, _ := dynamodbattribute.MarshalMap(map[string]interface{}{
-		"title":    "test",
-		"id":       "testing",
-		"username": "test",
-	})
-	out.SetItems([]map[string]*dynamodb.AttributeValue{
-		item,
-	})
-	p.On("Query", mock.MatchedBy(func(input *dynamodb.QueryInput) bool {
-		return true
-	})).Return(out, nil)
+		p.On("Query", mock.MatchedBy(func(input *dynamodb.QueryInput) bool {
+			return true
+		})).Return(&dynamodb.QueryOutput{}, nil)
 
-	posts := c.GetAll()
-	assert.NotNil(t, posts)
+		posts := c.GetAll()
+		assert.Nil(t, posts)
+	})
+
+	t.Run("ok", func(t *testing.T) {
+		p := new(providerMock)
+		c := New("bee", "boop", p)
+
+		out := &dynamodb.QueryOutput{}
+		item, _ := dynamodbattribute.MarshalMap(map[string]interface{}{
+			"title":    "test",
+			"id":       "testing",
+			"username": "test",
+		})
+		out.SetItems([]map[string]*dynamodb.AttributeValue{
+			item,
+		})
+		p.On("Query", mock.MatchedBy(func(input *dynamodb.QueryInput) bool {
+			return true
+		})).Return(out, nil)
+
+		posts := c.GetAll()
+		assert.NotNil(t, posts)
+	})
 }
 
 func TestGet(t *testing.T) {
@@ -182,6 +198,18 @@ func TestGet(t *testing.T) {
 		p.On("Query", mock.MatchedBy(func(input *dynamodb.QueryInput) bool {
 			return true
 		})).Return(nil, errors.New(""))
+
+		post := c.Get("test")
+		assert.Nil(t, post)
+	})
+
+	t.Run("0 items", func(t *testing.T) {
+		p := new(providerMock)
+		c := New("bee", "boop", p)
+
+		p.On("Query", mock.MatchedBy(func(input *dynamodb.QueryInput) bool {
+			return true
+		})).Return(&dynamodb.QueryOutput{}, nil)
 
 		post := c.Get("test")
 		assert.Nil(t, post)

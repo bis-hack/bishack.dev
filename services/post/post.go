@@ -7,56 +7,24 @@ import (
 	"strings"
 	"time"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
+	"bishack.dev/services/dynamo"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
-// DynamoDBProvider ...
-type DynamoDBProvider interface {
-	PutItem(*dynamodb.PutItemInput) (*dynamodb.PutItemOutput, error)
-	UpdateItem(*dynamodb.UpdateItemInput) (*dynamodb.UpdateItemOutput, error)
-	DeleteItem(*dynamodb.DeleteItemInput) (*dynamodb.DeleteItemOutput, error)
-	Query(*dynamodb.QueryInput) (*dynamodb.QueryOutput, error)
-	DescribeTable(*dynamodb.DescribeTableInput) (*dynamodb.DescribeTableOutput, error)
-}
-
 // Client ...
 type Client struct {
-	TableName string
-	Provider  DynamoDBProvider
+	*dynamo.Client
 }
 
 // New creates new Client instance
 func New(
 	tableName,
 	endpoint string,
-	provider DynamoDBProvider,
+	provider dynamo.DBProvider,
 ) *Client {
-	if provider != nil {
-		return &Client{
-			TableName: tableName,
-			Provider:  provider,
-		}
-	}
-
-	conf := &aws.Config{
-		Region: aws.String("us-east-1"),
-	}
-
-	// if endpoint is present
-	if endpoint != "" {
-		conf.Endpoint = aws.String(endpoint)
-	}
-
-	client := session.Must(session.NewSession(conf))
-
-	provider = dynamodb.New(client)
-
 	return &Client{
-		TableName: tableName,
-		Provider:  provider,
+		dynamo.New(tableName, endpoint, provider),
 	}
 }
 
@@ -114,7 +82,7 @@ func (c *Client) Create(params map[string]interface{}) *Post {
 
 // Get ...
 func (c *Client) Get(id string) *Post {
-	qs := "id = :id and created > :created"
+	ks := "id = :id and created > :created"
 	vals := map[string]interface{}{
 		":id":      id,
 		":created": 0,
@@ -122,49 +90,7 @@ func (c *Client) Get(id string) *Post {
 
 	// we set index name to blank since we're not querying
 	// global secondary index
-	posts := c.query("", qs, vals, false)
-	if posts == nil || len(posts) == 0 {
-		return nil
-	}
-
-	return posts[0]
-}
-
-// GetAll ...
-func (c *Client) GetAll() []*Post {
-	qs := "publish = :publish and created > :created"
-	vals := map[string]interface{}{
-		":publish": 1,
-		":created": 0,
-	}
-
-	return c.query("publish_index", qs, vals, false)
-}
-
-// Query
-// just pass in the following:
-//
-//  in      - index name (optional)
-//  qs      - query string
-//  vals    - expression attribute values
-//  forward - to ascending or not
-func (c *Client) query(in, qs string, vals map[string]interface{}, forward bool) []*Post {
-	// marshal values
-	values, _ := dynamodbattribute.MarshalMap(vals)
-
-	// prepare input
-	input := &dynamodb.QueryInput{
-		TableName:                 &c.TableName,
-		KeyConditionExpression:    &qs,
-		ExpressionAttributeValues: values,
-		ScanIndexForward:          aws.Bool(forward),
-	}
-	// if index name exists
-	if in != "" {
-		input.SetIndexName(in)
-	}
-
-	out, err := c.Provider.Query(input)
+	out, err := c.Query("", ks, "", vals, false, 0)
 	if err != nil {
 		fmt.Println("Query error:", err.Error())
 		return nil
@@ -178,5 +104,23 @@ func (c *Client) query(in, qs string, vals map[string]interface{}, forward bool)
 	var posts []*Post
 	_ = dynamodbattribute.UnmarshalListOfMaps(out.Items, &posts)
 
+	return posts[0]
+}
+
+// GetAll ...
+func (c *Client) GetAll() []*Post {
+	ks := "publish = :publish and created > :created"
+	vals := map[string]interface{}{
+		":publish": 1,
+		":created": 0,
+	}
+
+	out, err := c.Query("publish_index", ks, "", vals, false, 0)
+	if err != nil || len(out.Items) == 0 {
+		return nil
+	}
+
+	var posts []*Post
+	_ = dynamodbattribute.UnmarshalListOfMaps(out.Items, &posts)
 	return posts
 }
