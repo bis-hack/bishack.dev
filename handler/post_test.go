@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"bishack.dev/services/post"
+	"bishack.dev/services/user"
 	_ "bishack.dev/testing"
 	"github.com/gorilla/context"
 	"github.com/stretchr/testify/assert"
@@ -27,8 +28,8 @@ func TestNew(t *testing.T) {
 		w := httptest.NewRecorder()
 		r, _ := http.NewRequest(http.MethodGet, "/new", nil)
 
-		user := map[string]string{
-			"nickname": "test",
+		user := &user.User{
+			Username: "test",
 		}
 
 		context.Set(r, "user", user)
@@ -48,7 +49,7 @@ func TestCreatePost(t *testing.T) {
 		r, _ := http.NewRequest(http.MethodGet, "/new", nil)
 
 		context.Set(r, "postService", p)
-		p.On("Create", mock.MatchedBy(func(vals map[string]interface{}) bool {
+		p.On("CreatePost", mock.MatchedBy(func(vals map[string]interface{}) bool {
 			return true
 		})).Return(nil)
 
@@ -65,7 +66,7 @@ func TestCreatePost(t *testing.T) {
 		r, _ := http.NewRequest(http.MethodGet, "/new", nil)
 
 		context.Set(r, "postService", p)
-		p.On("Create", mock.MatchedBy(func(vals map[string]interface{}) bool {
+		p.On("CreatePost", mock.MatchedBy(func(vals map[string]interface{}) bool {
 			return true
 		})).Return(&post.Post{
 			Title:   "test",
@@ -88,7 +89,7 @@ func TestGetPost(t *testing.T) {
 		r, _ := http.NewRequest(http.MethodGet, "/p/test", nil)
 
 		context.Set(r, "postService", p)
-		p.On("Get", mock.MatchedBy(func(id string) bool {
+		p.On("GetPost", mock.MatchedBy(func(id string) bool {
 			return true
 		})).Return(nil)
 
@@ -105,7 +106,7 @@ func TestGetPost(t *testing.T) {
 		r, _ := http.NewRequest(http.MethodGet, "/p/test", nil)
 
 		context.Set(r, "postService", p)
-		p.On("Get", mock.MatchedBy(func(id string) bool {
+		p.On("GetPost", mock.MatchedBy(func(id string) bool {
 			return true
 		})).Return(&post.Post{
 			Title: "test",

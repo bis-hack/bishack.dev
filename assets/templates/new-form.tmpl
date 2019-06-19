@@ -59,9 +59,8 @@
     <div class="container">
         <form action="/new" method="POST" id="new-form" autocomplete="off">
             {{ .csrfField }}
-            <input type="hidden" name="username" value="{{.User.nickname}}">
-            <input type="hidden" name="userId" value="{{.User.sub}}">
-            <input type="hidden" name="userPic" value="{{.User.picture}}">
+            <input type="hidden" name="username" value="{{.User.Username}}">
+            <input type="hidden" name="userPic" value="{{.User.Picture}}">
             <input type="hidden" name="publish" value="1">
             <p>
                 <input

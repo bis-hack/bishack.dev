@@ -5,6 +5,7 @@ import (
 	"net/url"
 
 	"bishack.dev/services/post"
+	"bishack.dev/services/user"
 	"bishack.dev/utils/session"
 	cip "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 	"github.com/stretchr/testify/mock"
@@ -49,6 +50,17 @@ func (o *userServiceMock) AccountDetails(token string) (*cip.GetUserOutput, erro
 	}
 
 	return resp.(*cip.GetUserOutput), args.Error(1)
+}
+
+func (o *userServiceMock) GetUser(username string) *user.User {
+	args := o.Called(username)
+
+	resp := args.Get(0)
+	if resp == nil {
+		return nil
+	}
+
+	return resp.(*user.User)
 }
 
 func (o *userServiceMock) Verify(
@@ -166,7 +178,7 @@ func (p *postMock) GetCount() int64 {
 	return resp.(int64)
 }
 
-func (p *postMock) Create(vals map[string]interface{}) *post.Post {
+func (p *postMock) CreatePost(vals map[string]interface{}) *post.Post {
 	args := p.Called(vals)
 	resp := args.Get(0)
 
@@ -177,7 +189,7 @@ func (p *postMock) Create(vals map[string]interface{}) *post.Post {
 	return resp.(*post.Post)
 }
 
-func (p *postMock) GetAll() []*post.Post {
+func (p *postMock) GetPosts() []*post.Post {
 	args := p.Called()
 	resp := args.Get(0)
 
@@ -188,7 +200,18 @@ func (p *postMock) GetAll() []*post.Post {
 	return resp.([]*post.Post)
 }
 
-func (p *postMock) Get(id string) *post.Post {
+func (p *postMock) GetUserPosts(username string) []*post.Post {
+	args := p.Called(username)
+	resp := args.Get(0)
+
+	if resp == nil {
+		return nil
+	}
+
+	return resp.([]*post.Post)
+}
+
+func (p *postMock) GetPost(username, id string) *post.Post {
 	args := p.Called()
 	resp := args.Get(0)
 

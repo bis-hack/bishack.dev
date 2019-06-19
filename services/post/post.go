@@ -44,8 +44,8 @@ func (c *Client) GetCount() int64 {
 	return *resp.Table.ItemCount
 }
 
-// Create creates a new post
-func (c *Client) Create(params map[string]interface{}) *Post {
+// CreatePost creates a new post
+func (c *Client) CreatePost(params map[string]interface{}) *Post {
 	// dates
 	now := time.Now().Unix()
 	params["created"] = now
@@ -80,17 +80,19 @@ func (c *Client) Create(params map[string]interface{}) *Post {
 	return &post
 }
 
-// Get ...
-func (c *Client) Get(id string) *Post {
+// GetPost ...
+func (c *Client) GetPost(username, id string) *Post {
 	ks := "id = :id and created > :created"
+	fs := "username = :username"
 	vals := map[string]interface{}{
-		":id":      id,
-		":created": 0,
+		":id":       id,
+		":created":  0,
+		":username": username,
 	}
 
 	// we set index name to blank since we're not querying
 	// global secondary index
-	out, err := c.Query("", ks, "", vals, false, 0)
+	out, err := c.Query("", ks, fs, vals, false, 0)
 	if err != nil {
 		fmt.Println("Query error:", err.Error())
 		return nil
@@ -107,8 +109,28 @@ func (c *Client) Get(id string) *Post {
 	return posts[0]
 }
 
+// GetUser gets all the posts from user
+func (c *Client) GetUserPosts(username string) []*Post {
+	ks := "publish = :publish and created > :created"
+	fs := "username = :username"
+	vals := map[string]interface{}{
+		":publish":  1,
+		":created":  0,
+		":username": username,
+	}
+
+	out, err := c.Query("publish_index", ks, fs, vals, false, 0)
+	if err != nil || len(out.Items) == 0 {
+		return nil
+	}
+
+	var posts []*Post
+	_ = dynamodbattribute.UnmarshalListOfMaps(out.Items, &posts)
+	return posts
+}
+
 // GetAll ...
-func (c *Client) GetAll() []*Post {
+func (c *Client) GetPosts() []*Post {
 	ks := "publish = :publish and created > :created"
 	vals := map[string]interface{}{
 		":publish": 1,

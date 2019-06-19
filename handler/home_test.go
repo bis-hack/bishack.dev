@@ -6,6 +6,7 @@ import (
 	"regexp"
 	"testing"
 
+	"bishack.dev/services/user"
 	_ "bishack.dev/testing"
 	"github.com/gorilla/context"
 	"github.com/stretchr/testify/assert"
@@ -13,7 +14,6 @@ import (
 )
 
 func TestHome(t *testing.T) {
-
 	t.Run("normal", func(t *testing.T) {
 		s := new(sessionMock)
 		p := new(postMock)
@@ -24,7 +24,7 @@ func TestHome(t *testing.T) {
 		context.Set(r, "postService", p)
 		context.Set(r, "session", s)
 
-		p.On("GetAll").Return(nil)
+		p.On("GetPosts").Return(nil)
 		s.On("GetFlash", mock.MatchedBy(func(w http.ResponseWriter) bool {
 			return true
 		}), mock.MatchedBy(func(r *http.Request) bool {
@@ -44,15 +44,14 @@ func TestHome(t *testing.T) {
 		w := httptest.NewRecorder()
 		r, _ := http.NewRequest(http.MethodGet, "/", nil)
 
-		context.Set(r, "user", map[string]string{
-			"email":    "test@user.com",
-			"nickname": "tibur",
+		context.Set(r, "user", &user.User{
+			Username: "tibur",
 		})
 
 		context.Set(r, "postService", p)
 		context.Set(r, "session", s)
 
-		p.On("GetAll").Return(nil)
+		p.On("GetPosts").Return(nil)
 		s.On("GetFlash", mock.MatchedBy(func(w http.ResponseWriter) bool {
 			return true
 		}), mock.MatchedBy(func(r *http.Request) bool {

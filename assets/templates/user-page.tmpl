@@ -1,0 +1,124 @@
+{{define "style"}}
+    /* slack */
+    .slack {
+        position: fixed;
+        width: 320px;
+        border: 1px solid #eeeeee;
+        box-sizing: border-box;
+        right: 10px;
+        bottom: -160px;
+        transition: bottom .3s;
+        transition-delay: 5s;
+        padding: 24px;
+        border: 1px solid #aaaaaa;
+        background-color: #723a7b;
+        box-shadow: -3px -3px 10px 1px rgba(0,0,0,0.1);
+    }
+    .slack:hover {
+        transition: bottom .3s;
+        bottom: 10px;
+    }
+    .slack p {
+        margin-bottom: 0;
+        color: white;
+    }
+
+    .title {
+        letter-spacing: 1px;
+        width: 543px;
+        height: 182px;
+        opacity: 0.91;
+        margin: 0 auto 1em;
+        text-indent: -1000000px;
+        background: url(/images/bishack.svg) center center /contain no-repeat;
+    }
+
+    .jira {
+        position: relative;
+        text-decoration: line-through;
+        color: #888888;
+    }
+    .jira:after {
+        text-decoration: none;
+        color: black;
+        top: -32px;
+        left: -1px;
+        width: 150px;
+        transform: rotate(-4deg);
+        display: inline-block;
+        content: attr(data);
+        background-color: yellow;
+        padding: 0 10px;
+        position: absolute;
+    }
+    .sign-icon {
+        position: relative;
+        top: 5px;
+        margin-right: 12px;
+    }
+    .sign-icon path {
+        fill: #FFFFFF;
+    }
+    .post {
+        background-color: #ffffff;
+        margin-bottom: 2em;
+        border: 1px solid #aaa;
+        border-bottom: 2px solid #aaa;
+        border-right: 2px solid #aaa;
+        box-sizing: border-box;
+        padding: 24px;
+    }
+    .post a.post-title {
+        color: #333333 !important;
+        font-weight: bold;
+        text-transform: capitalize;
+        font-size: 1.2em;
+    }
+    .post a.post-title:hover {
+        border-bottom: 1px solid #EEE !important;
+    }
+    .x path {
+        fill: rgba(1,1,1,0.2);
+    }
+{{end}}
+{{define "script"}}
+{{end}}
+{{define "content"}}
+    <div class="container">
+        <div class="profile">
+            {{template "user-card.tmpl" .User}}
+        </div>
+        <div class="content">
+            {{if not .Posts}}
+                <div style="text-align:center;padding:64px;">
+                    <svg class="x" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                         width="64px"viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+                    <g>
+                        <path d="M480,320v128H32V320h78.859l64.016,96h162.25l64-96H480 M384,32H128L0,288v192h512V288L384,32L384,32z M35.781,288l112-224
+                            h216.438l112,224H384l-64,96H192l-64.016-96H35.781L35.781,288z"/>
+                    <g>
+                    </svg>
+                    <p style="margin-top:20px"><small>User doesn't have a post yet. Check back later.</small></p>
+                </div>
+            {{else}}
+                {{range .Posts}}
+                <div class="post">
+                    <div class="left" style="width:60px;top:3px;position:relative">
+                        <a style="border:0 !important;" href="/{{.Username}}">
+                            <img width="44p" style="border-radius:100px" src="{{.UserPic}}" alt="avatar">
+                        </a>
+                    </div>
+                    <div class="right" style="width:570px">
+                        <a class="post-title" href="/{{.Username}}/{{.ID}}">{{.Title}}</a>
+                        <br><br>
+                        <small style="opacity:0.6">
+                            <span style="">♥ 0<span class="div">|</span>💬 0</span><span class="div">|</span><span>Posted {{date "Jan 02" .Created}}</span>
+                        </small>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                {{end}}
+            {{end}}
+        </div>
+    </div>
+{{end}}

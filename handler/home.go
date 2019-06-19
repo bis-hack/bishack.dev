@@ -17,20 +17,17 @@ func Home(w http.ResponseWriter, r *http.Request) {
 
 	// get user details from context and cast it as map[string]string if
 	// not nil
-	user := context.Get(r, "user")
-	if user != nil {
-		user = user.(map[string]string)
-	}
+	u := context.Get(r, "user")
 
 	ps := context.Get(r, "postService").(interface {
-		GetAll() []*post.Post
+		GetPosts() []*post.Post
 	})
 
 	utils.Render(w, "main", "home", map[string]interface{}{
 		"Title": "Bisdak Tech Community",
 		"Flash": sess.GetFlash(w, r),
-		"User":  user,
-		"Posts": ps.GetAll(),
+		"User":  u,
+		"Posts": ps.GetPosts(),
 	})
 }
 

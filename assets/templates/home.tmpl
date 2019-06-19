@@ -145,7 +145,7 @@
                                 h216.438l112,224H384l-64,96H192l-64.016-96H35.781L35.781,288z"/>
                         <g>
                         </svg>
-                        <p style="margin-top:20px"><small>No Post Yet.</small></p>
+                        <p style="margin-top:20px"><small>No Post Yet. Why don't you create one?</small></p>
                     </div>
                 {{else}}
                     {{range .Posts}}
@@ -156,10 +156,10 @@
                             </a>
                         </div>
                         <div class="right" style="width:570px">
-                            <a class="post-title" href="/p/{{.ID}}">{{.Title}}</a>
+                            <a class="post-title" href="/{{.Username}}/{{.ID}}">{{.Title}}</a>
                             <br><br>
                             <small style="opacity:0.6">
-                                <span style="">♥ 4<span class="div">|</span>💬 2</span><span class="div">|</span><span>Posted {{date "Jan 02" .Created}}</span>
+                                <span style="">♥ 0<span class="div">|</span>💬 0</span><span class="div">|</span><span>Posted {{date "Jan 02" .Created}}</span>
                             </small>
                         </div>
                         <div class="clear"></div>

@@ -342,6 +342,15 @@ button.button {
   margin-bottom: 2em;
 }
 
+.container .article blockquote {
+  border-left: 5px solid #AAAAAA;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+.container .article blockquote p {
+  opacity: 0.7;
+}
+
 .container .article p {
   line-height: 2em;
   margin-bottom: 2em;

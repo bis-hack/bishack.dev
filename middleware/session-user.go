@@ -3,7 +3,7 @@ package middleware
 import (
 	"net/http"
 
-	cip "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
+	"bishack.dev/services/user"
 	"github.com/gorilla/context"
 )
 
@@ -26,24 +26,16 @@ func SessionUser(h http.Handler) http.Handler {
 		}
 
 		u := context.Get(r, "userService").(interface {
-			AccountDetails(token string) (*cip.GetUserOutput, error)
+			AccountDetails(token string) *user.User
 		})
 
 		token := su["token"]
-		o, err := u.AccountDetails(token)
-		if err != nil {
+
+		user := u.AccountDetails(token)
+		if user == nil {
 			return
 		}
 
-		if len(o.UserAttributes) == 0 {
-			return
-		}
-
-		ua := map[string]string{}
-		for _, v := range o.UserAttributes {
-			ua[*v.Name] = *v.Value
-		}
-
-		context.Set(r, "user", ua)
+		context.Set(r, "user", user)
 	})
 }

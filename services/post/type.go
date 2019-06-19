@@ -3,7 +3,6 @@ package post
 // Post a post item
 type Post struct {
 	Username string
-	UserID   string
 	ID       string
 	Title    string
 	Created  int64

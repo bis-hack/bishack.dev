@@ -20,7 +20,6 @@ func New(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user = user.(map[string]string)
 	utils.Render(w, "main", "new-form", map[string]interface{}{
 		"Title":          "Create New Post",
 		"User":           user,
@@ -38,34 +37,34 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	attr["publish"] = publish
 
 	attr["title"] = r.PostForm.Get("title")
-	attr["userId"] = r.PostForm.Get("userId")
 	attr["content"] = r.PostForm.Get("content")
 	attr["userPic"] = r.PostForm.Get("userPic")
 	attr["username"] = r.PostForm.Get("username")
 
 	ps := context.Get(r, "postService").(interface {
-		Create(params map[string]interface{}) *post.Post
+		CreatePost(params map[string]interface{}) *post.Post
 	})
 
-	p := ps.Create(attr)
+	p := ps.CreatePost(attr)
 	if p == nil {
 		log.Println("error")
 		http.Redirect(w, r, "/new", http.StatusSeeOther)
 		return
 	}
 
-	http.Redirect(w, r, fmt.Sprintf("/p/%s", p.ID), http.StatusSeeOther)
+	http.Redirect(w, r, fmt.Sprintf("/%s/%s", p.Username, p.ID), http.StatusSeeOther)
 }
 
 // GetPost ...
 func GetPost(w http.ResponseWriter, r *http.Request) {
 	id := r.URL.Query().Get(":id")
+	username := r.URL.Query().Get(":username")
 
 	ps := context.Get(r, "postService").(interface {
-		Get(id string) *post.Post
+		GetPost(username, id string) *post.Post
 	})
 
-	post := ps.Get(id)
+	post := ps.GetPost(username, id)
 	if post == nil {
 		// not found
 		utils.Render(w, "error", "notfound", map[string]interface{}{

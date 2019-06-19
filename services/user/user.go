@@ -4,26 +4,12 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/base64"
+	"os"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	cip "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 )
-
-// CognitoProvider ...
-type CognitoProvider interface {
-	SignUp(*cip.SignUpInput) (*cip.SignUpOutput, error)
-	ConfirmSignUp(*cip.ConfirmSignUpInput) (*cip.ConfirmSignUpOutput, error)
-	InitiateAuth(*cip.InitiateAuthInput) (*cip.InitiateAuthOutput, error)
-	GetUser(*cip.GetUserInput) (*cip.GetUserOutput, error)
-}
-
-// Client main struct
-type Client struct {
-	ClientID     string
-	ClientSecret string
-	Provider     CognitoProvider
-}
 
 // New creates a new instance of Client
 func New(id, secret string) *Client {
@@ -91,15 +77,58 @@ func (c *Client) Login(
 }
 
 // AccountDetails ...
-func (c *Client) AccountDetails(token string) (*cip.GetUserOutput, error) {
+func (c *Client) AccountDetails(token string) *User {
 	input := &cip.GetUserInput{}
 	input.SetAccessToken(token)
-	return c.Provider.GetUser(input)
+
+	out, err := c.Provider.GetUser(input)
+	if err != nil {
+		return nil
+	}
+
+	return newUserFromAttributes(out.UserAttributes)
+}
+
+func (c *Client) GetUser(username string) *User {
+	pid := os.Getenv("COGNITO_POOL_ID")
+
+	input := &cip.AdminGetUserInput{}
+	input.SetUserPoolId(pid)
+	input.SetUsername(username)
+
+	out, err := c.Provider.AdminGetUser(input)
+	if err != nil {
+		return nil
+	}
+
+	return newUserFromAttributes(out.UserAttributes)
 }
 
 //
 // PRIVATE
 //
+
+// newUserFromOutput ...
+func newUserFromAttributes(attrs []*cip.AttributeType) *User {
+	user := &User{}
+
+	// attr mappings
+	am := map[string]string{}
+	for _, a := range attrs {
+		am[*a.Name] = *a.Value
+	}
+
+	user.ID = am["sub"]
+	user.Bio = am["profile"]
+	user.Name = am["name"]
+	user.Email = am["email"]
+	user.Country = am["locale"]
+	user.Website = am["website"]
+	user.Picture = am["picture"]
+	user.Username = am["nickname"]
+
+	return user
+}
 
 // provider returns a new cognito identity service
 func provider() CognitoProvider {

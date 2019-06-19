@@ -1,16 +1,16 @@
 <div class="user-card">
     <div>
-        <img width="88" style="margin-right:32px;border-radius:100px;float:left" src="{{.picture}}" alt="{{.nickname}}">
+        <img width="88" style="margin-right:32px;border-radius:100px;float:left" src="{{.Picture}}" alt="{{.Username}}">
         <p style="position:relative;top:12px;line-height:32px;">
-            <strong>{{.name}}</strong><br>
-            <a href="/u/{{.nickname}}">@{{.nickname}}</a>
+            <strong>{{.Name}}</strong><br>
+            <a href="/{{.Username}}">@{{.Username}}</a>
         </p>
     </div>
     <hr class="clear" style="margin-bottom:32px">
-    {{if .profile}}
-    <p style="text-align:center;margin:32px auto"><code style="opacity:0.8">{{.profile}}</code></p>
+    {{if .Bio}}
+    <p style="text-align:center;margin:32px auto"><code style="opacity:0.8">{{.Bio}}</code></p>
     {{end}}
-    {{if .locale}}
+    {{if .Country}}
     <p>
         <svg width="20px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
              viewBox="0 0 477 477" style="enable-background:new 0 0 477 477;" xml:space="preserve">
@@ -28,10 +28,10 @@
             </g>
         </g>
         </svg>
-        <span style="position:relative;top:-4px;left:12px">{{.locale}}</span>
+        <span style="position:relative;top:-4px;left:12px">{{.Country}}</span>
     </p>
     {{end}}
-    {{if .website}}
+    {{if .Website}}
     <p style="margin-bottom:0">
         <svg width="20px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 54.971 54.971" style="enable-background:new 0 0 54.971 54.971;" xml:space="preserve">
         <g>
@@ -47,7 +47,7 @@
                 c3.481,0,6.746-1.348,9.192-3.795l7.778-7.778c0.781-0.781,0.781-2.047,0-2.828S27.913,39.789,27.132,40.57z"/>
         </g>
         </svg>
-        <a style="position:relative;top:-4px;left:12px" href="{{.website}}">{{.website}}</a>
+        <a style="position:relative;top:-4px;left:12px" href="{{.Website}}">{{.Website}}</a>
     </p>
     {{end}}
 </div>

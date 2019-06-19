@@ -14,13 +14,12 @@ import (
 	"github.com/gorilla/pat"
 )
 
-var (
-	rxEnv = regexp.MustCompile("`(?i)stag|prod")
-)
-
 func main() {
 	// csrf
 	csrfSecure := true
+
+	// env
+	rxEnv := regexp.MustCompile("`(?i)stag|prod")
 	isLive := rxEnv.MatchString(os.Getenv("UP_STAGE"))
 
 	// init route
@@ -40,7 +39,7 @@ func main() {
 
 	// handlers et al
 
-	// Auth
+	// auth
 	r.Get("/signup", handler.Signup)
 	r.Get("/verify", handler.Verify)
 	r.Get("/login", handler.LoginForm)
@@ -48,22 +47,25 @@ func main() {
 	r.Post("/signup", handler.FinishSignup)
 	r.Post("/login", handler.Login)
 
-	// Slack
+	// slack
 	r.Get("/slack-invite", handler.SlackInvite)
 
-	// Post
-	r.Get("/p/{id}", handler.GetPost)
+	// post
+	r.Get("/{username}/{id}", handler.GetPost)
 	r.Get("/new", handler.New)
 	r.Post("/new", handler.CreatePost)
 
-	// localhost
+	// user
+	r.Get("/{username}", handler.GetUserPosts)
+
+	// on local
 	if !isLive {
 		// set secure to false
 		csrfSecure = false
 
 		// launch nerdy stuff(pprof) server
 		go func() {
-			http.ListenAndServe(":6060", nil)
+			_ = http.ListenAndServe(":6060", nil)
 		}()
 	}
 

@@ -20,11 +20,11 @@ func New() *Client {
 func (s *Client) SetUser(
 	w http.ResponseWriter,
 	r *http.Request,
-	email,
+	username,
 	token string,
 ) {
 	session, _ := s.Store.Get(r, "user")
-	session.Values["email"] = email
+	session.Values["username"] = username
 	session.Values["token"] = token
 	session.Save(r, w)
 }
@@ -33,16 +33,16 @@ func (s *Client) SetUser(
 func (s *Client) GetUser(r *http.Request) map[string]string {
 	session, _ := s.Store.Get(r, "user")
 
-	email := session.Values["email"]
+	username := session.Values["username"]
 	token := session.Values["token"]
 
-	if email == nil || token == nil {
+	if username == nil || token == nil {
 		return nil
 	}
 
 	return map[string]string{
-		"email": email.(string),
-		"token": token.(string),
+		"username": username.(string),
+		"token":    token.(string),
 	}
 }
 
@@ -50,7 +50,7 @@ func (s *Client) GetUser(r *http.Request) map[string]string {
 func (s *Client) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	session, _ := s.Store.Get(r, "user")
 
-	session.Values["email"] = nil
+	session.Values["username"] = nil
 	session.Values["token"] = nil
 
 	session.Save(r, w)

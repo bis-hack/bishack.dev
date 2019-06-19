@@ -4,6 +4,7 @@ import (
 	"errors"
 	"testing"
 
+	test "bishack.dev/testing"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -24,7 +25,7 @@ func TestNew(t *testing.T) {
 
 func TestQuery(t *testing.T) {
 	c := New("", "", nil)
-	p := new(providerMock)
+	p := new(test.ProviderMock)
 
 	p.On("Query", mock.MatchedBy(func(input *dynamodb.QueryInput) bool {
 		return true

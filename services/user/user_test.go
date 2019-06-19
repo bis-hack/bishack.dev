@@ -1,6 +1,7 @@
 package user
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -8,51 +9,6 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
-
-type MockedUserService struct {
-	mock.Mock
-}
-
-func (m *MockedUserService) SignUp(in *cip.SignUpInput) (*cip.SignUpOutput, error) {
-	args := m.Called(in)
-
-	resp := args.Get(0)
-	if resp == nil {
-		return nil, args.Error(1)
-	}
-
-	return resp.(*cip.SignUpOutput), args.Error(1)
-}
-func (m *MockedUserService) ConfirmSignUp(in *cip.ConfirmSignUpInput) (*cip.ConfirmSignUpOutput, error) {
-	args := m.Called(in)
-
-	resp := args.Get(0)
-	if resp == nil {
-		return nil, args.Error(1)
-	}
-
-	return resp.(*cip.ConfirmSignUpOutput), args.Error(1)
-}
-func (m *MockedUserService) InitiateAuth(in *cip.InitiateAuthInput) (*cip.InitiateAuthOutput, error) {
-	args := m.Called(in)
-
-	resp := args.Get(0)
-	if resp == nil {
-		return nil, args.Error(1)
-	}
-
-	return resp.(*cip.InitiateAuthOutput), args.Error(1)
-}
-func (m *MockedUserService) GetUser(in *cip.GetUserInput) (*cip.GetUserOutput, error) {
-	args := m.Called(in)
-
-	resp := args.Get(0)
-	if resp == nil {
-		return nil, args.Error(1)
-	}
-
-	return resp.(*cip.GetUserOutput), args.Error(1)
-}
 
 func TestSignUp(t *testing.T) {
 	to := new(MockedUserService)
@@ -104,27 +60,85 @@ func TestVerify(t *testing.T) {
 }
 
 func TestAccountDetails(t *testing.T) {
-	to := new(MockedUserService)
-	client := New("id", "secret")
-	// change provider to our mocked object
-	client.Provider = to
 	t.Run("valid token", func(t *testing.T) {
+		to := new(MockedUserService)
+		client := New("id", "secret")
+		// change provider to our mocked object
+		client.Provider = to
 		to.On(
 			"GetUser",
 			mock.MatchedBy(func(in *cip.GetUserInput) bool {
-				if *in.AccessToken == "wadiwasi" {
-					return true
-				}
-				return false
+				return true
 			}),
 		).Return(&cip.GetUserOutput{
-			Username: aws.String("beep"),
+			Username: aws.String("test"),
+			UserAttributes: []*cip.AttributeType{
+				&cip.AttributeType{
+					Name:  aws.String("email"),
+					Value: aws.String("test@testing.com"),
+				},
+			},
 		}, nil)
 
-		o, err := client.AccountDetails("wadiwasi")
+		u := client.AccountDetails("test")
 
-		assert.Equal(t, err, nil)
-		assert.Equal(t, "beep", *o.Username)
+		assert.Equal(t, "test@testing.com", u.Email)
+		to.AssertExpectations(t)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		to := new(MockedUserService)
+		client := New("id", "secret")
+		// change provider to our mocked object
+		client.Provider = to
+		to.On(
+			"GetUser",
+			mock.MatchedBy(func(in *cip.GetUserInput) bool {
+				return true
+			}),
+		).Return(nil, errors.New(""))
+
+		u := client.AccountDetails("test")
+
+		assert.Nil(t, u)
+		to.AssertExpectations(t)
+	})
+}
+
+func TestGetUser(t *testing.T) {
+	t.Run("error", func(t *testing.T) {
+		to := new(MockedUserService)
+		client := New("id", "secret")
+		// change provider to our mocked object
+		client.Provider = to
+		to.On(
+			"AdminGetUser",
+			mock.MatchedBy(func(in *cip.AdminGetUserInput) bool {
+				return true
+			}),
+		).Return(nil, errors.New(""))
+
+		u := client.GetUser("test")
+
+		assert.Nil(t, u)
+		to.AssertExpectations(t)
+	})
+
+	t.Run("ok", func(t *testing.T) {
+		to := new(MockedUserService)
+		client := New("id", "secret")
+		// change provider to our mocked object
+		client.Provider = to
+		to.On(
+			"AdminGetUser",
+			mock.MatchedBy(func(in *cip.AdminGetUserInput) bool {
+				return true
+			}),
+		).Return(&cip.AdminGetUserOutput{}, nil)
+
+		u := client.GetUser("test")
+
+		assert.NotNil(t, u)
 		to.AssertExpectations(t)
 	})
 }

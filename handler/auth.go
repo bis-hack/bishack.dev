@@ -29,7 +29,7 @@ func FinishSignup(w http.ResponseWriter, r *http.Request) {
 	profile := r.Form.Get("profile")
 	picture := r.Form.Get("picture")
 	website := r.Form.Get("website")
-	nickname := r.Form.Get("login")
+	username := r.Form.Get("username")
 	password := r.Form.Get("password")
 
 	u := context.Get(r, "userService").(interface {
@@ -47,10 +47,10 @@ func FinishSignup(w http.ResponseWriter, r *http.Request) {
 		"profile":  profile,
 		"website":  website,
 		"picture":  picture,
-		"nickname": nickname,
+		"nickname": username,
 	}
 
-	_, err := u.Signup(email, password, meta)
+	_, err := u.Signup(username, password, meta)
 	if err != nil {
 		errMessage := "Could not sign you up. Try again!"
 
@@ -67,13 +67,13 @@ func FinishSignup(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Redirect(w, r, "/verify?email="+email, http.StatusSeeOther)
+	http.Redirect(w, r, "/verify?username="+username, http.StatusSeeOther)
 }
 
 // Verify ...
 func Verify(w http.ResponseWriter, r *http.Request) {
 	code := r.URL.Query().Get("code")
-	email := r.URL.Query().Get("email")
+	username := r.URL.Query().Get("username")
 
 	sess := context.Get(r, "session").(interface {
 		SetFlash(w http.ResponseWriter, r *http.Request, t, v string)
@@ -85,11 +85,11 @@ func Verify(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if code != "" {
-		_, err := u.Verify(email, code)
+		_, err := u.Verify(username, code)
 
 		if err != nil {
 			sess.SetFlash(w, r, "error", "Verification failed. Try again!")
-			http.Redirect(w, r, "/verify?email="+email, http.StatusSeeOther)
+			http.Redirect(w, r, "/verify?username="+username, http.StatusSeeOther)
 			return
 		}
 
@@ -111,7 +111,7 @@ func Verify(w http.ResponseWriter, r *http.Request) {
 
 	utils.Render(w, "main", "verify-form", map[string]interface{}{
 		"Title":          "Verify",
-		"Email":          email,
+		"Username":       username,
 		"Flash":          flash,
 		csrf.TemplateTag: csrf.TemplateField(r),
 	})
@@ -218,29 +218,29 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 // Login ...
 func Login(w http.ResponseWriter, r *http.Request) {
 	sess := context.Get(r, "session").(interface {
-		SetUser(w http.ResponseWriter, r *http.Request, email, token string)
+		SetUser(w http.ResponseWriter, r *http.Request, username, token string)
 		SetFlash(w http.ResponseWriter, r *http.Request, t, v string)
 	})
 
 	r.ParseForm()
-	email := r.Form.Get("email")
+	username := r.Form.Get("username")
 	password := r.Form.Get("password")
 
 	u := context.Get(r, "userService").(interface {
 		Login(username, password string) (*cip.InitiateAuthOutput, error)
 	})
 
-	out, err := u.Login(email, password)
+	out, err := u.Login(username, password)
 
 	if err != nil {
-		sess.SetFlash(w, r, "error", "Wrong email or password")
+		sess.SetFlash(w, r, "error", "Wrong username or password")
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
 
 	token := out.AuthenticationResult.AccessToken
 
-	sess.SetUser(w, r, email, *token)
+	sess.SetUser(w, r, username, *token)
 	sess.SetFlash(w, r, "success", "Welcome Back!")
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)

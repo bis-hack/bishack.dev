@@ -4,6 +4,7 @@ import (
 	"errors"
 	"testing"
 
+	test "bishack.dev/testing"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 	"github.com/stretchr/testify/assert"
@@ -17,7 +18,7 @@ func TestNew(t *testing.T) {
 	})
 
 	t.Run("with default provider", func(t *testing.T) {
-		provider := new(providerMock)
+		provider := new(test.ProviderMock)
 		c := New("beep", "boop", provider)
 		assert.NotNil(t, c.Provider.DescribeTable)
 	})
@@ -25,7 +26,7 @@ func TestNew(t *testing.T) {
 
 func TestGetCount(t *testing.T) {
 	t.Run("error", func(t *testing.T) {
-		provider := new(providerMock)
+		provider := new(test.ProviderMock)
 		c := New("beep", "boop", provider)
 
 		provider.On("DescribeTable", mock.MatchedBy(func(input *dynamodb.DescribeTableInput) bool {
@@ -39,7 +40,7 @@ func TestGetCount(t *testing.T) {
 	})
 
 	t.Run("ok", func(t *testing.T) {
-		provider := new(providerMock)
+		provider := new(test.ProviderMock)
 		c := New("beep", "boop", provider)
 
 		// table
@@ -63,14 +64,14 @@ func TestGetCount(t *testing.T) {
 
 func TestCreate(t *testing.T) {
 	t.Run("error", func(t *testing.T) {
-		provider := new(providerMock)
+		provider := new(test.ProviderMock)
 		c := New("bee", "boop", provider)
 
 		provider.On("PutItem", mock.MatchedBy(func(input *dynamodb.PutItemInput) bool {
 			return true
 		})).Return(nil, errors.New(""))
 
-		p := c.Create(map[string]interface{}{
+		p := c.CreatePost(map[string]interface{}{
 			"title":    "hello world",
 			"username": "hello",
 		})
@@ -80,7 +81,7 @@ func TestCreate(t *testing.T) {
 	})
 
 	t.Run("ok", func(t *testing.T) {
-		provider := new(providerMock)
+		provider := new(test.ProviderMock)
 		c := New("bee", "boop", provider)
 
 		out := &dynamodb.PutItemOutput{}
@@ -93,7 +94,7 @@ func TestCreate(t *testing.T) {
 			return true
 		})).Return(out, nil)
 
-		p := c.Create(map[string]interface{}{
+		p := c.CreatePost(map[string]interface{}{
 			"title":    "hello world",
 			"username": "hello",
 		})
@@ -106,7 +107,7 @@ func TestCreate(t *testing.T) {
 
 func TestQuery(t *testing.T) {
 	t.Run("error", func(t *testing.T) {
-		p := new(providerMock)
+		p := new(test.ProviderMock)
 		c := New("bee", "boop", p)
 
 		p.On("Query", mock.MatchedBy(func(input *dynamodb.QueryInput) bool {
@@ -118,7 +119,7 @@ func TestQuery(t *testing.T) {
 	})
 
 	t.Run("0 items", func(t *testing.T) {
-		p := new(providerMock)
+		p := new(test.ProviderMock)
 		c := New("bee", "boop", p)
 
 		out := &dynamodb.QueryOutput{}
@@ -133,7 +134,7 @@ func TestQuery(t *testing.T) {
 	})
 
 	t.Run("found items", func(t *testing.T) {
-		p := new(providerMock)
+		p := new(test.ProviderMock)
 		c := New("bee", "boop", p)
 
 		out := &dynamodb.QueryOutput{}
@@ -157,19 +158,19 @@ func TestQuery(t *testing.T) {
 
 func TestGetAll(t *testing.T) {
 	t.Run("0 item", func(t *testing.T) {
-		p := new(providerMock)
+		p := new(test.ProviderMock)
 		c := New("bee", "boop", p)
 
 		p.On("Query", mock.MatchedBy(func(input *dynamodb.QueryInput) bool {
 			return true
 		})).Return(&dynamodb.QueryOutput{}, nil)
 
-		posts := c.GetAll()
+		posts := c.GetPosts()
 		assert.Nil(t, posts)
 	})
 
 	t.Run("ok", func(t *testing.T) {
-		p := new(providerMock)
+		p := new(test.ProviderMock)
 		c := New("bee", "boop", p)
 
 		out := &dynamodb.QueryOutput{}
@@ -185,38 +186,38 @@ func TestGetAll(t *testing.T) {
 			return true
 		})).Return(out, nil)
 
-		posts := c.GetAll()
+		posts := c.GetPosts()
 		assert.NotNil(t, posts)
 	})
 }
 
 func TestGet(t *testing.T) {
 	t.Run("nil", func(t *testing.T) {
-		p := new(providerMock)
+		p := new(test.ProviderMock)
 		c := New("bee", "boop", p)
 
 		p.On("Query", mock.MatchedBy(func(input *dynamodb.QueryInput) bool {
 			return true
 		})).Return(nil, errors.New(""))
 
-		post := c.Get("test")
+		post := c.GetPost("test", "test")
 		assert.Nil(t, post)
 	})
 
 	t.Run("0 items", func(t *testing.T) {
-		p := new(providerMock)
+		p := new(test.ProviderMock)
 		c := New("bee", "boop", p)
 
 		p.On("Query", mock.MatchedBy(func(input *dynamodb.QueryInput) bool {
 			return true
 		})).Return(&dynamodb.QueryOutput{}, nil)
 
-		post := c.Get("test")
+		post := c.GetPost("test", "test")
 		assert.Nil(t, post)
 	})
 
 	t.Run("ok", func(t *testing.T) {
-		p := new(providerMock)
+		p := new(test.ProviderMock)
 		c := New("bee", "boop", p)
 
 		out := &dynamodb.QueryOutput{}
@@ -232,7 +233,45 @@ func TestGet(t *testing.T) {
 			return true
 		})).Return(out, nil)
 
-		post := c.Get("test")
+		post := c.GetPost("test", "test")
 		assert.NotNil(t, post)
+	})
+}
+
+func TestGetUserPosts(t *testing.T) {
+	t.Run("error", func(t *testing.T) {
+		p := new(test.ProviderMock)
+		c := New("bee", "boop", p)
+
+		p.On("Query", mock.MatchedBy(func(input *dynamodb.QueryInput) bool {
+			return true
+		})).Return(nil, errors.New(""))
+
+		posts := c.GetUserPosts("test")
+		assert.Nil(t, posts)
+	})
+
+	t.Run("ok", func(t *testing.T) {
+		p := new(test.ProviderMock)
+		c := New("bee", "boop", p)
+
+		out := &dynamodb.QueryOutput{}
+		item, _ := dynamodbattribute.MarshalMap(map[string]interface{}{
+			"title":    "test",
+			"id":       "testing",
+			"username": "test",
+		})
+		out.SetItems([]map[string]*dynamodb.AttributeValue{
+			item,
+		})
+		p.On("Query", mock.MatchedBy(func(input *dynamodb.QueryInput) bool {
+			return true
+		})).Return(out, nil)
+
+		posts := c.GetUserPosts("test")
+		assert.NotNil(t, posts)
+		assert.Equal(t, "testing", posts[0].ID)
+		assert.Equal(t, "test", posts[0].Title)
+		assert.Equal(t, "test", posts[0].Username)
 	})
 }

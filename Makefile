@@ -46,6 +46,7 @@ up.json:
 	@echo "  -> creating up.json from template file"
 	@cat up.tmpl | sed "s/\$$COGNITO_CLIENT_ID/${COGNITO_CLIENT_ID}/g" \
 		| sed "s/\$$COGNITO_CLIENT_SECRET/${COGNITO_CLIENT_SECRET}/g" \
+		| sed "s/\$$COGNITO_POOL_ID/${COGNITO_POOL_ID}/g" \
 		| sed "s/\$$GITHUB_CLIENT_SECRET/${GITHUB_CLIENT_SECRET}/g" \
 		| sed "s/\$$GITHUB_CLIENT_ID/${GITHUB_CLIENT_ID}/g" \
 		| sed "s/\$$SLACK_TOKEN/${SLACK_TOKEN}/g" \
@@ -53,12 +54,14 @@ up.json:
 		| sed "s/\$$CSRF_KEY/${CSRF_KEY}/g" \
 		| sed "s|\$$GITHUB_CALLBACK|${GITHUB_CALLBACK}|g" \
 		| sed "s/\$$DYNAMO_TABLE_POSTS/${DYNAMO_TABLE_POSTS}/g" \
+		| sed "s/\$$DYNAMO_TABLE_LIKES/${DYNAMO_TABLE_LIKES}/g" \
 		> up.json
 # parse up template for prod
 up.json.prod:
 	@echo "  -> creating up.json from template file"
 	@cat up.tmpl | sed "s/\$$COGNITO_CLIENT_ID/${COGNITO_CLIENT_ID_PROD}/g" \
 		| sed "s/\$$COGNITO_CLIENT_SECRET/${COGNITO_CLIENT_SECRET_PROD}/g" \
+		| sed "s/\$$COGNITO_POOL_ID/${COGNITO_POOL_ID_PROD}/g" \
 		| sed "s/\$$GITHUB_CLIENT_SECRET/${GITHUB_CLIENT_SECRET_PROD}/g" \
 		| sed "s/\$$GITHUB_CLIENT_ID/${GITHUB_CLIENT_ID_PROD}/g" \
 		| sed "s/\$$SLACK_TOKEN/${SLACK_TOKEN}/g" \
@@ -66,4 +69,5 @@ up.json.prod:
 		| sed "s/\$$CSRF_KEY/${CSRF_KEY}/g" \
 		| sed "s|\$$GITHUB_CALLBACK|${GITHUB_CALLBACK_PROD}|g" \
 		| sed "s/\$$DYNAMO_TABLE_POSTS/${DYNAMO_TABLE_POSTS_PROD}/g" \
+		| sed "s/\$$DYNAMO_TABLE_LIKES/${DYNAMO_TABLE_LIKES_PROD}/g" \
 		> up.json
