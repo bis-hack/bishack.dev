@@ -4,6 +4,7 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/base64"
+	"log"
 	"os"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -83,6 +84,7 @@ func (c *Client) AccountDetails(token string) *User {
 
 	out, err := c.Provider.GetUser(input)
 	if err != nil {
+		log.Println("GetUser error", err.Error())
 		return nil
 	}
 
@@ -98,6 +100,7 @@ func (c *Client) GetUser(username string) *User {
 
 	out, err := c.Provider.AdminGetUser(input)
 	if err != nil {
+		log.Println("AdminGetUser error:", err.Error())
 		return nil
 	}
 
