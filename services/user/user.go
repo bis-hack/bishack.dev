@@ -131,7 +131,7 @@ func newUserFromAttributes(attrs []*cip.AttributeType) *User {
 }
 
 // provider returns a new cognito identity service
-func provider() CognitoProvider {
+func provider() Provider {
 	sess := session.Must(session.NewSession(&aws.Config{
 		Region: aws.String("us-east-1"),
 	}))

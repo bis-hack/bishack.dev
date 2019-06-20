@@ -7,8 +7,8 @@ import (
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
-// DBProvider ...
-type DBProvider interface {
+// Provider ...
+type Provider interface {
 	PutItem(*dynamodb.PutItemInput) (*dynamodb.PutItemOutput, error)
 	UpdateItem(*dynamodb.UpdateItemInput) (*dynamodb.UpdateItemOutput, error)
 	DeleteItem(*dynamodb.DeleteItemInput) (*dynamodb.DeleteItemOutput, error)
@@ -19,14 +19,14 @@ type DBProvider interface {
 // Client ...
 type Client struct {
 	TableName string
-	Provider  DBProvider
+	Provider  Provider
 }
 
 // New creates new Client instance
 func New(
 	tableName,
 	endpoint string,
-	provider DBProvider,
+	provider Provider,
 ) *Client {
 	if provider != nil {
 		return &Client{

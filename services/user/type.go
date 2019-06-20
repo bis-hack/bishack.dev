@@ -2,8 +2,8 @@ package user
 
 import cip "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 
-// CognitoProvider ...
-type CognitoProvider interface {
+// Provider ...
+type Provider interface {
 	SignUp(*cip.SignUpInput) (*cip.SignUpOutput, error)
 	ConfirmSignUp(*cip.ConfirmSignUpInput) (*cip.ConfirmSignUpOutput, error)
 	InitiateAuth(*cip.InitiateAuthInput) (*cip.InitiateAuthOutput, error)
@@ -15,7 +15,7 @@ type CognitoProvider interface {
 type Client struct {
 	ClientID     string
 	ClientSecret string
-	Provider     CognitoProvider
+	Provider     Provider
 }
 
 // User ...

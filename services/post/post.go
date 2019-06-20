@@ -21,7 +21,7 @@ type Client struct {
 func New(
 	tableName,
 	endpoint string,
-	provider dynamo.DBProvider,
+	provider dynamo.Provider,
 ) *Client {
 	return &Client{
 		dynamo.New(tableName, endpoint, provider),
