@@ -5,7 +5,6 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/gorilla/pat"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -53,8 +52,4 @@ func TestUser(t *testing.T) {
 		u := c.GetUser(r)
 		assert.Nil(t, u)
 	})
-}
-
-func getRouter() *pat.Router {
-	return pat.New()
 }

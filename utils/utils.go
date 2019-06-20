@@ -53,7 +53,7 @@ func Render(w http.ResponseWriter, base, content string, ctx interface{}) {
 	if content == "notfound" {
 		w.WriteHeader(http.StatusNotFound)
 	}
-	tmpl.ExecuteTemplate(w, "layout", ctx)
+	_ = tmpl.ExecuteTemplate(w, "layout", ctx)
 }
 
 // GithubEndpoint parses endpoint for github request

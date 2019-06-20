@@ -21,7 +21,7 @@ const (
 
 // FinishSignup ...
 func FinishSignup(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
+	_ = r.ParseForm()
 
 	name := r.Form.Get("name")
 	email := r.Form.Get("email")
@@ -222,7 +222,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		SetFlash(w http.ResponseWriter, r *http.Request, t, v string)
 	})
 
-	r.ParseForm()
+	_ = r.ParseForm()
 	username := r.Form.Get("username")
 	password := r.Form.Get("password")
 

@@ -1,10 +1,16 @@
 GO ?= go
 
-test:
+test: lint
 	@echo '  -> running test'
 	@$(GO) test -race -coverprofile=coverage.txt -covermode=atomic ./...
 	@echo
 .PHONY: test
+
+lint:
+	@echo '  -> running golangci_lint'
+	@golangci-lint run
+	@echo
+.PHONY: lint
 
 dev: up.json
 	@up start

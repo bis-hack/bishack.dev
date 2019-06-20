@@ -18,7 +18,7 @@ func TestNew(t *testing.T) {
 	})
 
 	t.Run("with default provider", func(t *testing.T) {
-		provider := new(test.ProviderMock)
+		provider := new(test.DynamoProviderMock)
 		c := New("beep", "boop", provider)
 		assert.NotNil(t, c.Provider.DescribeTable)
 	})
@@ -26,7 +26,7 @@ func TestNew(t *testing.T) {
 
 func TestGetCount(t *testing.T) {
 	t.Run("error", func(t *testing.T) {
-		provider := new(test.ProviderMock)
+		provider := new(test.DynamoProviderMock)
 		c := New("beep", "boop", provider)
 
 		provider.On("DescribeTable", mock.MatchedBy(func(input *dynamodb.DescribeTableInput) bool {
@@ -40,7 +40,7 @@ func TestGetCount(t *testing.T) {
 	})
 
 	t.Run("ok", func(t *testing.T) {
-		provider := new(test.ProviderMock)
+		provider := new(test.DynamoProviderMock)
 		c := New("beep", "boop", provider)
 
 		// table
@@ -64,7 +64,7 @@ func TestGetCount(t *testing.T) {
 
 func TestCreate(t *testing.T) {
 	t.Run("error", func(t *testing.T) {
-		provider := new(test.ProviderMock)
+		provider := new(test.DynamoProviderMock)
 		c := New("bee", "boop", provider)
 
 		provider.On("PutItem", mock.MatchedBy(func(input *dynamodb.PutItemInput) bool {
@@ -81,7 +81,7 @@ func TestCreate(t *testing.T) {
 	})
 
 	t.Run("ok", func(t *testing.T) {
-		provider := new(test.ProviderMock)
+		provider := new(test.DynamoProviderMock)
 		c := New("bee", "boop", provider)
 
 		out := &dynamodb.PutItemOutput{}
@@ -107,7 +107,7 @@ func TestCreate(t *testing.T) {
 
 func TestQuery(t *testing.T) {
 	t.Run("error", func(t *testing.T) {
-		p := new(test.ProviderMock)
+		p := new(test.DynamoProviderMock)
 		c := New("bee", "boop", p)
 
 		p.On("Query", mock.MatchedBy(func(input *dynamodb.QueryInput) bool {
@@ -119,7 +119,7 @@ func TestQuery(t *testing.T) {
 	})
 
 	t.Run("0 items", func(t *testing.T) {
-		p := new(test.ProviderMock)
+		p := new(test.DynamoProviderMock)
 		c := New("bee", "boop", p)
 
 		out := &dynamodb.QueryOutput{}
@@ -134,7 +134,7 @@ func TestQuery(t *testing.T) {
 	})
 
 	t.Run("found items", func(t *testing.T) {
-		p := new(test.ProviderMock)
+		p := new(test.DynamoProviderMock)
 		c := New("bee", "boop", p)
 
 		out := &dynamodb.QueryOutput{}
@@ -158,7 +158,7 @@ func TestQuery(t *testing.T) {
 
 func TestGetAll(t *testing.T) {
 	t.Run("0 item", func(t *testing.T) {
-		p := new(test.ProviderMock)
+		p := new(test.DynamoProviderMock)
 		c := New("bee", "boop", p)
 
 		p.On("Query", mock.MatchedBy(func(input *dynamodb.QueryInput) bool {
@@ -170,7 +170,7 @@ func TestGetAll(t *testing.T) {
 	})
 
 	t.Run("ok", func(t *testing.T) {
-		p := new(test.ProviderMock)
+		p := new(test.DynamoProviderMock)
 		c := New("bee", "boop", p)
 
 		out := &dynamodb.QueryOutput{}
@@ -193,7 +193,7 @@ func TestGetAll(t *testing.T) {
 
 func TestGet(t *testing.T) {
 	t.Run("nil", func(t *testing.T) {
-		p := new(test.ProviderMock)
+		p := new(test.DynamoProviderMock)
 		c := New("bee", "boop", p)
 
 		p.On("Query", mock.MatchedBy(func(input *dynamodb.QueryInput) bool {
@@ -205,7 +205,7 @@ func TestGet(t *testing.T) {
 	})
 
 	t.Run("0 items", func(t *testing.T) {
-		p := new(test.ProviderMock)
+		p := new(test.DynamoProviderMock)
 		c := New("bee", "boop", p)
 
 		p.On("Query", mock.MatchedBy(func(input *dynamodb.QueryInput) bool {
@@ -217,7 +217,7 @@ func TestGet(t *testing.T) {
 	})
 
 	t.Run("ok", func(t *testing.T) {
-		p := new(test.ProviderMock)
+		p := new(test.DynamoProviderMock)
 		c := New("bee", "boop", p)
 
 		out := &dynamodb.QueryOutput{}
@@ -240,7 +240,7 @@ func TestGet(t *testing.T) {
 
 func TestGetUserPosts(t *testing.T) {
 	t.Run("error", func(t *testing.T) {
-		p := new(test.ProviderMock)
+		p := new(test.DynamoProviderMock)
 		c := New("bee", "boop", p)
 
 		p.On("Query", mock.MatchedBy(func(input *dynamodb.QueryInput) bool {
@@ -252,7 +252,7 @@ func TestGetUserPosts(t *testing.T) {
 	})
 
 	t.Run("ok", func(t *testing.T) {
-		p := new(test.ProviderMock)
+		p := new(test.DynamoProviderMock)
 		c := New("bee", "boop", p)
 
 		out := &dynamodb.QueryOutput{}

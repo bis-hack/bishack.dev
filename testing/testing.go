@@ -18,12 +18,12 @@ func init() {
 	_ = os.Chdir(dir)
 }
 
-// ProviderMock ...
-type ProviderMock struct {
+// DynamoProviderMock ...
+type DynamoProviderMock struct {
 	mock.Mock
 }
 
-func (p *ProviderMock) PutItem(input *dynamodb.PutItemInput) (
+func (p *DynamoProviderMock) PutItem(input *dynamodb.PutItemInput) (
 	*dynamodb.PutItemOutput,
 	error,
 ) {
@@ -36,7 +36,7 @@ func (p *ProviderMock) PutItem(input *dynamodb.PutItemInput) (
 
 	return resp.(*dynamodb.PutItemOutput), args.Error(1)
 }
-func (p *ProviderMock) UpdateItem(input *dynamodb.UpdateItemInput) (
+func (p *DynamoProviderMock) UpdateItem(input *dynamodb.UpdateItemInput) (
 	*dynamodb.UpdateItemOutput,
 	error,
 ) {
@@ -49,7 +49,7 @@ func (p *ProviderMock) UpdateItem(input *dynamodb.UpdateItemInput) (
 
 	return resp.(*dynamodb.UpdateItemOutput), args.Error(1)
 }
-func (p *ProviderMock) DeleteItem(input *dynamodb.DeleteItemInput) (*dynamodb.DeleteItemOutput, error) {
+func (p *DynamoProviderMock) DeleteItem(input *dynamodb.DeleteItemInput) (*dynamodb.DeleteItemOutput, error) {
 	args := p.Called(input)
 
 	resp := args.Get(0)
@@ -59,7 +59,7 @@ func (p *ProviderMock) DeleteItem(input *dynamodb.DeleteItemInput) (*dynamodb.De
 
 	return resp.(*dynamodb.DeleteItemOutput), args.Error(1)
 }
-func (p *ProviderMock) Query(input *dynamodb.QueryInput) (*dynamodb.QueryOutput, error) {
+func (p *DynamoProviderMock) Query(input *dynamodb.QueryInput) (*dynamodb.QueryOutput, error) {
 	args := p.Called(input)
 
 	resp := args.Get(0)
@@ -69,7 +69,7 @@ func (p *ProviderMock) Query(input *dynamodb.QueryInput) (*dynamodb.QueryOutput,
 
 	return resp.(*dynamodb.QueryOutput), args.Error(1)
 }
-func (p *ProviderMock) DescribeTable(input *dynamodb.DescribeTableInput) (*dynamodb.DescribeTableOutput, error) {
+func (p *DynamoProviderMock) DescribeTable(input *dynamodb.DescribeTableInput) (*dynamodb.DescribeTableOutput, error) {
 	args := p.Called(input)
 
 	resp := args.Get(0)

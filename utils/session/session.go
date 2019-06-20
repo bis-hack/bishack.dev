@@ -26,7 +26,7 @@ func (s *Client) SetUser(
 	session, _ := s.Store.Get(r, "user")
 	session.Values["username"] = username
 	session.Values["token"] = token
-	session.Save(r, w)
+	_ = session.Save(r, w)
 }
 
 // GetUser ...
@@ -53,7 +53,7 @@ func (s *Client) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	session.Values["username"] = nil
 	session.Values["token"] = nil
 
-	session.Save(r, w)
+	_ = session.Save(r, w)
 }
 
 // SetFlash sets the flash message with the given
@@ -66,7 +66,7 @@ func (s *Client) SetFlash(
 ) {
 	session, _ := s.Store.Get(r, "notification")
 	session.AddFlash(fmt.Sprintf("%s<>%s", t, v))
-	session.Save(r, w)
+	_ = session.Save(r, w)
 }
 
 // GetFlash ...
@@ -76,7 +76,7 @@ func (s *Client) GetFlash(w http.ResponseWriter, r *http.Request) *Flash {
 	if flashes := session.Flashes(); len(flashes) > 0 {
 		chunks := strings.Split(flashes[0].(string), "<>")
 		f := &Flash{chunks[0], chunks[1]}
-		session.Save(r, w)
+		_ = session.Save(r, w)
 		return f
 	}
 

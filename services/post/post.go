@@ -109,7 +109,7 @@ func (c *Client) GetPost(username, id string) *Post {
 	return posts[0]
 }
 
-// GetUser gets all the posts from user
+// GetUserPosts gets all the posts from user
 func (c *Client) GetUserPosts(username string) []*Post {
 	ks := "publish = :publish and created > :created"
 	fs := "username = :username"

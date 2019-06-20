@@ -14,6 +14,7 @@ jobs:
       - restore_cache:
           keys:
             - v1-pkg-cache
+      - run: go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
       - run: curl -sf https://up.apex.sh/install | sudo sh && go mod download
       - run: make deploy
       - run: mv coverage.txt /tmp/tests/coverage.txt
@@ -36,6 +37,7 @@ jobs:
       - restore_cache:
           keys:
             - v1-pkg-cache
+      - run: go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
       - run: curl -sf https://up.apex.sh/install | sudo sh && go mod download
       - run: make deploy.prod
       - run: mv coverage.txt /tmp/tests/coverage.txt

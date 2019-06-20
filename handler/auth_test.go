@@ -195,8 +195,8 @@ func TestVerify(t *testing.T) {
 		}), mock.MatchedBy(func(r *http.Request) bool {
 			return true
 		})).Return(&session.Flash{
-			"success",
-			"Account Verified!",
+			Type:  "success",
+			Value: "Account Verified!",
 		})
 
 		Verify(w, r)

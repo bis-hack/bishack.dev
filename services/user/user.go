@@ -91,6 +91,7 @@ func (c *Client) AccountDetails(token string) *User {
 	return newUserFromAttributes(out.UserAttributes)
 }
 
+// GetUser ...
 func (c *Client) GetUser(username string) *User {
 	pid := os.Getenv("COGNITO_POOL_ID")
 
@@ -106,10 +107,6 @@ func (c *Client) GetUser(username string) *User {
 
 	return newUserFromAttributes(out.UserAttributes)
 }
-
-//
-// PRIVATE
-//
 
 // newUserFromOutput ...
 func newUserFromAttributes(attrs []*cip.AttributeType) *User {
@@ -145,6 +142,6 @@ func provider() CognitoProvider {
 // hash that shit
 func hash(username, id, secret string) string {
 	hash := hmac.New(sha256.New, []byte(secret))
-	hash.Write([]byte(username + id))
+	_, _ = hash.Write([]byte(username + id))
 	return string(base64.StdEncoding.EncodeToString(hash.Sum(nil)))
 }

@@ -25,7 +25,7 @@ func TestNew(t *testing.T) {
 
 func TestQuery(t *testing.T) {
 	c := New("", "", nil)
-	p := new(test.ProviderMock)
+	p := new(test.DynamoProviderMock)
 
 	p.On("Query", mock.MatchedBy(func(input *dynamodb.QueryInput) bool {
 		return true
