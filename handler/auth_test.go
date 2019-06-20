@@ -453,7 +453,7 @@ func TestSignup(t *testing.T) {
 				return true
 			}), mock.MatchedBy(func(r *http.Request) bool {
 				return true
-			}), "error", "An error occured!")
+			}), "error", "An error occurred!")
 
 			Signup(w, r)
 

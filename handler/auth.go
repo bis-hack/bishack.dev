@@ -183,7 +183,7 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 		gu := githubUser{}
 		err = json.NewDecoder(resp.Body).Decode(&gu)
 		if err != nil {
-			sess.SetFlash(w, r, "error", "An error occured!")
+			sess.SetFlash(w, r, "error", "An error occurred!")
 			http.Redirect(w, r, r.RequestURI, http.StatusSeeOther)
 			return
 		}

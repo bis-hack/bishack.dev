@@ -7,10 +7,12 @@ import (
 	"github.com/pkg/errors"
 )
 
+// Client ...
 type Client struct {
 	*dynamo.Client
 }
 
+// New ...
 func New(
 	tableName,
 	endpoint string,

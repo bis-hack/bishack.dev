@@ -53,7 +53,7 @@ func (c *Client) CreatePost(params map[string]interface{}) *Post {
 
 	// parse title to create slug for id
 	title := params["title"].(string)
-	// remove extra spaces inbetween
+	// remove extra spaces between
 	slug := regexp.MustCompile("[^a-zA-Z0-9 ]").ReplaceAllString(title, "")
 	// remove outer spaces
 	slug = strings.Trim(regexp.MustCompile(`\s+`).ReplaceAllString(slug, " "), " ")
@@ -129,7 +129,7 @@ func (c *Client) GetUserPosts(username string) []*Post {
 	return posts
 }
 
-// GetAll ...
+// GetPosts ...
 func (c *Client) GetPosts() []*Post {
 	ks := "publish = :publish and created > :created"
 	vals := map[string]interface{}{

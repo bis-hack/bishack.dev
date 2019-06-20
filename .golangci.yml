@@ -9,7 +9,9 @@ linters:
     - errcheck
     - gosimple
     - govet
+    - golint
     - gocyclo
+    - misspell
     - ineffassign
     - staticcheck
     - structcheck
