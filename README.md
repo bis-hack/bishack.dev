@@ -8,6 +8,7 @@
 
 [![CircleCI](https://circleci.com/gh/bis-hack/bishack.dev.svg?style=svg)](https://circleci.com/gh/bis-hack/bishack.dev)
 [![codecov](https://codecov.io/gh/bis-hack/bishack.dev/branch/master/graph/badge.svg)](https://codecov.io/gh/bis-hack/bishack.dev)
+[![Go Report Card](https://goreportcard.com/badge/github.com/bis-hack/bishack.dev)](https://goreportcard.com/report/github.com/bis-hack/bishack.dev)
 
 &nbsp;
 
