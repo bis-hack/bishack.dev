@@ -45,7 +45,7 @@ func TestGetUserPosts(t *testing.T) {
 
 		u.On("GetUser", "").Return(&user.User{})
 		p.On("GetUserPosts", "").Return([]*post.Post{
-			&post.Post{
+			{
 				Title: "The quick brown test",
 			},
 		})

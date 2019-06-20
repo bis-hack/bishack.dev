@@ -73,7 +73,7 @@ func TestAccountDetails(t *testing.T) {
 		).Return(&cip.GetUserOutput{
 			Username: aws.String("test"),
 			UserAttributes: []*cip.AttributeType{
-				&cip.AttributeType{
+				{
 					Name:  aws.String("email"),
 					Value: aws.String("test@testing.com"),
 				},

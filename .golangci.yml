@@ -11,6 +11,7 @@ linters:
     - govet
     - golint
     - gocyclo
+    - gofmt
     - misspell
     - ineffassign
     - staticcheck
