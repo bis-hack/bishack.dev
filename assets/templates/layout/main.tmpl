@@ -8,14 +8,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta property="og:title" content="{{.Title}}" />
     <meta property="og:description" content="{{if .Description}}{{.Description}}{{else}}We are a community of bisdak developers, designers, tinkerers, and hackers{{end}}" />
-    <meta property="og:image" content="/images/ss.png" />
-    <link rel="icon" type="image/svg" href="/images/icon.png" />
+    <meta property="og:image" content="{{if .Cover}}{{.Cover}}{{else}}/images/bishack.svg{{end}}" />
+    <link rel="icon" type="image/x-icon" href="/images/icon.png" />
     <style>
     {{template "main.css"}}
     {{template "style" .}}
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/turbolinks/5.2.0/turbolinks.js"></script>
     <script>
+        {{template "turbolinks.js" .}}
         document.addEventListener('turbolinks:load', () => {
             {{template "axios.js" .}}
             {{template "main.js" .}}

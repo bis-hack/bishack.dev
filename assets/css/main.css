@@ -89,7 +89,7 @@ header a.logo {
   text-indent: -100000px;
   background: transparent url(/images/bishack.svg) center left /contain no-repeat;
   width: 200px;
-  height: 32px;
+  height: 44px;
   position: relative;
   border: 0 !important;
 }
@@ -374,7 +374,7 @@ button.button {
 .container .article h6,
 .container .article table {
   font-weight: normal;
-  margin-bottom: 1.2em;
+  margin-bottom: 32px;
   color: #000000 !important;
 }
 .container h1.main-title {
@@ -382,8 +382,10 @@ button.button {
 }
 
 .container .article pre {
-  padding: 24px;
-  border: 1px solid rgba(1,1,1,0.06);
+  padding: 32px;
+  border: 1px solid rgba(1,1,1,0.1);
+  margin-left: -64px;
+  margin-right: -64px;
   margin-bottom: 2em;
 }
 .container .article pre code {

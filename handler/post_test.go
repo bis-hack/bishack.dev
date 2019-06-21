@@ -118,6 +118,13 @@ func TestGetPost(t *testing.T) {
 			return true
 		})).Return(&post.Post{
 			Title: "test",
+			Content: `
+			On January 21, JYP Entertainment announced they would be debuting
+			a new girl group, being the first girl group from the label since
+			Twice’s debut in 2015.[6][7] On the same day, the group’s official
+			YouTube account was created and the label’s official channel shared
+			a video trailer unveiling the five members.[8][9]
+			`,
 		})
 		l.On("GetLikes", "").Return(nil, errors.New(""))
 

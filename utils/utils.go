@@ -37,11 +37,14 @@ func Render(w http.ResponseWriter, base, content string, ctx interface{}) {
 	tmpl, err := template.New("").Funcs(fns).ParseFiles(
 		fmt.Sprintf("assets/templates/layout/%s.tmpl", base),
 		fmt.Sprintf("assets/templates/%s.tmpl", content),
-		fmt.Sprintf("assets/templates/main-nav.tmpl"),
-		fmt.Sprintf("assets/templates/user-card.tmpl"),
-		// main css file
+		// components
+		fmt.Sprintf("assets/templates/components/main-nav.tmpl"),
+		fmt.Sprintf("assets/templates/components/user-card.tmpl"),
+		fmt.Sprintf("assets/templates/components/posts.tmpl"),
+		// stylesheets
 		fmt.Sprintf("assets/css/main.css"),
-		// main javascript file
+		// scripts
+		fmt.Sprintf("assets/scripts/turbolinks.js"),
 		fmt.Sprintf("assets/scripts/axios.js"),
 		fmt.Sprintf("assets/scripts/main.js"),
 	)

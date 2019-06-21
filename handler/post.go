@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"bishack.dev/services/like"
 	"bishack.dev/services/post"
@@ -39,6 +40,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 	attr["publish"] = publish
 
 	attr["title"] = r.PostForm.Get("title")
+	attr["cover"] = r.PostForm.Get("cover")
 	attr["content"] = r.PostForm.Get("content")
 	attr["userPic"] = r.PostForm.Get("userPic")
 	attr["username"] = r.PostForm.Get("username")
@@ -99,10 +101,18 @@ func GetPost(w http.ResponseWriter, r *http.Request) {
 		post.LikesCount = int64(len(likes))
 	}
 
+	description := post.Title
+	chunks := strings.Split(post.Content, " ")
+	if len(chunks) > 42 {
+		description = strings.Join(chunks[:42], " ")
+		description = strings.Replace(description, "#", "", -1)
+	}
 	utils.Render(w, "main", "post", map[string]interface{}{
 		"Title":          post.Title,
 		"Post":           post,
+		"Description":    description,
 		"User":           u,
+		"Cover":          post.Cover,
 		"Liker":          liker,
 		csrf.TemplateTag: csrf.TemplateField(r),
 	})

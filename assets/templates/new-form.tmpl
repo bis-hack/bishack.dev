@@ -66,21 +66,26 @@
                 <input
                     type="text"
                     name="title"
-                    placeholder="So what do you have in mind?"
+                    placeholder="Title"
                     style="font-size:32px;padding-left:0;padding-right:0;color:black;"
                 >
             </p>
             <p>
-                <textarea placeholder="Make it as bitchin' as possible" name="content" rows="20" style="background-color:white;font-size:20px;font-family:monospace;color:black"></textarea>
+                <textarea placeholder="Use markdown to format your content" name="content" rows="20" style="background-color:white;font-size:18px;font-family:monospace;color:black"></textarea>
             </p>
-            <p>
-
-            </p>
-            <p>
-                <button type="submit" class="button primary">Publish Now</button>
-                <span class="div">|</span>
-                <small>Use <a target="_blank" href="https://en.wikipedia.org/wiki/Markdown">markdown</a> to format your content.</small>
-            </p>
+            <div>
+                <div class="left" style="width:80%">
+                    <input name="cover" style="padding-left:0" type="text" placeholder="Enter a cover image (optional)">
+                    <br>
+                    <br>
+                </div>
+                <div class="right" style="width:20%;text-align:right">
+                    <button type="submit" class="button primary">
+                        <span style="position:relative;top:1px;margin-right:6px">✓</span>
+                        Publish Now
+                    </button>
+                </div>
+            </div>
         </form>
     </div>
 {{end}}
