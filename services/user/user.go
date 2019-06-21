@@ -109,7 +109,7 @@ func (c *Client) GetUser(username string) *User {
 }
 
 // UpdateUser a user attribute
-func (c *Client) UpdateUser(token string, attributes map[string]string) error {
+func (c *Client) UpdateUser(token string, attributes map[string]string) (*cip.UpdateUserAttributesOutput, error) {
 	input := &cip.UpdateUserAttributesInput{}
 
 	input.SetAccessToken(token)
@@ -124,12 +124,7 @@ func (c *Client) UpdateUser(token string, attributes map[string]string) error {
 
 	input.SetUserAttributes(userAttributes)
 
-	res, err := c.Provider.UpdateUserAttributes(input)
-	if err != nil || res == nil {
-		return err
-	}
-
-	return nil
+	return c.Provider.UpdateUserAttributes(input)
 }
 
 //
