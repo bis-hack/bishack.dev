@@ -2,6 +2,7 @@ package like
 
 // Like ...
 type Like struct {
-	Username string
 	ID       string
+	Created  int64
+	Username string
 }

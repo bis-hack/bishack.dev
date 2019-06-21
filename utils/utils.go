@@ -42,6 +42,7 @@ func Render(w http.ResponseWriter, base, content string, ctx interface{}) {
 		// main css file
 		fmt.Sprintf("assets/css/main.css"),
 		// main javascript file
+		fmt.Sprintf("assets/scripts/axios.js"),
 		fmt.Sprintf("assets/scripts/main.js"),
 	)
 

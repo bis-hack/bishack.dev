@@ -86,7 +86,7 @@
 {{define "content"}}
     <div class="container">
         <div class="profile">
-            {{template "user-card.tmpl" .User}}
+            {{template "user-card.tmpl" .Author}}
         </div>
         <div class="content">
             {{if not .Posts}}
@@ -112,7 +112,7 @@
                         <a class="post-title" href="/{{.Username}}/{{.ID}}">{{.Title}}</a>
                         <br><br>
                         <small style="opacity:0.6">
-                            <span style="">♥ 0<span class="div">|</span>💬 0</span><span class="div">|</span><span>Posted {{date "Jan 02" .Created}}</span>
+                            <span style="">♥ {{.LikesCount}}<span class="div">|</span>💬 0</span><span class="div">|</span><span>Posted {{date "Jan 02" .Created}}</span>
                         </small>
                     </div>
                     <div class="clear"></div>

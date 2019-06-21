@@ -51,8 +51,43 @@ pre code {
 .sub {
     opacity: 0.6;
 }
+#likey {
+    color: #a99191;
+}
+#likey.active {
+    color: red;
+}
 {{end}}
 {{define "script"}}
+    {{if .User}}
+        const csrfToken = document.getElementsByName("gorilla.csrf.Token")[0].value;
+        document.querySelector('#likey').addEventListener('click', (e) => {
+            e.preventDefault();
+			const likey = e.target;
+
+			let count = parseInt(document.querySelector('.lc').innerText, 10);
+			if (likey.className === 'active') {
+				document.querySelector('.lc').innerText = count - 1;
+				likey.className = '';
+			} else {
+				document.querySelector('.lc').innerText = count + 1;
+				likey.className = 'active';
+			}
+
+            (async () => {
+                const id = '{{.Post.ID}}';
+                resp = await axios({
+					url: `/like/${id}`,
+					method: 'put',
+					data: {},
+                    headers: {
+                        'X-CSRF-Token': csrfToken,
+                    }
+                })
+                console.log(resp);
+            })();
+        });
+    {{end}}
 {{end}}
 {{define "content"}}
     <div class="container">
@@ -66,13 +101,17 @@ pre code {
                     </a>
                 </small>
                 <small class="div">|</small>
-                <small><span style="font-size:1.5em;position:relative;top:3px;margin:0 4px 0 0;">♥</span> 42</small>
+                <small><span style="font-size:1.5em;position:relative;top:3px;margin:0 4px 0 0;">♥</span> <span class="lc">{{.Post.LikesCount}}</span></small>
                 <small class="div">|</small>
                 <small>Posted {{date "Jan 02" .Post.Created}}</small>
             </p>
             <div class="main-content">
                 <div class="social">
-                    <a href="#" style="font-size:64px;color:#a99191;border:0">♥</a>
+                {{if .User}}
+                    <a href="#" id="likey" class="{{if .Liker}}active{{end}}" style="font-size:64px;border:0">♥</a>
+                {{else}}
+                    <a href="/login" style="color: #a99191;font-size:64px;border:0">♥</a>
+                {{end}}
                 </div>
                 {{.Post.Content | md}}
             </div>
@@ -84,5 +123,6 @@ pre code {
                 <p class="sub" style="padding:24px;border:1px solid #aaa;text-align:center">SOON</p>
             </div>
         </article>
+        {{ .csrfField }}
     </div>
 {{end}}

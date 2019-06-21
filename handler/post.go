@@ -6,7 +6,9 @@ import (
 	"net/http"
 	"strconv"
 
+	"bishack.dev/services/like"
 	"bishack.dev/services/post"
+	"bishack.dev/services/user"
 	"bishack.dev/utils"
 	"github.com/gorilla/context"
 	"github.com/gorilla/csrf"
@@ -14,15 +16,15 @@ import (
 
 // New ...
 func New(w http.ResponseWriter, r *http.Request) {
-	user := context.Get(r, "user")
-	if user == nil {
+	u := context.Get(r, "user")
+	if u == nil {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 
 	utils.Render(w, "main", "new-form", map[string]interface{}{
 		"Title":          "Create New Post",
-		"User":           user,
+		"User":           u,
 		csrf.TemplateTag: csrf.TemplateField(r),
 	})
 }
@@ -74,11 +76,59 @@ func GetPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user := context.Get(r, "user")
+	ls := context.Get(r, "likeService").(interface {
+		GetLike(id, username string) (*like.Like, error)
+		GetLikes(id string) ([]*like.Like, error)
+	})
+
+	var u *user.User
+	liker := false
+	uc := context.Get(r, "user")
+	if uc != nil {
+		u = uc.(*user.User)
+
+		_, err := ls.GetLike(post.ID, u.Username)
+		log.Println(err)
+		if err == nil {
+			liker = true
+		}
+
+	}
+
+	likes, err := ls.GetLikes(post.ID)
+	if err == nil {
+		post.LikesCount = int64(len(likes))
+	}
 
 	utils.Render(w, "main", "post", map[string]interface{}{
-		"Title": post.Title,
-		"Post":  post,
-		"User":  user,
+		"Title":          post.Title,
+		"Post":           post,
+		"User":           u,
+		"Liker":          liker,
+		csrf.TemplateTag: csrf.TemplateField(r),
 	})
+}
+
+// ToggleLike ...
+func ToggleLike(w http.ResponseWriter, r *http.Request) {
+	id := r.URL.Query().Get(":id")
+	username := ""
+
+	uc := context.Get(r, "user")
+	if uc != nil {
+		u := uc.(*user.User)
+		username = u.Username
+	}
+
+	ls := context.Get(r, "likeService").(interface {
+		ToggleLike(id, username string) error
+	})
+
+	err := ls.ToggleLike(id, username)
+	if err != nil {
+		http.Error(w, "error", http.StatusBadRequest)
+		return
+	}
+
+	fmt.Fprintln(w, "ok")
 }

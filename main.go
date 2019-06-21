@@ -58,6 +58,9 @@ func main() {
 	// user
 	r.Get("/{username}", handler.GetUserPosts)
 
+	// like
+	r.Put("/like/{id}", handler.ToggleLike)
+
 	// on local
 	if !isLive {
 		// set secure to false

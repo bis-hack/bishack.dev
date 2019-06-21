@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"bishack.dev/services/like"
 	"bishack.dev/services/post"
 	"bishack.dev/services/user"
 	"bishack.dev/utils/session"
@@ -16,6 +17,7 @@ var (
 	cognitoID        = os.Getenv("COGNITO_CLIENT_ID")
 	cognitoSecret    = os.Getenv("COGNITO_CLIENT_SECRET")
 	dynamoTablePosts = os.Getenv("DYNAMO_TABLE_POSTS")
+	dynamoTableLikes = os.Getenv("DYNAMO_TABLE_LIKES")
 	dynamoEndpoint   = os.Getenv("DYNAMO_ENDPOINT")
 )
 
@@ -49,6 +51,9 @@ func Context(h http.Handler) http.Handler {
 
 		p := post.New(dynamoTablePosts, dynamoEndpoint, nil)
 		context.Set(r, "postService", p)
+
+		l := like.New(dynamoTableLikes, dynamoEndpoint, nil)
+		context.Set(r, "likeService", l)
 
 		h.ServeHTTP(w, r)
 	})

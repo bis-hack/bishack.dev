@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"net/url"
 
+	"bishack.dev/services/like"
 	"bishack.dev/services/post"
 	"bishack.dev/services/user"
 	"bishack.dev/utils/session"
@@ -220,4 +221,35 @@ func (p *postMock) GetPost(username, id string) *post.Post {
 	}
 
 	return resp.(*post.Post)
+}
+
+type likeMock struct {
+	mock.Mock
+}
+
+func (l *likeMock) GetLikes(id string) ([]*like.Like, error) {
+	args := l.Called(id)
+	resp := args.Get(0)
+
+	if resp == nil {
+		return nil, args.Error(1)
+	}
+
+	return resp.([]*like.Like), args.Error(1)
+}
+
+func (l *likeMock) GetLike(id, username string) (*like.Like, error) {
+	args := l.Called(id, username)
+	resp := args.Get(0)
+
+	if resp == nil {
+		return nil, args.Error(1)
+	}
+
+	return resp.(*like.Like), args.Error(1)
+}
+
+func (l *likeMock) ToggleLike(id, username string) error {
+	args := l.Called(id, username)
+	return args.Error(0)
 }

@@ -21,7 +21,7 @@ func TestGetLike(t *testing.T) {
 			return true
 		})).Return(nil, errors.New("beep"))
 
-		l, e := c.getLike("test", "ing")
+		l, e := c.GetLike("test", "ing")
 		assert.NotNil(t, e)
 		assert.Nil(t, l)
 		assert.Regexp(t, regexp.MustCompile(`(?i)getlike/query error: beep`), e.Error())
@@ -35,7 +35,7 @@ func TestGetLike(t *testing.T) {
 			return true
 		})).Return(&dynamodb.QueryOutput{}, nil)
 
-		l, e := c.getLike("test", "ing")
+		l, e := c.GetLike("test", "ing")
 		assert.NotNil(t, e)
 		assert.Nil(t, l)
 		assert.Regexp(t, regexp.MustCompile(`(?i)not found`), e.Error())
@@ -58,7 +58,7 @@ func TestGetLike(t *testing.T) {
 			return true
 		})).Return(out, nil)
 
-		l, e := c.getLike("test", "ing")
+		l, e := c.GetLike("test", "ing")
 
 		assert.Nil(t, e)
 		assert.NotNil(t, l)
@@ -102,7 +102,7 @@ func TestRemoveLike(t *testing.T) {
 			return true
 		})).Return(nil, errors.New("boop"))
 
-		e := c.removeLike("test", "ing")
+		e := c.removeLike("test", 123)
 		assert.NotNil(t, e)
 	})
 
@@ -114,7 +114,7 @@ func TestRemoveLike(t *testing.T) {
 			return true
 		})).Return(&dynamodb.DeleteItemOutput{}, nil)
 
-		e := c.removeLike("test", "ing")
+		e := c.removeLike("test", 123)
 		assert.Nil(t, e)
 	})
 }

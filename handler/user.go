@@ -2,8 +2,11 @@ package handler
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"sync"
 
+	"bishack.dev/services/like"
 	"bishack.dev/services/post"
 	"bishack.dev/services/user"
 	"bishack.dev/utils"
@@ -36,11 +39,35 @@ func GetUserPosts(w http.ResponseWriter, r *http.Request) {
 		GetUserPosts(username string) []*post.Post
 	})
 
+	posts := ps.GetUserPosts(username)
+
+	ls := context.Get(r, "likeService").(interface {
+		GetLikes(id string) ([]*like.Like, error)
+	})
+	// populate likes/comments count
+	var wg sync.WaitGroup
+	wg.Add(len(posts))
+	for _, p := range posts {
+		go func(p *post.Post) {
+			defer wg.Done()
+
+			results, err := ls.GetLikes(p.ID)
+			if err != nil {
+				log.Println("GetLikes error", err.Error())
+				return
+			}
+
+			p.LikesCount = int64(len(results))
+		}(p)
+	}
+	wg.Wait()
+
 	title := fmt.Sprintf("%s's Posts", user.Name)
 	utils.Render(w, "main", "user-page", map[string]interface{}{
-		"Title": title,
-		"Flash": sess.GetFlash(w, r),
-		"Posts": ps.GetUserPosts(username),
-		"User":  user,
+		"Title":  title,
+		"Flash":  sess.GetFlash(w, r),
+		"Posts":  posts,
+		"Author": user,
+		"User":   context.Get(r, "user"),
 	})
 }

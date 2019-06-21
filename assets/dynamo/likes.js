@@ -5,8 +5,8 @@ var params = {
       AttributeName: 'id',
       KeyType: 'HASH',
     },
-    { // Optional RANGE key type for HASH + RANGE tables
-      AttributeName: 'username',
+    { // Required HASH type attribute
+      AttributeName: 'created',
       KeyType: 'RANGE',
     }
   ],
@@ -16,8 +16,8 @@ var params = {
       AttributeType: 'S', // (S | N | B) for string, number, binary
     },
     {
-      AttributeName: 'username',
-      AttributeType: 'S', // (S | N | B) for string, number, binary
+      AttributeName: 'created',
+      AttributeType: 'N', // (S | N | B) for string, number, binary
     }
   ],
   ProvisionedThroughput: { // required provisioned throughput for the table
