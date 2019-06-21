@@ -196,29 +196,11 @@ func TestUpdateUserAttributes(t *testing.T) {
 			"email": "richard@mail.co",
 		}
 
-		u := client.UpdateUser("legit_token", attrs)
+		out, err := client.UpdateUser("legit_token", attrs)
 
-		assert.NoError(t, u, "Error updating")
+		assert.NotNil(t, out)
+		assert.Nil(t, err)
 		to.AssertExpectations(t)
 	})
 
-	t.Run("error", func(t *testing.T) {
-		to := new(MockedUserService)
-		client := New("id", "secret")
-		// change provider to our mocked object
-		client.Provider = to
-		to.On(
-			"UpdateUserAttributes",
-			mock.MatchedBy(func(in *cip.UpdateUserAttributesInput) bool {
-				return true
-			}),
-		).Return(nil, errors.New(""))
-
-		u := client.UpdateUser("token", map[string]string{
-			"email": "chardyy.orofeo@gmail.com",
-		})
-
-		assert.Nil(t, u)
-		to.AssertExpectations(t)
-	})
 }
