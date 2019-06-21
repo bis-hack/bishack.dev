@@ -9,6 +9,7 @@ type Provider interface {
 	InitiateAuth(*cip.InitiateAuthInput) (*cip.InitiateAuthOutput, error)
 	GetUser(*cip.GetUserInput) (*cip.GetUserOutput, error)
 	AdminGetUser(*cip.AdminGetUserInput) (*cip.AdminGetUserOutput, error)
+	UpdateUserAttributes(*cip.UpdateUserAttributesInput) (*cip.UpdateUserAttributesOutput, error)
 }
 
 // Client main struct

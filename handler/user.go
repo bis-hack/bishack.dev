@@ -73,8 +73,8 @@ func GetUserPosts(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// UserForm ...
-func UserForm(w http.ResponseWriter, r *http.Request) {
+// UpdateProfileForm ...
+func UpdateProfileForm(w http.ResponseWriter, r *http.Request) {
 
 	sess := context.Get(r, "session").(interface {
 		GetFlash(w http.ResponseWriter, r *http.Request) *session.Flash
@@ -83,10 +83,6 @@ func UserForm(w http.ResponseWriter, r *http.Request) {
 	// get user details from context and cast it as map[string]string if
 	// not nil
 	user := context.Get(r, "user")
-
-	if user != nil {
-		user = user.(map[string]string)
-	}
 
 	utils.Render(w, "main", "profile-form", map[string]interface{}{
 		"Title":          "Edit User Profile",
@@ -118,24 +114,8 @@ func UserUpdate(w http.ResponseWriter, r *http.Request) {
 
 	email := r.Form.Get("email")
 
-	oldPassword := r.Form.Get("old_password")
-	newPassword := r.Form.Get("new_password")
-	confirmNewPassword := r.Form.Get("confirm_new_password")
-
 	if email == "" {
 		sess.SetFlash(w, r, "error", "Email is required")
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-		return
-	}
-
-	if newPassword != confirmNewPassword {
-		sess.SetFlash(w, r, "error", "Passwords dont match")
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-		return
-	}
-
-	if newPassword == oldPassword {
-		sess.SetFlash(w, r, "error", "Please dont use the same password")
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}

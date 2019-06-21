@@ -32,25 +32,14 @@
     <div class="center-flex-box">
         <div class="kahon card center">
             <h2>{{.Title}}</h2>
-						{{.User.email}}
             <br>
             <br>
             <form id="login-form" action="/update" method="post">
                 {{ .csrfField }}
                 <p>
-                    <input type="text" name="email" value="{{.User.email}}" />
-                </p>
-                <p>
-                    <input type="password" name="old_password" placeholder="Old password" />
+                    <input type="text" name="email" value="{{.User.Email}}" />
                 </p>
 
-                <p>
-                    <input type="password" name="new_password" placeholder="New password" />
-                </p>
-
-                <p>
-                    <input type="password" name="confirm_new_password" placeholder="Confirm new password" />
-                </p>
                 <br>
                 <p>
                     <button type="submit" class="button primary full"><span>Update Profile</span></button>
