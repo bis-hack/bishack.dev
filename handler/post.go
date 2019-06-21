@@ -88,7 +88,6 @@ func GetPost(w http.ResponseWriter, r *http.Request) {
 		u = uc.(*user.User)
 
 		_, err := ls.GetLike(post.ID, u.Username)
-		log.Println(err)
 		if err == nil {
 			liker = true
 		}

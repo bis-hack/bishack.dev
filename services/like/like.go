@@ -1,7 +1,6 @@
 package like
 
 import (
-	"log"
 	"time"
 
 	"bishack.dev/services/dynamo"
@@ -78,7 +77,6 @@ func (c *Client) GetLike(id, username string) (*Like, error) {
 		":created":  0,
 		":username": username,
 	}
-	log.Println(id, username)
 
 	out, err := c.Query("", ks, fs, vals, false, 0)
 	if err != nil {
