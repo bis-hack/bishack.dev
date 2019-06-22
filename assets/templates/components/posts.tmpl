@@ -24,8 +24,14 @@
         <div class="right" style="width:570px">
             <a class="post-title" href="/{{.Username}}/{{.ID}}">{{.Title}}</a>
             <br><br>
-            <small style="opacity:0.6">
-                <span style="">♥ {{.LikesCount}}<span class="div">|</span>💬 0</span><span class="div">|</span><span>{{.Author}} posted on {{date "Jan 02" .Created}}</span>
+            <small>
+                <span>
+                    <a href="/{{.Username}}"><strong>{{.Author}}</strong></a> <span style="opacity:0.7">posted on {{date "Jan 02" .Created}}</span>
+                </span>
+                <span class="div">|</span>
+                <span style="opacity:0.7">♥ {{.LikesCount}}</span>
+                <span class="div">|</span>
+                <span style="opacity:0.7">💬 0</span>
             </small>
         </div>
         <div class="clear"></div>

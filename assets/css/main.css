@@ -393,9 +393,15 @@ button.button {
 .container .article pre {
   padding: 32px;
   border: 1px solid rgba(1,1,1,0.1);
+  border-left: 0;
+  border-right: 0;
   margin-left: -64px;
   margin-right: -64px;
+  overflow: visible;
   margin-bottom: 2em;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  position: relative;
 }
 .container .article pre code {
   tab-size: 2em;
