@@ -184,7 +184,7 @@ func TestUpdateUserAttributes(t *testing.T) {
 			}),
 		).Return(&cip.UpdateUserAttributesOutput{
 			CodeDeliveryDetailsList: []*cip.CodeDeliveryDetailsType{
-				&cip.CodeDeliveryDetailsType{
+				{
 					AttributeName:  aws.String("email"),
 					DeliveryMedium: aws.String("email"),
 					Destination:    aws.String("richard@mailinator.com"),
