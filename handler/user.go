@@ -13,6 +13,8 @@ import (
 	"bishack.dev/utils/session"
 	"github.com/gorilla/context"
 	"github.com/gorilla/csrf"
+
+	cip "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 )
 
 // GetUserPosts ...
@@ -80,9 +82,13 @@ func UpdateProfileForm(w http.ResponseWriter, r *http.Request) {
 		GetFlash(w http.ResponseWriter, r *http.Request) *session.Flash
 	})
 
-	// get user details from context and cast it as map[string]string if
-	// not nil
+	// get user details from context
 	user := context.Get(r, "user")
+
+	if user == nil {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
 
 	utils.Render(w, "main", "profile-form", map[string]interface{}{
 		"Title":          "Edit User Profile",
@@ -94,23 +100,19 @@ func UpdateProfileForm(w http.ResponseWriter, r *http.Request) {
 
 // UserUpdate ...
 func UserUpdate(w http.ResponseWriter, r *http.Request) {
-
 	sess := context.Get(r, "session").(interface {
-		SetUser(w http.ResponseWriter, r *http.Request, email, token string)
 		SetFlash(w http.ResponseWriter, r *http.Request, t, v string)
+		GetUser(r *http.Request) map[string]string
 	})
 
-	// get user details from context and cast it as map[string]string if
-	// not nil
-	user := context.Get(r, "user")
-
-	if user != nil {
-		user = user.(map[string]string)
-	}
-
-	if err := r.ParseForm(); err != nil {
+	su := sess.GetUser(r)
+	if su == nil {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
+
+	token := su["token"]
+	_ = r.ParseForm()
 
 	email := r.Form.Get("email")
 
@@ -120,6 +122,18 @@ func UserUpdate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO:: call API to update user
-	http.Redirect(w, r, "/", http.StatusMovedPermanently)
+	su["email"] = email
+
+	us := context.Get(r, "userService").(interface {
+		UpdateUser(token string, attrs map[string]string) (*cip.UpdateUserAttributesOutput, error)
+	})
+
+	if _, err := us.UpdateUser(token, su); err != nil {
+		sess.SetFlash(w, r, "error", "Email is required")
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	sess.SetFlash(w, r, "success", "Email Successfully Updated")
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
