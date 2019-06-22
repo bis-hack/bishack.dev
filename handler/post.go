@@ -41,6 +41,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 
 	attr["title"] = r.PostForm.Get("title")
 	attr["cover"] = r.PostForm.Get("cover")
+	attr["author"] = r.PostForm.Get("author")
 	attr["content"] = r.PostForm.Get("content")
 	attr["userPic"] = r.PostForm.Get("userPic")
 	attr["username"] = r.PostForm.Get("username")

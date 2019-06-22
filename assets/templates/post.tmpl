@@ -114,7 +114,7 @@ svg path {
                     <span class="lc">0</span>
                 </small>
                 <small class="div">|</small>
-                <small>Posted on {{date "Jan 02" .Post.Created}}</small>
+                <small>{{.Post.Author}} posted on {{date "Jan 02" .Post.Created}}</small>
             </p>
             <div class="main-content">
                 {{if ne .Post.Cover "" }}
