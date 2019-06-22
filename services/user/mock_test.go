@@ -59,3 +59,14 @@ func (m *MockedUserService) AdminGetUser(in *cip.AdminGetUserInput) (*cip.AdminG
 
 	return resp.(*cip.AdminGetUserOutput), args.Error(1)
 }
+
+func (m *MockedUserService) UpdateUserAttributes(in *cip.UpdateUserAttributesInput) (*cip.UpdateUserAttributesOutput, error) {
+	args := m.Called(in)
+
+	resp := args.Get(0)
+	if resp == nil {
+		return nil, args.Error(1)
+	}
+
+	return resp.(*cip.UpdateUserAttributesOutput), args.Error(1)
+}

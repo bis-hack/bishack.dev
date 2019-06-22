@@ -108,6 +108,29 @@ func (c *Client) GetUser(username string) *User {
 	return newUserFromAttributes(out.UserAttributes)
 }
 
+// UpdateUser a user attribute
+func (c *Client) UpdateUser(token string, attributes map[string]string) (*cip.UpdateUserAttributesOutput, error) {
+	input := &cip.UpdateUserAttributesInput{}
+
+	input.SetAccessToken(token)
+
+	userAttributes := []*cip.AttributeType{}
+	for k, v := range attributes {
+		a := &cip.AttributeType{}
+		a.SetName(k)
+		a.SetValue(v)
+		userAttributes = append(userAttributes, a)
+	}
+
+	input.SetUserAttributes(userAttributes)
+
+	return c.Provider.UpdateUserAttributes(input)
+}
+
+//
+// PRIVATE
+//
+
 // newUserFromOutput ...
 func newUserFromAttributes(attrs []*cip.AttributeType) *User {
 	user := &User{}

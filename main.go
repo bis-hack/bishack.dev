@@ -44,8 +44,13 @@ func main() {
 	r.Get("/verify", handler.Verify)
 	r.Get("/login", handler.LoginForm)
 	r.Get("/logout", handler.Logout)
+	r.Get("/slack-invite", handler.SlackInvite)
+	r.Get("/profile", handler.UpdateProfileForm)
+
+	// POST
 	r.Post("/signup", handler.FinishSignup)
 	r.Post("/login", handler.Login)
+	r.Post("/update", handler.UserUpdate)
 
 	// slack
 	r.Get("/slack-invite", handler.SlackInvite)
