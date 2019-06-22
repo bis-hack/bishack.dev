@@ -6,14 +6,19 @@ import (
 	"os"
 	"time"
 
+	"bishack.dev/services/like"
+	"bishack.dev/services/post"
 	"bishack.dev/services/user"
 	"bishack.dev/utils/session"
 	"github.com/gorilla/context"
 )
 
 var (
-	cognitoID     = os.Getenv("COGNITO_CLIENT_ID")
-	cognitoSecret = os.Getenv("COGNITO_CLIENT_SECRET")
+	cognitoID        = os.Getenv("COGNITO_CLIENT_ID")
+	cognitoSecret    = os.Getenv("COGNITO_CLIENT_SECRET")
+	dynamoTablePosts = os.Getenv("DYNAMO_TABLE_POSTS")
+	dynamoTableLikes = os.Getenv("DYNAMO_TABLE_LIKES")
+	dynamoEndpoint   = os.Getenv("DYNAMO_ENDPOINT")
 )
 
 // Context middleware will inject services, helpers and other utility code
@@ -43,6 +48,12 @@ func Context(h http.Handler) http.Handler {
 
 		// http client
 		context.Set(r, "client", c)
+
+		p := post.New(dynamoTablePosts, dynamoEndpoint, nil)
+		context.Set(r, "postService", p)
+
+		l := like.New(dynamoTableLikes, dynamoEndpoint, nil)
+		context.Set(r, "likeService", l)
 
 		h.ServeHTTP(w, r)
 	})

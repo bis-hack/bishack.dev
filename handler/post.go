@@ -1,0 +1,144 @@
+package handler
+
+import (
+	"fmt"
+	"log"
+	"net/http"
+	"strconv"
+	"strings"
+
+	"bishack.dev/services/like"
+	"bishack.dev/services/post"
+	"bishack.dev/services/user"
+	"bishack.dev/utils"
+	"github.com/gorilla/context"
+	"github.com/gorilla/csrf"
+)
+
+// New ...
+func New(w http.ResponseWriter, r *http.Request) {
+	u := context.Get(r, "user")
+	if u == nil {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	utils.Render(w, "main", "new-form", map[string]interface{}{
+		"Title":          "Create New Post",
+		"User":           u,
+		csrf.TemplateTag: csrf.TemplateField(r),
+	})
+}
+
+// CreatePost ...
+func CreatePost(w http.ResponseWriter, r *http.Request) {
+	_ = r.ParseForm()
+	attr := map[string]interface{}{}
+
+	// cast to int
+	publish, _ := strconv.Atoi(r.PostForm.Get("publish"))
+	attr["publish"] = publish
+
+	attr["title"] = r.PostForm.Get("title")
+	attr["cover"] = r.PostForm.Get("cover")
+	attr["author"] = r.PostForm.Get("author")
+	attr["content"] = r.PostForm.Get("content")
+	attr["userPic"] = r.PostForm.Get("userPic")
+	attr["username"] = r.PostForm.Get("username")
+
+	ps := context.Get(r, "postService").(interface {
+		CreatePost(params map[string]interface{}) *post.Post
+	})
+
+	p := ps.CreatePost(attr)
+	if p == nil {
+		log.Println("error")
+		http.Redirect(w, r, "/new", http.StatusSeeOther)
+		return
+	}
+
+	http.Redirect(w, r, fmt.Sprintf("/%s/%s", p.Username, p.ID), http.StatusSeeOther)
+}
+
+// GetPost ...
+func GetPost(w http.ResponseWriter, r *http.Request) {
+	id := r.URL.Query().Get(":id")
+	username := r.URL.Query().Get(":username")
+
+	ps := context.Get(r, "postService").(interface {
+		GetPost(username, id string) *post.Post
+	})
+
+	post := ps.GetPost(username, id)
+	if post == nil {
+		// not found
+		utils.Render(w, "error", "notfound", map[string]interface{}{
+			"Title": "Not Found",
+		})
+
+		return
+	}
+
+	ls := context.Get(r, "likeService").(interface {
+		GetLike(id, username string) (*like.Like, error)
+		GetLikes(id string) ([]*like.Like, error)
+	})
+
+	var u *user.User
+	liker := false
+	uc := context.Get(r, "user")
+	if uc != nil {
+		u = uc.(*user.User)
+
+		_, err := ls.GetLike(post.ID, u.Username)
+		if err == nil {
+			liker = true
+		}
+
+	}
+
+	likes, err := ls.GetLikes(post.ID)
+	if err == nil {
+		post.LikesCount = int64(len(likes))
+	}
+
+	description := post.Title
+	chunks := strings.Split(post.Content, " ")
+	if len(chunks) > 42 {
+		description = strings.Join(chunks[:42], " ")
+		description = strings.Replace(description, "#", "", -1)
+	}
+	utils.Render(w, "main", "post", map[string]interface{}{
+		"Title":          post.Title,
+		"Post":           post,
+		"Description":    description,
+		"User":           u,
+		"Cover":          post.Cover,
+		"Liker":          liker,
+		csrf.TemplateTag: csrf.TemplateField(r),
+	})
+}
+
+// ToggleLike ...
+func ToggleLike(w http.ResponseWriter, r *http.Request) {
+	id := r.URL.Query().Get(":id")
+	username := ""
+
+	uc := context.Get(r, "user")
+	if uc != nil {
+		u := uc.(*user.User)
+		username = u.Username
+	}
+
+	ls := context.Get(r, "likeService").(interface {
+		ToggleLike(id, username string) error
+	})
+
+	err := ls.ToggleLike(id, username)
+	if err != nil {
+		http.Error(w, "error", http.StatusBadRequest)
+		return
+	}
+
+	fmt.Fprintln(w, "ok")
+}

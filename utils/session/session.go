@@ -17,27 +17,32 @@ func New() *Client {
 }
 
 // SetUser ...
-func (s *Client) SetUser(w http.ResponseWriter, r *http.Request, email, token string) {
+func (s *Client) SetUser(
+	w http.ResponseWriter,
+	r *http.Request,
+	username,
+	token string,
+) {
 	session, _ := s.Store.Get(r, "user")
-	session.Values["email"] = email
+	session.Values["username"] = username
 	session.Values["token"] = token
-	session.Save(r, w)
+	_ = session.Save(r, w)
 }
 
 // GetUser ...
 func (s *Client) GetUser(r *http.Request) map[string]string {
 	session, _ := s.Store.Get(r, "user")
 
-	email := session.Values["email"]
+	username := session.Values["username"]
 	token := session.Values["token"]
 
-	if email == nil || token == nil {
+	if username == nil || token == nil {
 		return nil
 	}
 
 	return map[string]string{
-		"email": email.(string),
-		"token": token.(string),
+		"username": username.(string),
+		"token":    token.(string),
 	}
 }
 
@@ -45,18 +50,23 @@ func (s *Client) GetUser(r *http.Request) map[string]string {
 func (s *Client) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	session, _ := s.Store.Get(r, "user")
 
-	session.Values["email"] = nil
+	session.Values["username"] = nil
 	session.Values["token"] = nil
 
-	session.Save(r, w)
+	_ = session.Save(r, w)
 }
 
 // SetFlash sets the flash message with the given
 // type and value
-func (s *Client) SetFlash(w http.ResponseWriter, r *http.Request, t, v string) {
+func (s *Client) SetFlash(
+	w http.ResponseWriter,
+	r *http.Request,
+	t,
+	v string,
+) {
 	session, _ := s.Store.Get(r, "notification")
 	session.AddFlash(fmt.Sprintf("%s<>%s", t, v))
-	session.Save(r, w)
+	_ = session.Save(r, w)
 }
 
 // GetFlash ...
@@ -66,7 +76,7 @@ func (s *Client) GetFlash(w http.ResponseWriter, r *http.Request) *Flash {
 	if flashes := session.Flashes(); len(flashes) > 0 {
 		chunks := strings.Split(flashes[0].(string), "<>")
 		f := &Flash{chunks[0], chunks[1]}
-		session.Save(r, w)
+		_ = session.Save(r, w)
 		return f
 	}
 

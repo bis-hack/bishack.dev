@@ -3,7 +3,7 @@ package middleware
 import (
 	"net/http"
 
-	cip "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
+	"bishack.dev/services/user"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -11,15 +11,15 @@ type userServiceMock struct {
 	mock.Mock
 }
 
-func (o *userServiceMock) AccountDetails(token string) (*cip.GetUserOutput, error) {
+func (o *userServiceMock) AccountDetails(token string) *user.User {
 	args := o.Called(token)
 
 	resp := args.Get(0)
 	if resp == nil {
-		return nil, args.Error(1)
+		return nil
 	}
 
-	return resp.(*cip.GetUserOutput), args.Error(1)
+	return resp.(*user.User)
 }
 
 type sessionMock struct {

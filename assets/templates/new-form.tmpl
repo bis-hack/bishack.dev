@@ -1,0 +1,92 @@
+{{define "style"}}
+{{end}}
+{{define "script"}}
+    function enableTab(id) {
+        let el;
+        if (typeof id === 'string') {
+            el = document.getElementById(id);
+        } else {
+            el = id;
+        }
+        el.onkeydown = function(e) {
+            if (e.keyCode === 9) { // tab was pressed
+
+                // get caret position/selection
+                const val = this.value,
+                    start = this.selectionStart,
+                    end = this.selectionEnd;
+
+                // set textarea value to: text before caret + tab + text after caret
+                this.value = val.substring(0, start) + '\t' + val.substring(end);
+
+                // put caret at right position again
+                this.selectionStart = this.selectionEnd = start + 1;
+
+                // prevent the focus lose
+                return false;
+
+            }
+        };
+    }
+
+    form = document.querySelector('form#new-form');
+    if (form) {
+        enableTab(form.content)
+        form.addEventListener('submit', (e) => {
+            const { target } = e;
+            const { title, content } = target;
+
+            // reset
+            title.style.borderBottomColor = 'blue';
+            content.style.borderBottomColor = 'blue';
+
+            if (!title.value.trim()) {
+                title.style.borderBottomColor = 'red';
+                title.focus();
+                e.preventDefault();
+                return false;
+            }
+            if (!content.value.trim()) {
+                content.style.borderBottomColor = 'red';
+                content.focus();
+                e.preventDefault();
+                return false;
+            }
+        });
+    }
+{{end}}
+{{define "content"}}
+    <div class="container">
+        <form action="/new" method="POST" id="new-form" autocomplete="off">
+            {{ .csrfField }}
+            <input type="hidden" name="username" value="{{.User.Username}}">
+            <input type="hidden" name="userPic" value="{{.User.Picture}}">
+            <input type="hidden" name="author" value="{{.User.Name}}">
+            <input type="hidden" name="publish" value="1">
+            <p>
+                <input
+                    type="text"
+                    name="title"
+                    placeholder="Title"
+                    style="font-size:32px;padding-left:0;padding-right:0;color:black;"
+                >
+            </p>
+            <p>
+                <textarea placeholder="Use markdown to format your content" name="content" rows="20" style="background-color:white;font-size:18px;font-family:monospace;color:black"></textarea>
+            </p>
+            <div>
+                <div class="left" style="width:80%">
+                    <input name="cover" style="padding-left:0" type="text" placeholder="Enter a cover image (optional)">
+                    <br>
+                    <br>
+                </div>
+                <div class="right" style="width:20%;text-align:right">
+                    <button type="submit" class="button primary">
+                        <span style="position:relative;top:1px;margin-right:6px">✓</span>
+                        Publish Now
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+{{end}}

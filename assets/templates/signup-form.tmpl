@@ -67,11 +67,10 @@
                         {{end}}
                     </p>
                     <p>
-                        <input type="hidden" name="nickname" value="{{.GithubUser.Login}}"/>
+                        <input type="hidden" name="username" value="{{.GithubUser.Login}}"/>
                         <input type="hidden" name="picture" value="{{.GithubUser.AvatarURL}}"/>
                         <input type="hidden" name="locale" value="{{.GithubUser.Location}}"/>
                         <input type="hidden" name="website" value="{{.GithubUser.Website}}"/>
-                        <input type="hidden" name="login" value="{{.GithubUser.Login}}"/>
                         <input type="hidden" name="name" value="{{.GithubUser.Name}}"/>
                         <input type="hidden" name="profile" value="{{.GithubUser.Bio}}"/>
                     </p>

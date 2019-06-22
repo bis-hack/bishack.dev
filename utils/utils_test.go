@@ -35,3 +35,13 @@ func TestGithubEndpoint(t *testing.T) {
 		assert.Equal(t, regexp.MustCompile("access_token").MatchString(ep), true)
 	})
 }
+
+func TestMD(t *testing.T) {
+	tmpl := md(`# hello`)
+	assert.Regexp(t, regexp.MustCompile("<h1>hello</h1>"), tmpl)
+}
+
+func TestDate(t *testing.T) {
+	d := date("Jan", 1560096000)
+	assert.Equal(t, "Jun", d)
+}

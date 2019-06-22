@@ -5,7 +5,6 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/gorilla/pat"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -38,23 +37,19 @@ func TestUser(t *testing.T) {
 	})
 
 	t.Run("ok", func(t *testing.T) {
-		c.SetUser(w, r, "test@user.com", "tuku")
+		c.SetUser(w, r, "test", "tuku")
 		u := c.GetUser(r)
 		assert.NotNil(t, u)
-		assert.NotEmpty(t, u["email"])
+		assert.NotEmpty(t, u["username"])
 		assert.NotEmpty(t, u["token"])
-		assert.Equal(t, "test@user.com", u["email"])
+		assert.Equal(t, "test", u["username"])
 		assert.Equal(t, "tuku", u["token"])
 	})
 
 	t.Run("delete", func(t *testing.T) {
-		c.SetUser(w, r, "test@user.com", "tuku")
+		c.SetUser(w, r, "test", "tuku")
 		c.DeleteUser(w, r)
 		u := c.GetUser(r)
 		assert.Nil(t, u)
 	})
-}
-
-func getRouter() *pat.Router {
-	return pat.New()
 }

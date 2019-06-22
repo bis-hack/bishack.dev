@@ -3,15 +3,16 @@
 {{define "script"}}
     const form = document.querySelector('form#login-form');
     form && form.addEventListener('submit', (e) => {
-        const em = e.target.email;
+        const em = e.target.username;
         const pwd = e.target.password;
-        const email = em.value.trim();
+        const username = em.value.trim();
         const password = pwd.value.trim();
 
         // check for password
         em.style.borderColor = 'blue'; // reset color
-        const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if (!email.match(pattern)) {
+        let pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (!username.match(/@/)) pattern = /.{3,}/;
+        if (!username.match(pattern)) {
             em.style.borderColor = 'red';
             em.focus();
             e.preventDefault();
@@ -37,14 +38,14 @@
             <form id="login-form" action="/login" method="post">
                 {{ .csrfField }}
                 <p>
-                    <input type="text" name="email" placeholder="Email address" />
+                    <input type="text" name="username" placeholder="Username / Email" />
                 </p>
                 <p>
                     <input type="password" name="password" placeholder="Password" />
                 </p>
                 <br>
                 <p>
-                    <button type="submit" class="button primary full"><span>LOG IN</span></button>
+                    <button type="submit" class="button primary full"><span>Log In</span></button>
                 </p>
             </form>
         </div>

@@ -4,6 +4,9 @@ import (
 	"net/http"
 	"net/url"
 
+	"bishack.dev/services/like"
+	"bishack.dev/services/post"
+	"bishack.dev/services/user"
 	"bishack.dev/utils/session"
 	cip "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 	"github.com/stretchr/testify/mock"
@@ -48,6 +51,17 @@ func (o *userServiceMock) AccountDetails(token string) (*cip.GetUserOutput, erro
 	}
 
 	return resp.(*cip.GetUserOutput), args.Error(1)
+}
+
+func (o *userServiceMock) GetUser(username string) *user.User {
+	args := o.Called(username)
+
+	resp := args.Get(0)
+	if resp == nil {
+		return nil
+	}
+
+	return resp.(*user.User)
 }
 
 func (o *userServiceMock) Verify(
@@ -153,4 +167,89 @@ func (c *clientMock) Get(url string) (*http.Response, error) {
 	}
 
 	return resp.(*http.Response), args.Error(1)
+}
+
+type postMock struct {
+	mock.Mock
+}
+
+func (p *postMock) GetCount() int64 {
+	args := p.Called()
+	resp := args.Get(0)
+	return resp.(int64)
+}
+
+func (p *postMock) CreatePost(vals map[string]interface{}) *post.Post {
+	args := p.Called(vals)
+	resp := args.Get(0)
+
+	if resp == nil {
+		return nil
+	}
+
+	return resp.(*post.Post)
+}
+
+func (p *postMock) GetPosts() []*post.Post {
+	args := p.Called()
+	resp := args.Get(0)
+
+	if resp == nil {
+		return nil
+	}
+
+	return resp.([]*post.Post)
+}
+
+func (p *postMock) GetUserPosts(username string) []*post.Post {
+	args := p.Called(username)
+	resp := args.Get(0)
+
+	if resp == nil {
+		return nil
+	}
+
+	return resp.([]*post.Post)
+}
+
+func (p *postMock) GetPost(username, id string) *post.Post {
+	args := p.Called()
+	resp := args.Get(0)
+
+	if resp == nil {
+		return nil
+	}
+
+	return resp.(*post.Post)
+}
+
+type likeMock struct {
+	mock.Mock
+}
+
+func (l *likeMock) GetLikes(id string) ([]*like.Like, error) {
+	args := l.Called(id)
+	resp := args.Get(0)
+
+	if resp == nil {
+		return nil, args.Error(1)
+	}
+
+	return resp.([]*like.Like), args.Error(1)
+}
+
+func (l *likeMock) GetLike(id, username string) (*like.Like, error) {
+	args := l.Called(id, username)
+	resp := args.Get(0)
+
+	if resp == nil {
+		return nil, args.Error(1)
+	}
+
+	return resp.(*like.Like), args.Error(1)
+}
+
+func (l *likeMock) ToggleLike(id, username string) error {
+	args := l.Called(id, username)
+	return args.Error(0)
 }

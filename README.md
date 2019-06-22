@@ -8,6 +8,7 @@
 
 [![CircleCI](https://circleci.com/gh/bis-hack/bishack.dev.svg?style=svg)](https://circleci.com/gh/bis-hack/bishack.dev)
 [![codecov](https://codecov.io/gh/bis-hack/bishack.dev/branch/master/graph/badge.svg)](https://codecov.io/gh/bis-hack/bishack.dev)
+[![Go Report Card](https://goreportcard.com/badge/github.com/bis-hack/bishack.dev)](https://goreportcard.com/report/github.com/bis-hack/bishack.dev)
 
 &nbsp;
 
@@ -48,6 +49,8 @@ If you want to contribute to this project, do **[let me know](https://github.com
 
 - [**Go**](https://golang.org) - 1.12 or higher
 
+- [**Docker**](https://docker.io)
+
 - **AWS buffet** - you can always sign up for a free tier
 
 	- **IAM Key Pair** - to be loaded into your `~/.aws/credentials` config file.
@@ -58,7 +61,7 @@ If you want to contribute to this project, do **[let me know](https://github.com
 
 		> Ping me on slack if you need help on this one.
 
-	- **DynamoDB Tables** - TBA
+	- **DynamoDB Tables** - [See DynamoDB Setup](#dynamodb-setup-local)
 
 
 - **Github oauth credentials** this one is easy
@@ -66,11 +69,31 @@ If you want to contribute to this project, do **[let me know](https://github.com
 
 &nbsp;
 
-### Setup
+### DynamoDB Setup (local)
+
+> Before you start you need to have **[docker](https://docker.io)** installed on your system first.
+
+1. **Run the the following command:**
+
+	`$ docker run -d -p 8000:8000 amazon/dynamodb-local -jar DynamoDBLocal.jar -inMemory -sharedDb`
+
+	> The above command will run a localized version of dynamodb with shared database.
+
+
+2. **Go to `http://localhost:8000/shell` and copy, paste and run every files inside the `./assets/dynamo` folder.**
+
+	> See example below:
+
+	![ss](https://cl.ly/d0ea7b20429e/Screen%252520Recording%2525202019-06-21%252520at%25252003.19%252520PM.gif)
+
+
+&nbsp;
+
+### Dev Setup
 
 Install a live-reload command line utility called [**Gin**](https://github.com/codegangsta/gin) with the following command:
 
-	$ https://github.com/codegangsta/gin
+	$ go get -u github.com/codegangsta/gin
 
 
 And then install [**up**](https://up.docs.apex.sh/).
@@ -88,6 +111,8 @@ Start the server with this command:
 	  GITHUB_CLIENT_ID=<id> \
 	  GITHUB_CLIENT_SECRET=<secret> \
 	  GITHUB_CALLBACK=http://localhost:3000/signup \
+	  DYNAMO_TABLE_POSTS=posts \
+	  DYNAMO_ENDPOINT=http://localhost:8000 \
 	  make dev
 
 
@@ -96,8 +121,9 @@ Head to `http://localhost:3000/` on your browser.
 
 &nbsp;
 
-> Write your test and submit a pull-request. 🖖 🤓
+
+Happy Hacking! 🖖 🤓
 
 &nbsp;
 
-Happy Hacking!
+

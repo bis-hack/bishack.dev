@@ -47,7 +47,7 @@ func TestLogin(t *testing.T) {
 		r, _ := http.NewRequest(http.MethodPost, "/login", nil)
 
 		form := url.Values{}
-		form.Add("email", "")
+		form.Add("username", "")
 		form.Add("password", "")
 		r.PostForm = form
 
@@ -58,7 +58,7 @@ func TestLogin(t *testing.T) {
 			return true
 		}), mock.MatchedBy(func(r *http.Request) bool {
 			return true
-		}), "error", "Wrong email or password")
+		}), "error", "Wrong username or password")
 
 		Login(w, r)
 
@@ -75,7 +75,7 @@ func TestLogin(t *testing.T) {
 		r, _ := http.NewRequest(http.MethodPost, "/login", nil)
 
 		form := url.Values{}
-		form.Add("email", "test@user.com")
+		form.Add("username", "test")
 		form.Add("password", "test")
 		r.PostForm = form
 
@@ -83,16 +83,16 @@ func TestLogin(t *testing.T) {
 		context.Set(r, "session", s)
 
 		result := &cip.AuthenticationResultType{}
-		result.SetAccessToken("beepboop")
+		result.SetAccessToken("test")
 		out := &cip.InitiateAuthOutput{}
 		out.SetAuthenticationResult(result)
 
-		m.On("Login", "test@user.com", "test").Return(out, nil)
+		m.On("Login", "test", "test").Return(out, nil)
 		s.On("SetUser", mock.MatchedBy(func(w http.ResponseWriter) bool {
 			return true
 		}), mock.MatchedBy(func(r *http.Request) bool {
 			return true
-		}), "test@user.com", "beepboop")
+		}), "test", "test")
 		s.On("SetFlash", mock.MatchedBy(func(w http.ResponseWriter) bool {
 			return true
 		}), mock.MatchedBy(func(r *http.Request) bool {
@@ -134,12 +134,12 @@ func TestVerify(t *testing.T) {
 		s := new(sessionMock)
 
 		w := httptest.NewRecorder()
-		r, _ := http.NewRequest(http.MethodGet, "/verify?code=111&email=test@user.com", nil)
+		r, _ := http.NewRequest(http.MethodGet, "/verify?code=111&username=test", nil)
 
 		context.Set(r, "userService", m)
 		context.Set(r, "session", s)
 
-		m.On("Verify", "test@user.com", "111").Return(nil, errors.New(""))
+		m.On("Verify", "test", "111").Return(nil, errors.New(""))
 		s.On("SetFlash", mock.MatchedBy(func(w http.ResponseWriter) bool {
 			return true
 		}), mock.MatchedBy(func(r *http.Request) bool {
@@ -159,13 +159,13 @@ func TestVerify(t *testing.T) {
 		s := new(sessionMock)
 
 		w := httptest.NewRecorder()
-		r, _ := http.NewRequest(http.MethodGet, "/verify?code=111&email=test@user.com", nil)
+		r, _ := http.NewRequest(http.MethodGet, "/verify?code=111&username=test", nil)
 
 		context.Set(r, "userService", m)
 		context.Set(r, "session", s)
 
 		out := &cip.ConfirmSignUpOutput{}
-		m.On("Verify", "test@user.com", "111").Return(out, nil)
+		m.On("Verify", "test", "111").Return(out, nil)
 		s.On("SetFlash", mock.MatchedBy(func(w http.ResponseWriter) bool {
 			return true
 		}), mock.MatchedBy(func(r *http.Request) bool {
@@ -195,8 +195,8 @@ func TestVerify(t *testing.T) {
 		}), mock.MatchedBy(func(r *http.Request) bool {
 			return true
 		})).Return(&session.Flash{
-			"success",
-			"Account Verified!",
+			Type:  "success",
+			Value: "Account Verified!",
 		})
 
 		Verify(w, r)
@@ -241,16 +241,17 @@ func TestFinishSignup(t *testing.T) {
 		r, _ := http.NewRequest(http.MethodPost, "/signup", nil)
 
 		form := url.Values{}
-		form.Add("email", "test@user.com")
+		form.Add("username", "test")
 		form.Add("password", "beepboop")
 		r.PostForm = form
 
 		context.Set(r, "userService", m)
 		context.Set(r, "session", s)
 
-		m.On("Signup", "test@user.com", "beepboop", mock.MatchedBy(func(m map[string]string) bool {
+		m.On("Signup", "test", "beepboop", mock.MatchedBy(func(m map[string]string) bool {
 			return true
 		})).Return(nil, errors.New(""))
+
 		s.On("SetFlash", mock.MatchedBy(func(w http.ResponseWriter) bool {
 			return true
 		}), mock.MatchedBy(func(r *http.Request) bool {
@@ -273,14 +274,14 @@ func TestFinishSignup(t *testing.T) {
 		r, _ := http.NewRequest(http.MethodPost, "/signup", nil)
 
 		form := url.Values{}
-		form.Add("email", "test@user.com")
+		form.Add("username", "test")
 		form.Add("password", "beepboop")
 		r.PostForm = form
 
 		context.Set(r, "userService", m)
 		context.Set(r, "session", s)
 
-		m.On("Signup", "test@user.com", "beepboop", mock.MatchedBy(func(m map[string]string) bool {
+		m.On("Signup", "test", "beepboop", mock.MatchedBy(func(m map[string]string) bool {
 			return true
 		})).Return(nil, errors.New("exists"))
 		s.On("SetFlash", mock.MatchedBy(func(w http.ResponseWriter) bool {
@@ -452,7 +453,7 @@ func TestSignup(t *testing.T) {
 				return true
 			}), mock.MatchedBy(func(r *http.Request) bool {
 				return true
-			}), "error", "An error occured!")
+			}), "error", "An error occurred!")
 
 			Signup(w, r)
 
@@ -475,7 +476,7 @@ func TestSignup(t *testing.T) {
 			resp.StatusCode = http.StatusOK
 			resp.Header = http.Header{}
 			resp.Header.Set("content-type", "application/json")
-			resp.Body = ioutil.NopCloser(bytes.NewReader([]byte(`{"email":"test@user.com"}`)))
+			resp.Body = ioutil.NopCloser(bytes.NewReader([]byte(`{"username":"test"}`)))
 
 			c.On("Do", mock.MatchedBy(func(r *http.Request) bool {
 				return true

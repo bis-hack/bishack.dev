@@ -5,23 +5,47 @@ import (
 	"html/template"
 	"net/http"
 	"os"
+	"time"
+
+	"gitlab.com/golang-commonmark/markdown"
 )
 
 const (
 	oauthEndpoint = "https://github.com/login/oauth"
 )
 
+func md(input string) template.HTML {
+	md := markdown.New()
+	out := template.HTML(md.RenderToString(
+		[]byte(input),
+	))
+	return out
+}
+
+func date(fmt string, input int64) string {
+	t := time.Unix(input, 0)
+	return t.Format(fmt)
+}
+
 // Render parses templates and writes them into the the passed in ResponseWriter
 // interface
 func Render(w http.ResponseWriter, base, content string, ctx interface{}) {
-	tmpl, err := template.New("").ParseFiles(
+	fns := template.FuncMap{
+		"md":   md,
+		"date": date,
+	}
+	tmpl, err := template.New("").Funcs(fns).ParseFiles(
 		fmt.Sprintf("assets/templates/layout/%s.tmpl", base),
 		fmt.Sprintf("assets/templates/%s.tmpl", content),
-		fmt.Sprintf("assets/templates/main-nav.tmpl"),
-		fmt.Sprintf("assets/templates/user-card.tmpl"),
-		// main css file
+		// components
+		fmt.Sprintf("assets/templates/components/main-nav.tmpl"),
+		fmt.Sprintf("assets/templates/components/user-card.tmpl"),
+		fmt.Sprintf("assets/templates/components/posts.tmpl"),
+		// stylesheets
 		fmt.Sprintf("assets/css/main.css"),
-		// main javascript file
+		// scripts
+		fmt.Sprintf("assets/scripts/turbolinks.js"),
+		fmt.Sprintf("assets/scripts/axios.js"),
 		fmt.Sprintf("assets/scripts/main.js"),
 	)
 
@@ -33,7 +57,7 @@ func Render(w http.ResponseWriter, base, content string, ctx interface{}) {
 	if content == "notfound" {
 		w.WriteHeader(http.StatusNotFound)
 	}
-	tmpl.ExecuteTemplate(w, "layout", ctx)
+	_ = tmpl.ExecuteTemplate(w, "layout", ctx)
 }
 
 // GithubEndpoint parses endpoint for github request

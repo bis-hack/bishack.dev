@@ -24,10 +24,10 @@
             <form id="verify-form" action="" method="get">
                 {{ .csrfField }}
                 <p>
-                {{if not .Email}}
-                    <input type="text" name="email" placeholder="Email"/>
+                {{if not .Username}}
+                    <input type="text" name="username" placeholder="Username"/>
                 {{else}}
-                    <input type="hidden" name="email" value="{{.Email}}"/>
+                    <input type="hidden" name="username" value="{{.Username}}"/>
                 {{end}}
                 </p>
                 <p><input type="text" name="code" placeholder="Code" /></p>

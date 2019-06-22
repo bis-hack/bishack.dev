@@ -14,16 +14,9 @@ jobs:
       - restore_cache:
           keys:
             - v1-pkg-cache
+      - run: go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
       - run: curl -sf https://up.apex.sh/install | sudo sh && go mod download
-      - run: |
-          SLACK_TOKEN=$SLACK_TOKEN \
-          SESSION_KEY=$SESSION_KEY \
-          CSRF_KEY=$CSRF_KEY \
-          COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID \
-          COGNITO_CLIENT_SECRET=$COGNITO_CLIENT_SECRET \
-          GITHUB_CLIENT_ID=$GITHUB_CLIENT_ID \
-          GITHUB_CLIENT_SECRET=$GITHUB_CLIENT_SECRET \
-          make deploy
+      - run: make deploy
       - run: mv coverage.txt /tmp/tests/coverage.txt
       - codecov/upload:
           file: /tmp/tests/coverage.txt
@@ -44,17 +37,9 @@ jobs:
       - restore_cache:
           keys:
             - v1-pkg-cache
+      - run: go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
       - run: curl -sf https://up.apex.sh/install | sudo sh && go mod download
-      - run: |
-          SLACK_TOKEN=$SLACK_TOKEN \
-          SESSION_KEY=$SESSION_KEY \
-          CSRF_KEY=$CSRF_KEY \
-          COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID_PROD \
-          COGNITO_CLIENT_SECRET=$COGNITO_CLIENT_SECRET_PROD \
-          GITHUB_CLIENT_ID=$GITHUB_CLIENT_ID_PROD \
-          GITHUB_CLIENT_SECRET=$GITHUB_CLIENT_SECRET_PROD \
-          GITHUB_CALLBACK=$GITHUB_CALLBACK_PROD \
-          make deploy.prod
+      - run: make deploy.prod
       - run: mv coverage.txt /tmp/tests/coverage.txt
       - codecov/upload:
           file: /tmp/tests/coverage.txt
