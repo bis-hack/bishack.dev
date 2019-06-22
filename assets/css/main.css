@@ -246,6 +246,7 @@ button.button {
 /* Misc */
 .turbolinks-progress-bar {
   height: 3px;
+  top: 65px;
   background-color: blue;
   z-index: 100;
 }
