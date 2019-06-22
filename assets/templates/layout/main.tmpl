@@ -17,6 +17,10 @@
     <script>
         {{template "turbolinks.js" .}}
         {{template "axios.js" .}}
+        document.addEventListener('turbolinks:load', () => {
+            {{template "main.js" .}}
+            {{template "script" .}}
+        });
     </script>
 </head>
 
@@ -39,12 +43,6 @@
         </header>
         {{template "content" .}}
     </div>
-    <script>
-        document.addEventListener('turbolinks:load', () => {
-            {{template "main.js" .}}
-            {{template "script" .}}
-        });
-    </script>
 </body>
 
 </html>
