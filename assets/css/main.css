@@ -124,6 +124,7 @@ table {
   box-sizing: border-box;
   text-align: left;
   border: 1px solid #CCCCCC;
+  border-spacing: 0;
 }
 table td, table th {
   padding: 12px;
@@ -131,7 +132,7 @@ table td, table th {
   margin: 0;
 }
 table thead {
-  background-color: lightyellow;
+  background-color: rgba(1,1,1,0.1);
 }
 
 /* Buttons */
