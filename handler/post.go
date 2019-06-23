@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -166,12 +167,17 @@ func GetPost(w http.ResponseWriter, r *http.Request) {
 		post.LikesCount = int64(len(likes))
 	}
 
-	description := post.Title
-	chunks := strings.Split(post.Content, " ")
-	if len(chunks) > 42 {
-		description = strings.Join(chunks[:42], " ")
-		description = strings.Replace(description, "#", "", -1)
+	chunks := strings.Split(post.Content, "\r\n\r\n")
+	description := chunks[0]
+	if len(chunks) >= 2 {
+		description = chunks[1]
+		description = regexp.MustCompile(`https?:\/\/.+\s`).ReplaceAllString(description, "")
+		description = strings.Join(
+			regexp.MustCompile(`[a-zA-Z0-9\-\s]+`).FindAllString(description, -1),
+			" ",
+		)
 	}
+
 	utils.Render(w, "main", "post", map[string]interface{}{
 		"Title":          post.Title,
 		"Post":           post,
