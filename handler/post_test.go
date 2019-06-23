@@ -202,3 +202,109 @@ func TestToggleLike(t *testing.T) {
 
 	})
 }
+
+func TestUpdatePost(t *testing.T) {
+	t.Run("error", func(t *testing.T) {
+		p := new(postMock)
+		s := new(sessionMock)
+
+		w := httptest.NewRecorder()
+		r, _ := http.NewRequest(http.MethodGet, "/p/test", nil)
+
+		context.Set(r, "postService", p)
+		context.Set(r, "session", s)
+
+		p.On("UpdatePost", "", "", "", int64(0)).Return(errors.New(""))
+		s.On("SetFlash", mock.MatchedBy(func(w http.ResponseWriter) bool {
+			return true
+		}), mock.MatchedBy(func(r *http.Request) bool {
+			return true
+		}), "error", "An error occurred. Try again.").Return(nil)
+
+		UpdatePost(w, r)
+
+		assert.Equal(t, http.StatusSeeOther, w.Code)
+	})
+
+	t.Run("ok", func(t *testing.T) {
+		p := new(postMock)
+		s := new(sessionMock)
+
+		w := httptest.NewRecorder()
+		r, _ := http.NewRequest(http.MethodGet, "/p/test", nil)
+
+		context.Set(r, "postService", p)
+		context.Set(r, "session", s)
+
+		p.On("UpdatePost", "", "", "", int64(0)).Return(nil)
+		s.On("SetFlash", mock.MatchedBy(func(w http.ResponseWriter) bool {
+			return true
+		}), mock.MatchedBy(func(r *http.Request) bool {
+			return true
+		}), "success", "Changes saved successfully!").Return(nil)
+
+		UpdatePost(w, r)
+
+		assert.Equal(t, http.StatusSeeOther, w.Code)
+	})
+}
+
+func TestEditPost(t *testing.T) {
+	t.Run("user not found", func(t *testing.T) {
+		w := httptest.NewRecorder()
+		r, _ := http.NewRequest(http.MethodGet, "/p/test", nil)
+
+		EditPost(w, r)
+
+		assert.Equal(t, http.StatusSeeOther, w.Code)
+	})
+
+	t.Run("post is nil", func(t *testing.T) {
+		p := new(postMock)
+
+		w := httptest.NewRecorder()
+		r, _ := http.NewRequest(http.MethodGet, "/edit/test", nil)
+
+		context.Set(r, "postService", p)
+		context.Set(r, "user", &user.User{})
+
+		p.On("GetPost", mock.MatchedBy(func(username string) bool {
+			return true
+		}), mock.MatchedBy(func(id string) bool {
+			return true
+		})).Return(nil)
+
+		EditPost(w, r)
+
+		assert.Equal(t, http.StatusSeeOther, w.Code)
+	})
+
+	t.Run("ok", func(t *testing.T) {
+		p := new(postMock)
+		s := new(sessionMock)
+
+		w := httptest.NewRecorder()
+		r, _ := http.NewRequest(http.MethodGet, "/edit/test", nil)
+
+		context.Set(r, "postService", p)
+		context.Set(r, "session", s)
+		context.Set(r, "user", &user.User{})
+
+		p.On("GetPost", mock.MatchedBy(func(username string) bool {
+			return true
+		}), mock.MatchedBy(func(id string) bool {
+			return true
+		})).Return(&post.Post{})
+
+		s.On("GetFlash", mock.MatchedBy(func(w http.ResponseWriter) bool {
+			return true
+		}), mock.MatchedBy(func(r *http.Request) bool {
+			return true
+		})).Return(nil)
+
+		EditPost(w, r)
+
+		assert.Equal(t, http.StatusOK, w.Code)
+		assert.Regexp(t, regexp.MustCompile("edit-form"), w.Body.String())
+	})
+}

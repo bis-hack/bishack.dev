@@ -40,8 +40,10 @@
 }
 pre {
     overflow: scroll;
-    background-color: rgba(1,1,1,0.05);
-    color: #333;
+    background-color: rgba(0,0,0,0.03);
+    border: 1px solid rgba(0,0,0,0.1);
+    color: rgba(0,0,0,0.5);
+    letter-spacing: 1px;
 }
 pre code {
     font-size: 16px;
@@ -115,6 +117,12 @@ svg path {
                     <span style="font-size:1.5em;position:relative;top:3px;margin:0 4px 0 0;">💬</span>
                     <span class="lc">0</span>
                 </small>
+                {{if eq .User.Username .Post.Username}}
+                <small class="div">|</small>
+                <small>
+                    <a href="/edit/{{.Post.ID}}">Edit Post</a>
+                </small>
+                {{end}}
             </p>
             <div class="main-content">
                 {{if ne .Post.Cover "" }}

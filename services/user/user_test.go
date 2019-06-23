@@ -170,3 +170,37 @@ func TestLogin(t *testing.T) {
 		to.AssertExpectations(t)
 	})
 }
+
+func TestUpdateUserAttributes(t *testing.T) {
+	t.Run("valid token", func(t *testing.T) {
+		to := new(MockedUserService)
+		client := New("id", "secret")
+		// change provider to our mocked object
+		client.Provider = to
+		to.On(
+			"UpdateUserAttributes",
+			mock.MatchedBy(func(in *cip.UpdateUserAttributesInput) bool {
+				return true
+			}),
+		).Return(&cip.UpdateUserAttributesOutput{
+			CodeDeliveryDetailsList: []*cip.CodeDeliveryDetailsType{
+				{
+					AttributeName:  aws.String("email"),
+					DeliveryMedium: aws.String("email"),
+					Destination:    aws.String("richard@mailinator.com"),
+				},
+			},
+		}, nil)
+
+		attrs := map[string]string{
+			"email": "richard@mail.co",
+		}
+
+		out, err := client.UpdateUser("legit_token", attrs)
+
+		assert.NotNil(t, out)
+		assert.Nil(t, err)
+		to.AssertExpectations(t)
+	})
+
+}

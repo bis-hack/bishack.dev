@@ -12,6 +12,9 @@ import (
 	"bishack.dev/utils"
 	"bishack.dev/utils/session"
 	"github.com/gorilla/context"
+	"github.com/gorilla/csrf"
+
+	cip "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 )
 
 // GetUserPosts ...
@@ -70,4 +73,67 @@ func GetUserPosts(w http.ResponseWriter, r *http.Request) {
 		"Author": user,
 		"User":   context.Get(r, "user"),
 	})
+}
+
+// UpdateProfileForm ...
+func UpdateProfileForm(w http.ResponseWriter, r *http.Request) {
+
+	sess := context.Get(r, "session").(interface {
+		GetFlash(w http.ResponseWriter, r *http.Request) *session.Flash
+	})
+
+	// get user details from context
+	user := context.Get(r, "user")
+
+	if user == nil {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	utils.Render(w, "main", "profile-form", map[string]interface{}{
+		"Title":          "Edit User Profile",
+		"Flash":          sess.GetFlash(w, r),
+		"User":           user,
+		csrf.TemplateTag: csrf.TemplateField(r),
+	})
+}
+
+// UserUpdate ...
+func UserUpdate(w http.ResponseWriter, r *http.Request) {
+	sess := context.Get(r, "session").(interface {
+		SetFlash(w http.ResponseWriter, r *http.Request, t, v string)
+		GetUser(r *http.Request) map[string]string
+	})
+
+	su := sess.GetUser(r)
+	if su == nil {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	token := su["token"]
+	_ = r.ParseForm()
+
+	email := r.Form.Get("email")
+
+	if email == "" {
+		sess.SetFlash(w, r, "error", "Email is required")
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	su["email"] = email
+
+	us := context.Get(r, "userService").(interface {
+		UpdateUser(token string, attrs map[string]string) (*cip.UpdateUserAttributesOutput, error)
+	})
+
+	if _, err := us.UpdateUser(token, su); err != nil {
+		sess.SetFlash(w, r, "error", "Email is required")
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	sess.SetFlash(w, r, "success", "Email Successfully Updated")
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }

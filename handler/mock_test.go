@@ -53,6 +53,17 @@ func (o *userServiceMock) AccountDetails(token string) (*cip.GetUserOutput, erro
 	return resp.(*cip.GetUserOutput), args.Error(1)
 }
 
+func (o *userServiceMock) UpdateUser(token string, attrs map[string]string) (*cip.UpdateUserAttributesOutput, error) {
+	args := o.Called(token, attrs)
+
+	resp := args.Get(0)
+	if resp == nil {
+		return nil, args.Error(1)
+	}
+
+	return resp.(*cip.UpdateUserAttributesOutput), args.Error(1)
+}
+
 func (o *userServiceMock) GetUser(username string) *user.User {
 	args := o.Called(username)
 
@@ -210,6 +221,12 @@ func (p *postMock) GetUserPosts(username string) []*post.Post {
 	}
 
 	return resp.([]*post.Post)
+}
+
+func (p *postMock) UpdatePost(id, cover, content string, created int64) error {
+	args := p.Called(id, cover, content, created)
+	_ = args.Get(0)
+	return args.Error(0)
 }
 
 func (p *postMock) GetPost(username, id string) *post.Post {

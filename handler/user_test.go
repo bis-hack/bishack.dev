@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"regexp"
 	"testing"
 
@@ -100,5 +101,169 @@ func TestGetUserPosts(t *testing.T) {
 
 		assert.Equal(t, http.StatusOK, w.Code)
 		assert.Regexp(t, regexp.MustCompile("The quick brown test"), w.Body.String())
+	})
+}
+
+func TestUserProfileForm(t *testing.T) {
+	t.Run("User nil", func(t *testing.T) {
+
+		s := new(sessionMock)
+
+		w := httptest.NewRecorder()
+		r, _ := http.NewRequest(http.MethodGet, "/profile", nil)
+
+		context.Set(r, "session", s)
+
+		s.On("GetFlash", mock.MatchedBy(func(w http.ResponseWriter) bool {
+			return true
+		}), mock.MatchedBy(func(r *http.Request) bool {
+			return true
+		})).Return(nil)
+
+		UpdateProfileForm(w, r)
+
+		assert.Equal(t, http.StatusSeeOther, w.Code)
+	})
+
+	t.Run("OK", func(t *testing.T) {
+
+		s := new(sessionMock)
+
+		w := httptest.NewRecorder()
+		r, _ := http.NewRequest(http.MethodGet, "/profile", nil)
+
+		context.Set(r, "session", s)
+		context.Set(r, "user", map[string]string{})
+
+		s.On("GetFlash", mock.MatchedBy(func(w http.ResponseWriter) bool {
+			return true
+		}), mock.MatchedBy(func(r *http.Request) bool {
+			return true
+		})).Return(nil)
+
+		UpdateProfileForm(w, r)
+
+		assert.Equal(t, http.StatusOK, w.Code)
+	})
+}
+
+func TestUserUpdate(t *testing.T) {
+	t.Run("User is nil", func(t *testing.T) {
+		s := new(sessionMock)
+
+		w := httptest.NewRecorder()
+		r, _ := http.NewRequest(http.MethodPost, "/update", nil)
+
+		context.Set(r, "session", s)
+
+		s.On("GetUser", mock.MatchedBy(func(r *http.Request) bool {
+			return true
+		})).Return(nil)
+
+		UserUpdate(w, r)
+
+		assert.Equal(t, http.StatusSeeOther, w.Code)
+	})
+
+	t.Run("Email is empty", func(t *testing.T) {
+		s := new(sessionMock)
+
+		w := httptest.NewRecorder()
+		r, _ := http.NewRequest(http.MethodPost, "/update", nil)
+
+		context.Set(r, "session", s)
+
+		s.On("GetUser", mock.MatchedBy(func(r *http.Request) bool {
+			return true
+		})).Return(map[string]string{})
+
+		s.On("SetFlash", mock.MatchedBy(func(w http.ResponseWriter) bool {
+			return true
+		}), mock.MatchedBy(func(r *http.Request) bool {
+			return true
+		}), "error", "Email is required")
+
+		UserUpdate(w, r)
+
+		assert.Equal(t, http.StatusSeeOther, w.Code)
+		s.AssertExpectations(t)
+	})
+
+	t.Run("User update error", func(t *testing.T) {
+		s := new(sessionMock)
+		u := new(userServiceMock)
+
+		w := httptest.NewRecorder()
+		r, _ := http.NewRequest(http.MethodPost, "/update", nil)
+
+		context.Set(r, "session", s)
+		context.Set(r, "userService", u)
+
+		form := url.Values{}
+		form.Set("email", "test@mailinator.com")
+
+		r.Form = form
+
+		u.On("GetUser")
+
+		um := map[string]string{
+			"token": "test",
+		}
+
+		s.On("GetUser", mock.MatchedBy(func(r *http.Request) bool {
+			return true
+		})).Return(um)
+
+		u.On("UpdateUser", um["token"], um).Return(nil, errors.New(""))
+
+		s.On("SetFlash", mock.MatchedBy(func(w http.ResponseWriter) bool {
+			return true
+		}), mock.MatchedBy(func(r *http.Request) bool {
+			return true
+		}), "error", "Email is required")
+
+		UserUpdate(w, r)
+
+		assert.Equal(t, http.StatusSeeOther, w.Code)
+		s.AssertExpectations(t)
+	})
+
+	t.Run("User update ok", func(t *testing.T) {
+		s := new(sessionMock)
+		u := new(userServiceMock)
+
+		w := httptest.NewRecorder()
+		r, _ := http.NewRequest(http.MethodPost, "/update", nil)
+
+		context.Set(r, "session", s)
+		context.Set(r, "userService", u)
+
+		form := url.Values{}
+		form.Set("email", "test@mailinator.com")
+
+		r.Form = form
+
+		u.On("GetUser")
+
+		um := map[string]string{
+			"token": "test",
+		}
+
+		s.On("GetUser", mock.MatchedBy(func(r *http.Request) bool {
+			return true
+		})).Return(um)
+
+		u.On("UpdateUser", um["token"], um).Return(nil, nil)
+
+		s.On("SetFlash", mock.MatchedBy(func(w http.ResponseWriter) bool {
+			return true
+		}), mock.MatchedBy(func(r *http.Request) bool {
+			return true
+		}), "success", "Email Successfully Updated")
+
+		UserUpdate(w, r)
+
+		assert.Equal(t, http.StatusSeeOther, w.Code)
+		s.AssertExpectations(t)
 	})
 }
