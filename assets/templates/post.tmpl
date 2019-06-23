@@ -117,11 +117,13 @@ svg path {
                     <span style="font-size:1.5em;position:relative;top:3px;margin:0 4px 0 0;">💬</span>
                     <span class="lc">0</span>
                 </small>
-                {{if eq .User.Username .Post.Username}}
-                <small class="div">|</small>
-                <small>
-                    <a href="/edit/{{.Post.ID}}">Edit Post</a>
-                </small>
+                {{if .User}}
+                    {{if eq .User.Username .Post.Username}}
+                    <small class="div">|</small>
+                    <small>
+                        <a href="/edit/{{.Post.ID}}">Edit Post</a>
+                    </small>
+                    {{end}}
                 {{end}}
             </p>
             <div class="main-content">
