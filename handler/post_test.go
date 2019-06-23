@@ -117,14 +117,8 @@ func TestGetPost(t *testing.T) {
 		p.On("GetPost", mock.MatchedBy(func(id string) bool {
 			return true
 		})).Return(&post.Post{
-			Title: "test",
-			Content: `
-			On January 21, JYP Entertainment announced they would be debuting
-			a new girl group, being the first girl group from the label since
-			Twice’s debut in 2015.[6][7] On the same day, the group’s official
-			YouTube account was created and the label’s official channel shared
-			a video trailer unveiling the five members.[8][9]
-			`,
+			Title:   "test",
+			Content: "beep\r\n\r\nboop\r\n\r\n",
 		})
 		l.On("GetLikes", "").Return(nil, errors.New(""))
 
