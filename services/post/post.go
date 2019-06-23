@@ -37,11 +37,42 @@ func (c *Client) GetCount() int64 {
 	resp, err := c.Provider.DescribeTable(in)
 	if err != nil {
 		// we log non-actionable errors
-		fmt.Println("DescribeTable Error:", c.TableName, err.Error())
+		log.Println("DescribeTable Error:", c.TableName, err.Error())
 		return 0
 	}
 
 	return *resp.Table.ItemCount
+}
+
+// UpdatePost
+func (c *Client) UpdatePost(
+	id,
+	cover,
+	content string,
+	created int64,
+) error {
+	key, _ := dynamodbattribute.MarshalMap(map[string]interface{}{
+		"id":      id,
+		"created": created,
+	})
+	vals, _ := dynamodbattribute.MarshalMap(map[string]interface{}{
+		":cover":   cover,
+		":content": content,
+	})
+
+	input := &dynamodb.UpdateItemInput{}
+	input.SetKey(key)
+	input.SetTableName(c.TableName)
+	input.SetUpdateExpression("SET content = :content, cover = :cover")
+	input.SetExpressionAttributeValues(vals)
+
+	_, err := c.Provider.UpdateItem(input)
+	if err != nil {
+		log.Println("UpdateItem error:", err.Error())
+		return err
+	}
+
+	return nil
 }
 
 // CreatePost creates a new post
@@ -94,12 +125,12 @@ func (c *Client) GetPost(username, id string) *Post {
 	// global secondary index
 	out, err := c.Query("", ks, fs, vals, false, 0)
 	if err != nil {
-		fmt.Println("Query error:", err.Error())
+		log.Println("Query error:", err.Error())
 		return nil
 	}
 
 	if len(out.Items) == 0 {
-		fmt.Println("Query error: Not Found")
+		log.Println("Query error: Not Found")
 		return nil
 	}
 

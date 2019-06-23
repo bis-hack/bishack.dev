@@ -11,6 +11,7 @@ import (
 	"bishack.dev/services/post"
 	"bishack.dev/services/user"
 	"bishack.dev/utils"
+	"bishack.dev/utils/session"
 	"github.com/gorilla/context"
 	"github.com/gorilla/csrf"
 )
@@ -26,6 +27,69 @@ func New(w http.ResponseWriter, r *http.Request) {
 	utils.Render(w, "main", "new-form", map[string]interface{}{
 		"Title":          "Create New Post",
 		"User":           u,
+		csrf.TemplateTag: csrf.TemplateField(r),
+	})
+}
+
+func UpdatePost(w http.ResponseWriter, r *http.Request) {
+	_ = r.ParseForm()
+
+	id := r.FormValue("id")
+	cover := r.FormValue("cover")
+	created, _ := strconv.Atoi(r.FormValue("created"))
+	content := r.FormValue("content")
+
+	ps := context.Get(r, "postService").(interface {
+		UpdatePost(string, string, string, int64) error
+	})
+
+	sess := context.Get(r, "session").(interface {
+		SetFlash(http.ResponseWriter, *http.Request, string, string)
+	})
+
+	err := ps.UpdatePost(id, cover, content, int64(created))
+	if err != nil {
+		sess.SetFlash(w, r, "error", "An error occurred. Try again.")
+	} else {
+		sess.SetFlash(w, r, "success", "Changes saved successfully!")
+	}
+
+	http.Redirect(w, r, "/edit/"+id, http.StatusSeeOther)
+}
+
+// EditPost ...
+func EditPost(w http.ResponseWriter, r *http.Request) {
+	uc := context.Get(r, "user")
+	if uc == nil {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+	u := uc.(*user.User)
+
+	ps := context.Get(r, "postService").(interface {
+		GetPost(username, id string) *post.Post
+	})
+
+	username := u.Username
+	id := r.URL.Query().Get(":id")
+
+	post := ps.GetPost(username, id)
+	if post == nil {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	sess := context.Get(r, "session").(interface {
+		GetFlash(w http.ResponseWriter, r *http.Request) *session.Flash
+	})
+
+	flash := sess.GetFlash(w, r)
+
+	utils.Render(w, "main", "edit-form", map[string]interface{}{
+		"Title":          post.Title,
+		"User":           u,
+		"Post":           post,
+		"Flash":          flash,
 		csrf.TemplateTag: csrf.TemplateField(r),
 	})
 }

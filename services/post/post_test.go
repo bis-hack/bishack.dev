@@ -24,6 +24,32 @@ func TestNew(t *testing.T) {
 	})
 }
 
+func TestUpdatePost(t *testing.T) {
+	t.Run("error", func(t *testing.T) {
+		provider := new(test.DynamoProviderMock)
+		c := New("beep", "boop", provider)
+
+		provider.On("UpdateItem", mock.MatchedBy(func(input *dynamodb.UpdateItemInput) bool {
+			return true
+		})).Return(nil, errors.New(""))
+
+		err := c.UpdatePost("test", "test", "test", int64(42))
+		assert.NotNil(t, err)
+	})
+
+	t.Run("ok", func(t *testing.T) {
+		provider := new(test.DynamoProviderMock)
+		c := New("beep", "boop", provider)
+
+		provider.On("UpdateItem", mock.MatchedBy(func(input *dynamodb.UpdateItemInput) bool {
+			return true
+		})).Return(&dynamodb.UpdateItemOutput{}, nil)
+
+		err := c.UpdatePost("test", "test", "test", int64(42))
+		assert.Nil(t, err)
+	})
+}
+
 func TestGetCount(t *testing.T) {
 	t.Run("error", func(t *testing.T) {
 		provider := new(test.DynamoProviderMock)

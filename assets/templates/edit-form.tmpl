@@ -1,0 +1,94 @@
+{{define "style"}}
+{{end}}
+{{define "script"}}
+    function enableTab(id) {
+        let el;
+        if (typeof id === 'string') {
+            el = document.getElementById(id);
+        } else {
+            el = id;
+        }
+        el.onkeydown = function(e) {
+            if (e.keyCode === 9) { // tab was pressed
+
+                // get caret position/selection
+                const val = this.value,
+                    start = this.selectionStart,
+                    end = this.selectionEnd;
+
+                // set textarea value to: text before caret + tab + text after caret
+                this.value = val.substring(0, start) + '\t' + val.substring(end);
+
+                // put caret at right position again
+                this.selectionStart = this.selectionEnd = start + 1;
+
+                // prevent the focus lose
+                return false;
+
+            }
+        };
+    }
+
+    form = document.querySelector('form#edit-form');
+    if (form) {
+        enableTab(form.content);
+        form.addEventListener('submit', (e) => {
+            const { target } = e;
+            const { title, content } = target;
+
+            // reset
+            title.style.borderBottomColor = 'blue';
+            content.style.borderBottomColor = 'blue';
+
+            if (!title.value.trim()) {
+                title.style.borderBottomColor = 'red';
+                title.focus();
+                e.preventDefault();
+                return false;
+            }
+            if (!content.value.trim()) {
+                content.style.borderBottomColor = 'red';
+                content.focus();
+                e.preventDefault();
+                return false;
+            }
+        });
+    }
+{{end}}
+{{define "content"}}
+    <div class="container">
+        <form action="/update-post" method="POST" id="edit-form" autocomplete="off">
+            {{ .csrfField }}
+            <input type="hidden" name="id" value="{{.Post.ID}}">
+            <input type="hidden" name="created" value="{{.Post.Created}}">
+            <p>
+                <input
+                    disabled
+                    type="text"
+                    name="title"
+                    value="{{.Post.Title}}"
+                    placeholder="Title"
+                    style="font-size:32px;color:black;"
+                >
+            </p>
+            <p>
+                <textarea placeholder="Use markdown to format your content" name="content" rows="20" style="background-color:white;font-size:18px;font-family:monospace;color:black">{{.Post.Content}}</textarea>
+            </p>
+            <div>
+                <div class="left" style="width:70%">
+                    <input value="{{.Post.Cover}}" name="cover" style="padding-left:0" type="text" placeholder="Enter a cover image (optional)">
+                    <br>
+                    <br>
+                </div>
+                <div class="right" style="width:30%;text-align:right">
+                    <button type="submit" class="button primary">
+                        <span style="position:relative;top:1px;margin-right:6px">✓</span>
+                        Save Changes
+                    </button>
+                    <span>&nbsp;</span>
+                    <a style="padding-top:13px;padding-bottom:13px" class="button primary" href="/{{.Post.Username}}/{{.Post.ID}}">Done</a>
+                </div>
+            </div>
+        </form>
+    </div>
+{{end}}

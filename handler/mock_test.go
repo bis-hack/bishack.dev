@@ -223,6 +223,12 @@ func (p *postMock) GetUserPosts(username string) []*post.Post {
 	return resp.([]*post.Post)
 }
 
+func (p *postMock) UpdatePost(id, cover, content string, created int64) error {
+	args := p.Called(id, cover, content, created)
+	_ = args.Get(0)
+	return args.Error(0)
+}
+
 func (p *postMock) GetPost(username, id string) *post.Post {
 	args := p.Called()
 	resp := args.Get(0)
