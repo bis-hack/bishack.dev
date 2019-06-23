@@ -172,7 +172,7 @@ func GetPost(w http.ResponseWriter, r *http.Request) {
 	if len(chunks) >= 2 {
 		description = chunks[1]
 		description = strings.Join(
-			regexp.MustCompile(`[a-zA-Z0-9\.\-\s\/\:]+`).FindAllString(description, -1),
+			regexp.MustCompile(`[a-zA-Z0-9\.\-\s\/\:,;]+`).FindAllString(description, -1),
 			" ",
 		)
 	}
