@@ -171,9 +171,8 @@ func GetPost(w http.ResponseWriter, r *http.Request) {
 	description := chunks[0]
 	if len(chunks) >= 2 {
 		description = chunks[1]
-		description = regexp.MustCompile(`https?:\/\/.+\s`).ReplaceAllString(description, "")
 		description = strings.Join(
-			regexp.MustCompile(`[a-zA-Z0-9\-\s]+`).FindAllString(description, -1),
+			regexp.MustCompile(`[a-zA-Z0-9\.\-\s\/\:]+`).FindAllString(description, -1),
 			" ",
 		)
 	}
