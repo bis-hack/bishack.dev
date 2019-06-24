@@ -370,7 +370,7 @@ button.button {
 }
 
 .container .article p code {
-  padding: 3px 12px;
+  padding: 3px;
   background-color: lightyellow;
 }
 
@@ -391,9 +391,7 @@ button.button {
 }
 
 .container .article pre {
-  padding: 32px;
-  border-left: 0;
-  border-right: 0;
+  padding: 64px;
   margin-left: -64px;
   margin-right: -64px;
   overflow: visible;
@@ -401,9 +399,17 @@ button.button {
   word-wrap: break-word;
   white-space: pre-wrap;
   position: relative;
+  overflow: scroll;
+  background-color: rgba(237, 255, 0, 0.04);
+  border-bottom: 1px solid rgba(237, 255, 0, 0.9);
+  border-top: 1px solid rgba(237, 255, 0, 0.9);
+  color: #000000;
+  letter-spacing: 1px;
+  font-size: 16px;
 }
 .container .article pre code {
   tab-size: 2em;
+  line-height: 1.8em;
 }
 
 .container .article ul, .container .article ol {
