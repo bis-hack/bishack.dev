@@ -4,13 +4,13 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
-	"net/url"
 	"regexp"
 	"testing"
 
 	"bishack.dev/services/like"
 	"bishack.dev/services/post"
 	"bishack.dev/services/user"
+	cip "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 	"github.com/gorilla/context"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -104,7 +104,7 @@ func TestGetUserPosts(t *testing.T) {
 	})
 }
 
-func TestUserProfileForm(t *testing.T) {
+func TestProfile(t *testing.T) {
 	t.Run("User nil", func(t *testing.T) {
 
 		s := new(sessionMock)
@@ -120,7 +120,7 @@ func TestUserProfileForm(t *testing.T) {
 			return true
 		})).Return(nil)
 
-		UpdateProfileForm(w, r)
+		Profile(w, r)
 
 		assert.Equal(t, http.StatusSeeOther, w.Code)
 	})
@@ -141,14 +141,14 @@ func TestUserProfileForm(t *testing.T) {
 			return true
 		})).Return(nil)
 
-		UpdateProfileForm(w, r)
+		Profile(w, r)
 
 		assert.Equal(t, http.StatusOK, w.Code)
 	})
 }
 
-func TestUserUpdate(t *testing.T) {
-	t.Run("User is nil", func(t *testing.T) {
+func TestUpdateProfile(t *testing.T) {
+	t.Run("user nil", func(t *testing.T) {
 		s := new(sessionMock)
 
 		w := httptest.NewRecorder()
@@ -160,36 +160,12 @@ func TestUserUpdate(t *testing.T) {
 			return true
 		})).Return(nil)
 
-		UserUpdate(w, r)
+		UpdateProfile(w, r)
 
 		assert.Equal(t, http.StatusSeeOther, w.Code)
 	})
 
-	t.Run("Email is empty", func(t *testing.T) {
-		s := new(sessionMock)
-
-		w := httptest.NewRecorder()
-		r, _ := http.NewRequest(http.MethodPost, "/update", nil)
-
-		context.Set(r, "session", s)
-
-		s.On("GetUser", mock.MatchedBy(func(r *http.Request) bool {
-			return true
-		})).Return(map[string]string{})
-
-		s.On("SetFlash", mock.MatchedBy(func(w http.ResponseWriter) bool {
-			return true
-		}), mock.MatchedBy(func(r *http.Request) bool {
-			return true
-		}), "error", "Email is required")
-
-		UserUpdate(w, r)
-
-		assert.Equal(t, http.StatusSeeOther, w.Code)
-		s.AssertExpectations(t)
-	})
-
-	t.Run("User update error", func(t *testing.T) {
+	t.Run("error", func(t *testing.T) {
 		s := new(sessionMock)
 		u := new(userServiceMock)
 
@@ -199,36 +175,26 @@ func TestUserUpdate(t *testing.T) {
 		context.Set(r, "session", s)
 		context.Set(r, "userService", u)
 
-		form := url.Values{}
-		form.Set("email", "test@mailinator.com")
-
-		r.Form = form
-
-		u.On("GetUser")
-
-		um := map[string]string{
-			"token": "test",
-		}
-
 		s.On("GetUser", mock.MatchedBy(func(r *http.Request) bool {
 			return true
-		})).Return(um)
-
-		u.On("UpdateUser", um["token"], um).Return(nil, errors.New(""))
-
+		})).Return(map[string]string{
+			"token": "test",
+		})
+		u.On("UpdateUser", "test", mock.MatchedBy(func(args map[string]string) bool {
+			return true
+		})).Return(nil, errors.New("Invalid Token"))
 		s.On("SetFlash", mock.MatchedBy(func(w http.ResponseWriter) bool {
 			return true
 		}), mock.MatchedBy(func(r *http.Request) bool {
 			return true
-		}), "error", "Email is required")
+		}), "error", "Invalid Token")
 
-		UserUpdate(w, r)
+		UpdateProfile(w, r)
 
 		assert.Equal(t, http.StatusSeeOther, w.Code)
-		s.AssertExpectations(t)
 	})
 
-	t.Run("User update ok", func(t *testing.T) {
+	t.Run("ok", func(t *testing.T) {
 		s := new(sessionMock)
 		u := new(userServiceMock)
 
@@ -238,32 +204,22 @@ func TestUserUpdate(t *testing.T) {
 		context.Set(r, "session", s)
 		context.Set(r, "userService", u)
 
-		form := url.Values{}
-		form.Set("email", "test@mailinator.com")
-
-		r.Form = form
-
-		u.On("GetUser")
-
-		um := map[string]string{
-			"token": "test",
-		}
-
 		s.On("GetUser", mock.MatchedBy(func(r *http.Request) bool {
 			return true
-		})).Return(um)
-
-		u.On("UpdateUser", um["token"], um).Return(nil, nil)
-
+		})).Return(map[string]string{
+			"token": "test",
+		})
+		u.On("UpdateUser", "test", mock.MatchedBy(func(args map[string]string) bool {
+			return true
+		})).Return(&cip.UpdateUserAttributesOutput{}, nil)
 		s.On("SetFlash", mock.MatchedBy(func(w http.ResponseWriter) bool {
 			return true
 		}), mock.MatchedBy(func(r *http.Request) bool {
 			return true
-		}), "success", "Email Successfully Updated")
+		}), "success", "Profile Updated")
 
-		UserUpdate(w, r)
+		UpdateProfile(w, r)
 
 		assert.Equal(t, http.StatusSeeOther, w.Code)
-		s.AssertExpectations(t)
 	})
 }

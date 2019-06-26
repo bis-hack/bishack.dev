@@ -75,8 +75,8 @@ func GetUserPosts(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// UpdateProfileForm ...
-func UpdateProfileForm(w http.ResponseWriter, r *http.Request) {
+// Profile ...
+func Profile(w http.ResponseWriter, r *http.Request) {
 
 	sess := context.Get(r, "session").(interface {
 		GetFlash(w http.ResponseWriter, r *http.Request) *session.Flash
@@ -98,8 +98,8 @@ func UpdateProfileForm(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// UserUpdate ...
-func UserUpdate(w http.ResponseWriter, r *http.Request) {
+// UpdateProfile ...
+func UpdateProfile(w http.ResponseWriter, r *http.Request) {
 	sess := context.Get(r, "session").(interface {
 		SetFlash(w http.ResponseWriter, r *http.Request, t, v string)
 		GetUser(r *http.Request) map[string]string
@@ -111,29 +111,25 @@ func UserUpdate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token := su["token"]
 	_ = r.ParseForm()
 
-	email := r.Form.Get("email")
-
-	if email == "" {
-		sess.SetFlash(w, r, "error", "Email is required")
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-		return
-	}
-
-	su["email"] = email
+	args := map[string]string{}
+	args["name"] = r.FormValue("name")
+	args["locale"] = r.FormValue("locale")
+	args["profile"] = r.FormValue("profile")
+	args["website"] = r.FormValue("website")
 
 	us := context.Get(r, "userService").(interface {
 		UpdateUser(token string, attrs map[string]string) (*cip.UpdateUserAttributesOutput, error)
 	})
 
-	if _, err := us.UpdateUser(token, su); err != nil {
-		sess.SetFlash(w, r, "error", "Email is required")
+	token := su["token"]
+	if _, err := us.UpdateUser(token, args); err != nil {
+		sess.SetFlash(w, r, "error", err.Error())
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 
-	sess.SetFlash(w, r, "success", "Email Successfully Updated")
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	sess.SetFlash(w, r, "success", "Profile Updated")
+	http.Redirect(w, r, "/profile", http.StatusSeeOther)
 }
