@@ -1,4 +1,10 @@
 {{define "style"}}
+input {
+    background-color: rgba(255,255,255,0);
+}
+textarea {
+    background-color: #fffff0 !important;
+}
 {{end}}
 {{define "script"}}
     function enableTab(id) {
@@ -38,7 +44,6 @@
 
             // reset
             title.style.borderBottomColor = 'blue';
-            content.style.borderBottomColor = 'blue';
 
             if (!title.value.trim()) {
                 title.style.borderBottomColor = 'red';
@@ -46,6 +51,8 @@
                 e.preventDefault();
                 return false;
             }
+
+            content.style.borderBottomColor = 'blue';
             if (!content.value.trim()) {
                 content.style.borderBottomColor = 'red';
                 content.focus();

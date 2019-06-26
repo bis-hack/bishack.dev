@@ -145,7 +145,7 @@ func newUserFromAttributes(attrs []*cip.AttributeType) *User {
 	user.Bio = am["profile"]
 	user.Name = am["name"]
 	user.Email = am["email"]
-	user.Country = am["locale"]
+	user.Location = am["locale"]
 	user.Website = am["website"]
 	user.Picture = am["picture"]
 	user.Username = am["nickname"]

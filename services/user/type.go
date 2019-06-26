@@ -25,7 +25,7 @@ type User struct {
 	Bio      string
 	Name     string
 	Email    string
-	Country  string
+	Location string
 	Website  string
 	Picture  string
 	Username string

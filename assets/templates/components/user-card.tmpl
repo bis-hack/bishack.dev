@@ -10,7 +10,7 @@
     {{if .Bio}}
     <p style="text-align:center;margin:32px auto"><code style="opacity:0.8">{{.Bio}}</code></p>
     {{end}}
-    {{if .Country}}
+    {{if .Location}}
     <p>
         <svg width="20px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
              viewBox="0 0 477 477" style="enable-background:new 0 0 477 477;" xml:space="preserve">
@@ -28,7 +28,7 @@
             </g>
         </g>
         </svg>
-        <span style="position:relative;top:-4px;left:12px">{{.Country}}</span>
+        <span style="position:relative;top:-4px;left:12px">{{.Location}}</span>
     </p>
     {{end}}
     {{if .Website}}
