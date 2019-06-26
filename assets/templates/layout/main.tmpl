@@ -16,8 +16,12 @@
     </style>
     <script>
         {{template "axios.js" .}}
-        {{template "main.js" .}}
-        {{template "script" .}}
+        window.onload = () => {
+            if (document.readyState === 'complete') {
+                {{template "main.js" .}}
+                {{template "script" .}}
+            }
+        };
     </script>
 </head>
 
