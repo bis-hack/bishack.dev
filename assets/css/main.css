@@ -436,3 +436,27 @@ svg.new path {
 svg.new-reverse path {
   fill: white;
 }
+
+input.new-form-title {
+  font-size:32px;
+  padding-left:0;
+  padding-right:0;
+  color:black;
+  background-color: rgba(1,1,1,0);
+}
+textarea.new-form {
+  background-color: #fffff0 !important;
+  font-size:18px;
+  font-family:monospace;
+  color:black;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin-bottom: 128px;
+  margin-top: 195px;
+}
+div.new-form-footer {
+  position: absolute;
+  width: 100%;
+  bottom: 34px;
+}

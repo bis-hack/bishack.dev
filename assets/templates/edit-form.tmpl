@@ -1,10 +1,4 @@
 {{define "style"}}
-input {
-    background-color: rgba(255,255,255,0);
-}
-textarea {
-    background-color: #fffff0 !important;
-}
 {{end}}
 {{define "script"}}
     function enableTab(id) {
@@ -78,21 +72,21 @@ textarea {
                 >
             </p>
             <p>
-                <textarea placeholder="Use markdown to format your content" name="content" rows="20" style="background-color:white;font-size:18px;font-family:monospace;color:black">{{.Post.Content}}</textarea>
+                <textarea placeholder="Use markdown to format your content" name="content" rows="20" class="new-form">{{.Post.Content}}</textarea>
             </p>
-            <div>
-                <div class="left" style="width:70%">
-                    <input value="{{.Post.Cover}}" name="cover" style="padding-left:0" type="text" placeholder="Enter a cover image (optional)">
+            <div class="new-form-footer">
+                <div class="left" style="width:60%">
+                    <input style="background-color:rgba(1,1,1,0);padding-left:0;padding-right:0" value="{{.Post.Cover}}" name="cover" style="padding-left:0" type="text" placeholder="Enter a cover image (optional)">
                     <br>
                     <br>
                 </div>
-                <div class="right" style="width:30%;text-align:right">
-                    <button type="submit" class="button primary">
+                <div class="right" style="width:40%;text-align:right">
+                    <a style="font-weight:bold;padding-top:13px;padding-bottom:13px" href="/{{.Post.Username}}/{{.Post.ID}}">DONE EDITING</a>
+                    <span class="div">|</span>
+                    <button type="submit" class="button success">
                         <span style="position:relative;top:1px;margin-right:6px">✓</span>
                         Save Changes
                     </button>
-                    <span>&nbsp;</span>
-                    <a style="padding-top:13px;padding-bottom:13px" class="button primary" href="/{{.Post.Username}}/{{.Post.ID}}">Done</a>
                 </div>
             </div>
         </form>

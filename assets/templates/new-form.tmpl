@@ -1,10 +1,4 @@
 {{define "style"}}
-input {
-    background-color: rgba(255,255,255,0);
-}
-textarea {
-    background-color: #fffff0 !important;
-}
 {{end}}
 {{define "script"}}
     function enableTab(id) {
@@ -75,20 +69,20 @@ textarea {
                     type="text"
                     name="title"
                     placeholder="Title"
-                    style="font-size:32px;padding-left:0;padding-right:0;color:black;"
+                    class="new-form-title"
                 >
             </p>
             <p>
-                <textarea placeholder="Use markdown to format your content" name="content" rows="20" style="background-color:white;font-size:18px;font-family:monospace;color:black"></textarea>
+                <textarea placeholder="Use markdown to format your content" name="content" rows="20" class="new-form"></textarea>
             </p>
-            <div>
+            <div class="new-form-footer">
                 <div class="left" style="width:80%">
-                    <input name="cover" style="padding-left:0" type="text" placeholder="Enter a cover image (optional)">
+                    <input style="background-color:rgba(1,1,1,0);padding-left:0;padding-right:0" name="cover" type="text" placeholder="Enter a cover image (optional)">
                     <br>
                     <br>
                 </div>
                 <div class="right" style="width:20%;text-align:right">
-                    <button type="submit" class="button primary">
+                    <button type="submit" class="button success">
                         <span style="position:relative;top:1px;margin-right:6px">✓</span>
                         Publish Now
                     </button>
