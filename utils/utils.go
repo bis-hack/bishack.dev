@@ -15,7 +15,7 @@ const (
 )
 
 func md(input string) template.HTML {
-	md := markdown.New()
+	md := markdown.New(markdown.Linkify(false))
 	out := template.HTML(md.RenderToString(
 		[]byte(input),
 	))
