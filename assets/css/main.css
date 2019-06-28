@@ -396,14 +396,12 @@ button.button {
   margin-right: -64px;
   overflow: visible;
   margin-bottom: 2em;
-  word-wrap: break-word;
-  white-space: pre-wrap;
   position: relative;
   overflow: scroll;
-  background-color: rgba(237, 255, 0, 0.04);
+  background-color: #000000;
   border-bottom: 1px solid rgba(237, 255, 0, 0.9);
   border-top: 1px solid rgba(237, 255, 0, 0.9);
-  color: #000000;
+  color: #CCCCCC;
   letter-spacing: 1px;
   font-size: 16px;
 }
