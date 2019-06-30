@@ -45,6 +45,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 			}
 
 			p.LikesCount = int64(len(results))
+			p.ReadingTime = computeReadingTime(p.Content)
 		}(p)
 	}
 	wg.Wait()
