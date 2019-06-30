@@ -2,6 +2,24 @@
 {{end}}
 {{define "script"}}
     const form = document.querySelector('form#profile-form');
+    const charsCount = document.querySelector('strong.chars');
+
+    // set char count
+    const setCount = () => {
+        if (!charsCount || !form.profile) return;
+        const count = form.profile.value.length;
+        charsCount.innerText = Math.max(0, Math.abs(count - 128));
+    };
+
+    form.profile.addEventListener('keydown', (e) => {
+        const target = e.target;
+        if (target.value.length > 128 && e.keyCode !== 8) {
+            e.preventDefault();
+            return false;
+        }
+        setCount();
+    });
+
     form && form.addEventListener('submit', (e) => {
         const nm = e.target.name;
         const name = nm.value.trim();
@@ -24,16 +42,17 @@
             return false;
         }
     });
+
+    setCount();
 {{end}}
 {{define "content"}}
     <div class="container">
         <div class="profile">
             <div style="margin-right:24px;">
-                <p>
-                    <img width="100%" src="{{.User.Picture}}" alt="pic">
+                <p style="text-align:center">
+                    <img style="border-radius:10000px"width="200px;margin:0 auto" src="{{.User.Picture}}" alt="pic">
                 </p>
                 <p>
-                    <button class="button full" disabled>Upload Picture</button>
                 </p>
             </div>
         </div>
@@ -48,6 +67,7 @@
                 <p>
                     <label for="profile" style="font-weight:bold;display:inline-block;margin-bottom:12px">Bio</label>
                     <textarea placeholder="Make it as bitchin' as possible" name="profile"/>{{.User.Bio}}</textarea>
+                    <br><small style="color: blue"><strong class="chars">128</strong> characters left</small>
                 </p>
                 <br>
                 <p>

@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"log"
+	"math"
 	"net/http"
 	"sync"
 
@@ -116,7 +117,8 @@ func UpdateProfile(w http.ResponseWriter, r *http.Request) {
 	args := map[string]string{}
 	args["name"] = r.FormValue("name")
 	args["locale"] = r.FormValue("locale")
-	args["profile"] = r.FormValue("profile")
+	profile := r.FormValue("profile")
+	args["profile"] = profile[:int(math.Min(128, float64(len(profile))))] // Maximum of 128 chars
 	args["website"] = r.FormValue("website")
 
 	us := context.Get(r, "userService").(interface {
