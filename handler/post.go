@@ -102,14 +102,16 @@ func CreatePost(w http.ResponseWriter, r *http.Request) {
 
 	// cast to int
 	publish, _ := strconv.Atoi(r.PostForm.Get("publish"))
+	content := r.PostForm.Get("content")
 	attr["publish"] = publish
 
 	attr["title"] = r.PostForm.Get("title")
 	attr["cover"] = r.PostForm.Get("cover")
 	attr["author"] = r.PostForm.Get("author")
-	attr["content"] = r.PostForm.Get("content")
+	attr["content"] = content
 	attr["userPic"] = r.PostForm.Get("userPic")
 	attr["username"] = r.PostForm.Get("username")
+	attr["readingTime"] = computeReadingTime(content)
 
 	ps := context.Get(r, "postService").(interface {
 		CreatePost(params map[string]interface{}) *post.Post
@@ -143,6 +145,8 @@ func GetPost(w http.ResponseWriter, r *http.Request) {
 
 		return
 	}
+
+	post.ReadingTime = computeReadingTime(post.Content)
 
 	ls := context.Get(r, "likeService").(interface {
 		GetLike(id, username string) (*like.Like, error)
@@ -210,4 +214,11 @@ func ToggleLike(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Fprintln(w, "ok")
+}
+
+func computeReadingTime(content string) int {
+	const avgWPM = 265 // 265 wpm
+	wordCount := len(content)
+
+	return wordCount / avgWPM
 }
