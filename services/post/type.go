@@ -12,6 +12,7 @@ type Post struct {
 	Publish       int
 	UserPic       string
 	Content       string
+	ReadingTime   int
 	LikesCount    int64
 	CommentsCount int64
 }
