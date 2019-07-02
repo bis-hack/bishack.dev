@@ -13,40 +13,25 @@ import (
 )
 
 func TestSessionUserMw(t *testing.T) {
-	t.Run("session not found", func(t *testing.T) {
-		s := new(sessionMock)
-
+	t.Run("token not found", func(t *testing.T) {
 		w := httptest.NewRecorder()
-		r, _ := http.NewRequest(http.MethodGet, "/signup", nil)
-
-		context.Set(r, "session", s)
-		s.On("GetUser", mock.MatchedBy(func(r *http.Request) bool {
-			return true
-		})).Return(nil)
+		r, _ := http.NewRequest(http.MethodGet, "/", nil)
 
 		SessionUser(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		})).ServeHTTP(w, r)
 
 		u := context.Get(r, "user")
 		assert.Nil(t, u)
-		s.AssertExpectations(t)
 	})
 
 	t.Run("error account details", func(t *testing.T) {
 		u := new(userServiceMock)
-		s := new(sessionMock)
 
 		w := httptest.NewRecorder()
-		r, _ := http.NewRequest(http.MethodGet, "/signup", nil)
+		r, _ := http.NewRequest(http.MethodGet, "/", nil)
 
-		context.Set(r, "session", s)
 		context.Set(r, "userService", u)
-
-		s.On("GetUser", mock.MatchedBy(func(r *http.Request) bool {
-			return true
-		})).Return(map[string]string{
-			"token": "test",
-		})
+		context.Set(r, "token", "test")
 
 		u.On("AccountDetails", "test").Return(nil, errors.New(""))
 
@@ -56,24 +41,16 @@ func TestSessionUserMw(t *testing.T) {
 		user := context.Get(r, "user")
 		assert.Nil(t, user)
 		u.AssertExpectations(t)
-		s.AssertExpectations(t)
 	})
 
 	t.Run("ok", func(t *testing.T) {
 		u := new(userServiceMock)
-		s := new(sessionMock)
 
 		w := httptest.NewRecorder()
-		r, _ := http.NewRequest(http.MethodGet, "/signup", nil)
+		r, _ := http.NewRequest(http.MethodGet, "/", nil)
 
-		context.Set(r, "session", s)
 		context.Set(r, "userService", u)
-
-		s.On("GetUser", mock.MatchedBy(func(r *http.Request) bool {
-			return true
-		})).Return(map[string]string{
-			"token": "test",
-		})
+		context.Set(r, "token", "test")
 
 		resp := &user.User{}
 		u.On("AccountDetails", "test").Return(resp, nil)
@@ -84,6 +61,76 @@ func TestSessionUserMw(t *testing.T) {
 		user := context.Get(r, "user")
 		assert.NotNil(t, user)
 		u.AssertExpectations(t)
-		s.AssertExpectations(t)
+	})
+}
+
+func TestTokenMw(t *testing.T) {
+	t.Run("session user not found", func(t *testing.T) {
+		s := new(sessionMock)
+
+		w := httptest.NewRecorder()
+		r, _ := http.NewRequest(http.MethodGet, "/", nil)
+
+		context.Set(r, "session", s)
+
+		s.On("GetUser", mock.MatchedBy(func(r *http.Request) bool {
+			return true
+		})).Return(nil)
+
+		Token(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		})).ServeHTTP(w, r)
+
+		token := context.Get(r, "token")
+		assert.Nil(t, token)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		s := new(sessionMock)
+		u := new(userServiceMock)
+
+		w := httptest.NewRecorder()
+		r, _ := http.NewRequest(http.MethodGet, "/", nil)
+
+		context.Set(r, "session", s)
+		context.Set(r, "userService", u)
+
+		s.On("GetUser", mock.MatchedBy(func(r *http.Request) bool {
+			return true
+		})).Return(map[string]string{
+			"username": "test",
+			"token":    "test",
+		})
+		u.On("GetToken", "test", "test").Return("", errors.New(""))
+
+		Token(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		})).ServeHTTP(w, r)
+
+		token := context.Get(r, "token")
+		assert.Nil(t, token)
+	})
+
+	t.Run("ok", func(t *testing.T) {
+		s := new(sessionMock)
+		u := new(userServiceMock)
+
+		w := httptest.NewRecorder()
+		r, _ := http.NewRequest(http.MethodGet, "/", nil)
+
+		context.Set(r, "session", s)
+		context.Set(r, "userService", u)
+
+		s.On("GetUser", mock.MatchedBy(func(r *http.Request) bool {
+			return true
+		})).Return(map[string]string{
+			"username": "test",
+			"token":    "test",
+		})
+		u.On("GetToken", "test", "test").Return("test", nil)
+
+		Token(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		})).ServeHTTP(w, r)
+
+		token := context.Get(r, "token")
+		assert.Equal(t, "test", token.(string))
 	})
 }

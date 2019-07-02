@@ -16,12 +16,8 @@ func SessionUser(h http.Handler) http.Handler {
 			h.ServeHTTP(w, r)
 		}()
 
-		ss := context.Get(r, "session").(interface {
-			GetUser(r *http.Request) map[string]string
-		})
-
-		su := ss.GetUser(r)
-		if su == nil {
+		token := context.Get(r, "token")
+		if token == nil {
 			return
 		}
 
@@ -29,13 +25,45 @@ func SessionUser(h http.Handler) http.Handler {
 			AccountDetails(token string) *user.User
 		})
 
-		token := su["token"]
-
-		user := u.AccountDetails(token)
+		user := u.AccountDetails(token.(string))
 		if user == nil {
 			return
 		}
 
 		context.Set(r, "user", user)
+	})
+}
+
+// Token queries Cognito for a fresh access token from the refresh token
+// that is saved under the user session.
+// Main reason for this decision is to solve Cognito's short-lived session
+// lifespan.
+func Token(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		defer func() {
+			h.ServeHTTP(w, r)
+		}()
+
+		ses := context.Get(r, "session").(interface {
+			GetUser(r *http.Request) map[string]string
+		})
+
+		su := ses.GetUser(r)
+		if su == nil {
+			return
+		}
+
+		us := context.Get(r, "userService").(interface {
+			GetToken(string, string) (string, error)
+		})
+
+		username := su["username"]
+		token := su["token"]
+		accessToken, err := us.GetToken(username, token)
+		if err != nil {
+			return
+		}
+
+		context.Set(r, "token", accessToken)
 	})
 }

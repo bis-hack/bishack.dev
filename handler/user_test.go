@@ -149,16 +149,8 @@ func TestProfile(t *testing.T) {
 
 func TestUpdateProfile(t *testing.T) {
 	t.Run("user nil", func(t *testing.T) {
-		s := new(sessionMock)
-
 		w := httptest.NewRecorder()
 		r, _ := http.NewRequest(http.MethodPost, "/update", nil)
-
-		context.Set(r, "session", s)
-
-		s.On("GetUser", mock.MatchedBy(func(r *http.Request) bool {
-			return true
-		})).Return(nil)
 
 		UpdateProfile(w, r)
 
@@ -172,14 +164,10 @@ func TestUpdateProfile(t *testing.T) {
 		w := httptest.NewRecorder()
 		r, _ := http.NewRequest(http.MethodPost, "/update", nil)
 
+		context.Set(r, "token", "test")
 		context.Set(r, "session", s)
 		context.Set(r, "userService", u)
 
-		s.On("GetUser", mock.MatchedBy(func(r *http.Request) bool {
-			return true
-		})).Return(map[string]string{
-			"token": "test",
-		})
 		u.On("UpdateUser", "test", mock.MatchedBy(func(args map[string]string) bool {
 			return true
 		})).Return(nil, errors.New("Invalid Token"))
@@ -201,14 +189,10 @@ func TestUpdateProfile(t *testing.T) {
 		w := httptest.NewRecorder()
 		r, _ := http.NewRequest(http.MethodPost, "/update", nil)
 
+		context.Set(r, "token", "test")
 		context.Set(r, "session", s)
 		context.Set(r, "userService", u)
 
-		s.On("GetUser", mock.MatchedBy(func(r *http.Request) bool {
-			return true
-		})).Return(map[string]string{
-			"token": "test",
-		})
 		u.On("UpdateUser", "test", mock.MatchedBy(func(args map[string]string) bool {
 			return true
 		})).Return(&cip.UpdateUserAttributesOutput{}, nil)

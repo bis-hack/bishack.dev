@@ -83,7 +83,7 @@ func TestLogin(t *testing.T) {
 		context.Set(r, "session", s)
 
 		result := &cip.AuthenticationResultType{}
-		result.SetAccessToken("test")
+		result.SetRefreshToken("test")
 		out := &cip.InitiateAuthOutput{}
 		out.SetAuthenticationResult(result)
 

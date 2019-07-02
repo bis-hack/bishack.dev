@@ -22,6 +22,11 @@ func (o *userServiceMock) AccountDetails(token string) *user.User {
 	return resp.(*user.User)
 }
 
+func (o *userServiceMock) GetToken(username, token string) (string, error) {
+	args := o.Called(username, token)
+	return args.String(0), args.Error(1)
+}
+
 type sessionMock struct {
 	mock.Mock
 }
