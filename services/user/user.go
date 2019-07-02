@@ -10,6 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	cip "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
+	"github.com/pkg/errors"
 )
 
 // New creates a new instance of Client
@@ -75,6 +76,30 @@ func (c *Client) Login(
 	})
 
 	return c.Provider.InitiateAuth(input)
+}
+
+// GetToken ...
+func (c *Client) GetToken(
+	username,
+	token string,
+) (string, error) {
+	input := &cip.InitiateAuthInput{}
+
+	input.SetClientId(c.ClientID)
+
+	secretHash := hash(username, c.ClientID, c.ClientSecret)
+	input.SetAuthFlow(cip.AuthFlowTypeRefreshToken)
+	input.SetAuthParameters(map[string]*string{
+		"REFRESH_TOKEN": &token,
+		"SECRET_HASH":   &secretHash,
+	})
+
+	out, err := c.Provider.InitiateAuth(input)
+	if err != nil {
+		return "", errors.Wrap(err, "InitiateAuth")
+	}
+
+	return *out.AuthenticationResult.AccessToken, nil
 }
 
 // AccountDetails ...

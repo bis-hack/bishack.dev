@@ -238,7 +238,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token := out.AuthenticationResult.AccessToken
+	token := out.AuthenticationResult.RefreshToken
 
 	sess.SetUser(w, r, username, *token)
 	sess.SetFlash(w, r, "success", "Welcome Back!")

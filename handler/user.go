@@ -101,13 +101,8 @@ func Profile(w http.ResponseWriter, r *http.Request) {
 
 // UpdateProfile ...
 func UpdateProfile(w http.ResponseWriter, r *http.Request) {
-	sess := context.Get(r, "session").(interface {
-		SetFlash(w http.ResponseWriter, r *http.Request, t, v string)
-		GetUser(r *http.Request) map[string]string
-	})
-
-	su := sess.GetUser(r)
-	if su == nil {
+	token := context.Get(r, "token")
+	if token == nil {
 		http.Redirect(w, r, "/login", http.StatusSeeOther)
 		return
 	}
@@ -121,12 +116,15 @@ func UpdateProfile(w http.ResponseWriter, r *http.Request) {
 	args["profile"] = profile[:int(math.Min(128, float64(len(profile))))] // Maximum of 128 chars
 	args["website"] = r.FormValue("website")
 
+	sess := context.Get(r, "session").(interface {
+		SetFlash(w http.ResponseWriter, r *http.Request, t, v string)
+	})
+
 	us := context.Get(r, "userService").(interface {
 		UpdateUser(token string, attrs map[string]string) (*cip.UpdateUserAttributesOutput, error)
 	})
 
-	token := su["token"]
-	if _, err := us.UpdateUser(token, args); err != nil {
+	if _, err := us.UpdateUser(token.(string), args); err != nil {
 		sess.SetFlash(w, r, "error", err.Error())
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return

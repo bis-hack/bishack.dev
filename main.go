@@ -87,6 +87,6 @@ func main() {
 	port := ":" + os.Getenv("PORT")
 	log.Fatal(http.ListenAndServe(
 		port,
-		protect(mw.Context(mw.SessionUser(mw.AuthRedirects(r)))),
+		protect(mw.Context(mw.Token(mw.SessionUser(mw.AuthRedirects(r))))),
 	))
 }

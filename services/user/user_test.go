@@ -171,6 +171,49 @@ func TestLogin(t *testing.T) {
 	})
 }
 
+func TestGetToken(t *testing.T) {
+	t.Run("error", func(t *testing.T) {
+		to := new(MockedUserService)
+		client := New("id", "secret")
+		client.Provider = to
+
+		to.On(
+			"InitiateAuth",
+			mock.MatchedBy(func(in *cip.InitiateAuthInput) bool {
+				return true
+			}),
+		).Return(nil, errors.New(""))
+
+		token, err := client.GetToken("test", "ing")
+
+		assert.NotNil(t, err)
+		assert.Equal(t, "", token)
+		to.AssertExpectations(t)
+	})
+
+	t.Run("ok", func(t *testing.T) {
+		to := new(MockedUserService)
+		client := New("id", "secret")
+		client.Provider = to
+		to.On(
+			"InitiateAuth",
+			mock.MatchedBy(func(in *cip.InitiateAuthInput) bool {
+				return true
+			}),
+		).Return(&cip.InitiateAuthOutput{
+			AuthenticationResult: &cip.AuthenticationResultType{
+				AccessToken: aws.String("testing"),
+			},
+		}, nil)
+
+		token, err := client.GetToken("test", "ing")
+
+		assert.Nil(t, err)
+		assert.Equal(t, "testing", token)
+		to.AssertExpectations(t)
+	})
+}
+
 func TestUpdateUserAttributes(t *testing.T) {
 	t.Run("valid token", func(t *testing.T) {
 		to := new(MockedUserService)
