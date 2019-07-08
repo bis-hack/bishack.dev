@@ -398,10 +398,10 @@ button.button {
   margin-bottom: 2em;
   position: relative;
   overflow: scroll;
-  background-color: #000000;
-  border-bottom: 1px solid rgba(237, 255, 0, 0.9);
-  border-top: 1px solid rgba(237, 255, 0, 0.9);
-  color: #CCCCCC;
+  background-color: rgba(255,255,224, 0.8);
+  border-top: 1px solid #ffd7005c;
+  border-bottom: 1px solid #ffd7005c;
+  color: #000000;
   letter-spacing: 1px;
   font-size: 16px;
 }
