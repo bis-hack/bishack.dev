@@ -54,7 +54,9 @@ func (p *DynamoProviderMock) UpdateItem(input *dynamodb.UpdateItemInput) (
 }
 
 // DeleteItem ...
-func (p *DynamoProviderMock) DeleteItem(input *dynamodb.DeleteItemInput) (*dynamodb.DeleteItemOutput, error) {
+func (p *DynamoProviderMock) DeleteItem(
+	input *dynamodb.DeleteItemInput,
+) (*dynamodb.DeleteItemOutput, error) {
 	args := p.Called(input)
 
 	resp := args.Get(0)
@@ -66,7 +68,9 @@ func (p *DynamoProviderMock) DeleteItem(input *dynamodb.DeleteItemInput) (*dynam
 }
 
 // Query ...
-func (p *DynamoProviderMock) Query(input *dynamodb.QueryInput) (*dynamodb.QueryOutput, error) {
+func (p *DynamoProviderMock) Query(
+	input *dynamodb.QueryInput,
+) (*dynamodb.QueryOutput, error) {
 	args := p.Called(input)
 
 	resp := args.Get(0)
@@ -78,7 +82,9 @@ func (p *DynamoProviderMock) Query(input *dynamodb.QueryInput) (*dynamodb.QueryO
 }
 
 // DescribeTable ...
-func (p *DynamoProviderMock) DescribeTable(input *dynamodb.DescribeTableInput) (*dynamodb.DescribeTableOutput, error) {
+func (p *DynamoProviderMock) DescribeTable(
+	input *dynamodb.DescribeTableInput,
+) (*dynamodb.DescribeTableOutput, error) {
 	args := p.Called(input)
 
 	resp := args.Get(0)
