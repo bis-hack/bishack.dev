@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"log"
 	"math"
 	"net/http"
@@ -66,13 +65,14 @@ func GetUserPosts(w http.ResponseWriter, r *http.Request) {
 	}
 	wg.Wait()
 
-	title := fmt.Sprintf("%s's Posts", user.Name)
 	utils.Render(w, "main", "user-page", map[string]interface{}{
-		"Title":  title,
-		"Flash":  sess.GetFlash(w, r),
-		"Posts":  posts,
-		"Author": user,
-		"User":   context.Get(r, "user"),
+		"Title":       user.Name,
+		"Description": user.Bio,
+		"Cover":       user.Picture,
+		"Flash":       sess.GetFlash(w, r),
+		"Posts":       posts,
+		"Author":      user,
+		"User":        context.Get(r, "user"),
 	})
 }
 

@@ -42,15 +42,15 @@ func (o *userServiceMock) Signup(
 	return resp.(*cip.SignUpOutput), args.Error(1)
 }
 
-func (o *userServiceMock) AccountDetails(token string) (*cip.GetUserOutput, error) {
+func (o *userServiceMock) AccountDetails(token string) *user.User {
 	args := o.Called(token)
 
 	resp := args.Get(0)
 	if resp == nil {
-		return nil, args.Error(1)
+		return nil
 	}
 
-	return resp.(*cip.GetUserOutput), args.Error(1)
+	return resp.(*user.User)
 }
 
 func (o *userServiceMock) UpdateUser(token string, attrs map[string]string) (*cip.UpdateUserAttributesOutput, error) {

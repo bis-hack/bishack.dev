@@ -10,8 +10,10 @@ import (
 	"regexp"
 	"testing"
 
+	"bishack.dev/services/user"
 	_ "bishack.dev/testing"
 	"bishack.dev/utils/session"
+	"github.com/aws/aws-sdk-go/aws"
 	cip "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 	"github.com/gorilla/context"
 	"github.com/stretchr/testify/assert"
@@ -67,6 +69,44 @@ func TestLogin(t *testing.T) {
 		s.AssertExpectations(t)
 	})
 
+	t.Run("login invalid token", func(t *testing.T) {
+		m := new(userServiceMock)
+		s := new(sessionMock)
+
+		w := httptest.NewRecorder()
+		r, _ := http.NewRequest(http.MethodPost, "/login", nil)
+
+		form := url.Values{}
+		form.Add("username", "test")
+		form.Add("password", "test")
+		r.PostForm = form
+
+		context.Set(r, "userService", m)
+		context.Set(r, "session", s)
+
+		out := &cip.InitiateAuthOutput{
+			AuthenticationResult: &cip.AuthenticationResultType{
+				AccessToken:  aws.String("test"),
+				RefreshToken: aws.String("test"),
+			},
+		}
+
+		m.On("Login", "test", "test").Return(out, nil)
+		m.On("AccountDetails", "test").Return(nil)
+		s.On("SetFlash", mock.MatchedBy(func(w http.ResponseWriter) bool {
+			return true
+		}), mock.MatchedBy(func(r *http.Request) bool {
+			return true
+		}), "error", "Wrong username or password")
+
+		Login(w, r)
+
+		assert.Equal(t, http.StatusSeeOther, w.Code)
+
+		m.AssertExpectations(t)
+		s.AssertExpectations(t)
+	})
+
 	t.Run("login success", func(t *testing.T) {
 		m := new(userServiceMock)
 		s := new(sessionMock)
@@ -82,12 +122,17 @@ func TestLogin(t *testing.T) {
 		context.Set(r, "userService", m)
 		context.Set(r, "session", s)
 
-		result := &cip.AuthenticationResultType{}
-		result.SetRefreshToken("test")
-		out := &cip.InitiateAuthOutput{}
-		out.SetAuthenticationResult(result)
+		out := &cip.InitiateAuthOutput{
+			AuthenticationResult: &cip.AuthenticationResultType{
+				AccessToken:  aws.String("test"),
+				RefreshToken: aws.String("test"),
+			},
+		}
 
 		m.On("Login", "test", "test").Return(out, nil)
+		m.On("AccountDetails", "test").Return(&user.User{
+			Username: "test",
+		}, nil)
 		s.On("SetUser", mock.MatchedBy(func(w http.ResponseWriter) bool {
 			return true
 		}), mock.MatchedBy(func(r *http.Request) bool {
