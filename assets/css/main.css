@@ -28,7 +28,6 @@ h1, h2, h3, h4, p {
 }
 
 code {
-  font-size: 95%/150%;
 }
 
 /* Inputs */
@@ -369,9 +368,10 @@ button.button {
   color: #333333;
 }
 
-.container .article p code {
+.container .article code {
   padding: 3px;
-  background-color: lightyellow;
+  background-color: rgba(0, 0, 0, 0.03);
+  font-weight: bold;
 }
 
 .container .article h1,
@@ -391,23 +391,22 @@ button.button {
 }
 
 .container .article pre {
-  padding: 64px;
-  margin-left: -64px;
-  margin-right: -64px;
+  padding: 32px;
   overflow: visible;
   margin-bottom: 2em;
   position: relative;
   overflow: scroll;
-  background-color: rgba(255,255,224, 0.8);
-  border-top: 1px solid #ffd7005c;
-  border-bottom: 1px solid #ffd7005c;
+  border: 1px dashed #cccccc;
   color: #000000;
+  background-color: rgba(0,0,0,0.01);
   letter-spacing: 1px;
-  font-size: 16px;
+  font-size: .95em;
 }
 .container .article pre code {
   tab-size: 2em;
-  line-height: 1.8em;
+  line-height: 1.5em;
+  font-weight: normal;
+  background-color: transparent;
 }
 
 .container .article ul, .container .article ol {
