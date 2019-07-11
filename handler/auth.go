@@ -8,6 +8,7 @@ import (
 	"regexp"
 	"strings"
 
+	"bishack.dev/services/user"
 	"bishack.dev/utils"
 	"bishack.dev/utils/session"
 	cip "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
@@ -228,6 +229,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	u := context.Get(r, "userService").(interface {
 		Login(username, password string) (*cip.InitiateAuthOutput, error)
+		AccountDetails(token string) *user.User
 	})
 
 	out, err := u.Login(username, password)
@@ -240,7 +242,14 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	token := out.AuthenticationResult.RefreshToken
 
-	sess.SetUser(w, r, username, *token)
+	user := u.AccountDetails(*out.AuthenticationResult.AccessToken)
+	if user == nil {
+		sess.SetFlash(w, r, "error", "Wrong username or password")
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	sess.SetUser(w, r, user.Username, *token)
 	sess.SetFlash(w, r, "success", "Welcome Back!")
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
