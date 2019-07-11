@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"gitlab.com/golang-commonmark/markdown"
@@ -16,10 +17,9 @@ const (
 
 func md(input string) template.HTML {
 	md := markdown.New(markdown.Linkify(false))
-	out := template.HTML(md.RenderToString(
-		[]byte(input),
-	))
-	return out
+	out := md.RenderToString([]byte(input))
+	out = strings.Replace(out, "<pre>", "<pre class=\"prettyprint\">", -1)
+	return template.HTML(out)
 }
 
 func date(fmt string, input int64) string {
