@@ -1,8 +1,4 @@
-<p>
-<img src="./public/images/bishack.svg" width="200"/>
-<br/><br/>
-<span>JOIN US ON SLACK</span>
-</p>
+![bishack](./banner.jpg)
 
 &nbsp;
 
