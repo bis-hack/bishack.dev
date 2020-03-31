@@ -38,15 +38,15 @@ func Render(w http.ResponseWriter, base, content string, ctx interface{}) {
 		fmt.Sprintf("assets/templates/layout/%s.tmpl", base),
 		fmt.Sprintf("assets/templates/%s.tmpl", content),
 		// components
-		fmt.Sprintf("assets/templates/components/main-nav.tmpl"),
-		fmt.Sprintf("assets/templates/components/user-card.tmpl"),
-		fmt.Sprintf("assets/templates/components/posts.tmpl"),
+		"assets/templates/components/main-nav.tmpl",
+		"assets/templates/components/user-card.tmpl",
+		"assets/templates/components/posts.tmpl",
 		// stylesheets
-		fmt.Sprintf("assets/css/main.css"),
+		"assets/css/main.css",
 		// scripts
-		fmt.Sprintf("assets/scripts/turbolinks.js"),
-		fmt.Sprintf("assets/scripts/axios.js"),
-		fmt.Sprintf("assets/scripts/main.js"),
+		"assets/scripts/turbolinks.js",
+		"assets/scripts/axios.js",
+		"assets/scripts/main.js",
 	)
 
 	if err != nil {
