@@ -9,6 +9,8 @@ import (
 
 	"bishack.dev/handler"
 	mw "bishack.dev/middleware"
+
+	// autoload env
 	_ "github.com/joho/godotenv/autoload"
 
 	"github.com/gorilla/csrf"

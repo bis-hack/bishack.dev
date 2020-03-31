@@ -11,6 +11,8 @@ import (
 	"bishack.dev/services/user"
 	"bishack.dev/utils/session"
 	"github.com/gorilla/context"
+
+	// autoload env
 	_ "github.com/joho/godotenv/autoload"
 )
 
