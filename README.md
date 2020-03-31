@@ -9,26 +9,28 @@
 &nbsp;
 
 ### Folder Structure
-
-	├── assets/             // Static files (go-bindatable/private)
-	│   ├── css/
-	│   ├── scripts/
-	│   └── templates/
+	.
+	├── assets
+	│   ├── css
+	│   ├── dynamo       // dynamo schemas
+	│   ├── scripts
+	│   └── templates
 	│
-	├── handler/            // Handler package.
-	|
-	├── middleware/         // Middleware central :D
+	├── handler
+	├── middleware
+	├── public
+	│   └── images
 	│
-	├── public/             // For publicly available static content.
-	│   └── images/
+	├── services
+	│   ├── dynamo
+	│   ├── like
+	│   ├── post
+	│   └── user
 	│
-	├── services/           // Anything that does i/o goes here.
-	│   └── user/
+	├── testing
 	│
-	├── testing/            // Includes a nifty little tricks for testing.
-	│
-	└── utils/              // None service related stuff like: session, crypto, etc...
-	    └── session/
+	└── utils
+	    └── session
 &nbsp;
 
 
@@ -65,55 +67,42 @@ If you want to contribute to this project, do **[let me know](https://github.com
 
 &nbsp;
 
-### DynamoDB Setup (local)
-
-> Before you start you need to have **[docker](https://docker.io)** installed on your system first.
-
-1. **Run the the following command:**
-
-	`$ docker run -d -p 8000:8000 amazon/dynamodb-local -jar DynamoDBLocal.jar -inMemory -sharedDb`
-
-	> The above command will run a localized version of dynamodb with shared database.
+### Dev Setup
 
 
-2. **Go to `http://localhost:8000/shell` and copy, paste and run every files inside the `./assets/dynamo` folder.**
+1. **To setup dev environment, just run the following command in your terminal window:**
+
+	**`$ make setup`**
+
+
+2. **Then create a `.env` file with the following content:**
+
+		SLACK_TOKEN=<slack api token (optional)>
+		SESSION_KEY=<32-bytes-key>
+		CSRF_KEY=<32-bytes-key>
+		COGNITO_CLIENT_ID=<ask @penzur>
+		COGNITO_CLIENT_SECRET=<ask @penzur>
+		GITHUB_CLIENT_ID=<ask @penzur>
+		GITHUB_CLIENT_SECRET=<ask @penzur>
+		GITHUB_CALLBACK=http://localhost:3000/signup
+		DYNAMO_TABLE_POSTS=posts
+		DYNAMO_TABLE_LIKES=likes
+		DYNAMO_ENDPOINT=http://localhost:8000
+
+
+3. **Go to `http://localhost:8000/shell` and copy, paste and run every files inside the `./assets/dynamo` folder.**
 
 	> See example below:
 
 	![ss](https://cl.ly/d0ea7b20429e/Screen%252520Recording%2525202019-06-21%252520at%25252003.19%252520PM.gif)
 
 
-&nbsp;
 
-### Dev Setup
+4. **Once ☝🏼 is done, run the dev server with:**
 
-Install a live-reload command line utility called [**Gin**](https://github.com/codegangsta/gin) with the following command:
+	**`$ make dev`**
 
-	$ go get -u github.com/codegangsta/gin
-
-
-And then install [**up**](https://up.docs.apex.sh/).
-
-	$ curl -sf https://up.apex.sh/install | sh
-
-
-Start the server with this command:
-
-	$ SLACK_TOKEN=<slack api token (optional)> \
-	  SESSION_KEY=<32-bytes-key> \
-	  CSRF_KEY=<32-bytes-key> \
-	  COGNITO_CLIENT_ID=<key> \
-	  COGNITO_CLIENT_SECRET=<secret> \
-	  GITHUB_CLIENT_ID=<id> \
-	  GITHUB_CLIENT_SECRET=<secret> \
-	  GITHUB_CALLBACK=http://localhost:3000/signup \
-	  DYNAMO_TABLE_POSTS=posts \
-	  DYNAMO_ENDPOINT=http://localhost:8000 \
-	  make dev
-
-
-
-Head to `http://localhost:3000/` on your browser.
+	> This will launch the hot-reload server.
 
 &nbsp;
 

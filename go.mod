@@ -9,6 +9,7 @@ require (
 	github.com/gorilla/mux v1.7.2 // indirect
 	github.com/gorilla/pat v0.0.0-20180118222023-199c85a7f6d1
 	github.com/gorilla/sessions v1.1.3
+	github.com/joho/godotenv v1.3.0
 	github.com/pkg/errors v0.8.1
 	github.com/russross/blackfriday v2.0.0+incompatible // indirect
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect

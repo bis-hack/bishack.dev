@@ -6,14 +6,50 @@ test: lint
 	@echo
 .PHONY: test
 
+setup:
+	@if [[ ! -x `which go` ]]; then echo '\n  Go is not installed!'; exit; fi;
+	@if [[ ! -x `which docker` ]]; then echo '\n  Docker is not installed!'; exit; fi;
+	@echo
+	@echo ' Setting up development environment'
+	@echo
+	@echo ' [Go]'
+	@echo ' -> downloading go modules...'
+	@$(GO) mod download
+	@echo ' -> downloading golangci-lint...'
+	@cd ~ && curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $$(go env GOPATH)/bin v1.24.0 > /dev/null && cd - > /dev/null
+	@echo ' -> downloading hot-reload program called air...'
+	@cd ~ && go get -u github.com/cosmtrek/air && cd - > /dev/null
+	@echo
+	@echo ' [Apex/Up]'
+	@echo ' -> downloading apex/up...'
+	@curl -sf https://up.apex.sh/install | sh > /dev/null
+	@echo
+	@echo ' [Docker]'
+	@echo ' -> [dynamodb] setting up service...'
+	@docker rm -f dynamo > /dev/null
+	@docker run --name dynamo -d -p 8000:8000 amazon/dynamodb-local -jar DynamoDBLocal.jar -inMemory -sharedDb > /dev/null
+	@echo ' -> [dynamodb] rock en roll!'
+	@echo
+	@echo ' [IMPORTANT!]'
+	@echo ' Create a .env file and ask @penzur for the content'
+	@echo
+	@echo ' Done ✔'
+	@echo
+.PHONY: setup
+
+
 lint:
 	@echo '  -> running golangci_lint'
 	@golangci-lint run
 	@echo
 .PHONY: lint
 
-dev: up.json
+start: up.json
 	@up start
+.PHONY: start
+
+dev: up.json
+	@air
 .PHONY: dev
 
 

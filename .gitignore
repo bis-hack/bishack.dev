@@ -19,3 +19,4 @@ gin-bin
 up.json
 coverage.txt
 .env
+tmp/
