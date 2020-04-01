@@ -88,13 +88,15 @@ If you want to contribute to this project, do **[let me know](https://github.com
 		DYNAMO_TABLE_POSTS=posts
 		DYNAMO_TABLE_LIKES=likes
 		DYNAMO_ENDPOINT=http://localhost:8000
+		AWS_ACCESS_KEY_ID=<ask @penzur>
+		AWS_SECRET_ACCESS_KEY=<ask @penzur>
 
 
 3. **Go to `http://localhost:8000/shell` and copy, paste and run every files inside the `./assets/dynamo` folder.**
 
 	> See example below:
 
-	![ss](https://cl.ly/d0ea7b20429e/Screen%252520Recording%2525202019-06-21%252520at%25252003.19%252520PM.gif)
+	![ss](https://s3.bishack.dev/misc/dynamo.gif)
 
 
 
