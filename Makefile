@@ -49,7 +49,7 @@ start: up.json
 .PHONY: start
 
 dev: up.json
-	@air
+	@up start -c 'air'
 .PHONY: dev
 
 
