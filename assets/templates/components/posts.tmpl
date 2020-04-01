@@ -1,13 +1,7 @@
 {{define "posts"}}
 {{if not .}}
     <div style="text-align:center;padding:64px;">
-        <svg class="x" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-             width="64px"viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
-        <g>
-            <path d="M480,320v128H32V320h78.859l64.016,96h162.25l64-96H480 M384,32H128L0,288v192h512V288L384,32L384,32z M35.781,288l112-224
-                h216.438l112,224H384l-64,96H192l-64.016-96H35.781L35.781,288z"/>
-        <g>
-        </svg>
+        {{template "svg-nopost"}}
         <p style="margin-top:20px"><small>No post yet. Check back later.</small></p>
     </div>
 {{else}}

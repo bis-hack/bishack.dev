@@ -10,6 +10,7 @@
     <meta property="og:description" content="{{if .Description}}{{.Description}}{{else}}We are a community of bisdak developers, designers, tinkerers, and hackers{{end}}" />
     <meta property="og:image" content="{{if .Cover}}{{.Cover}}{{else}}/images/bishack.svg{{end}}" />
     <link rel="icon" type="image/x-icon" href="/images/icon.png" />
+    <link rel="stylesheets" href="/css/main.css" />
     <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
     <style>
     {{template "main.css"}}
@@ -131,7 +132,9 @@
       .fun {
         color: #4271ae;
       }
+
     }
+
     </style>
     <script>
         {{template "axios.js" .}}
