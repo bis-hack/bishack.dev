@@ -42,6 +42,7 @@ func Render(w http.ResponseWriter, base, content string, ctx interface{}) {
 		"assets/templates/components/user-card.tmpl",
 		"assets/templates/components/posts.tmpl",
 		"assets/templates/components/svg.tmpl",
+		"assets/templates/components/css.tmpl",
 		// stylesheets
 		"assets/css/main.css",
 		// scripts
