@@ -116,6 +116,7 @@ header nav.main-nav {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 0 30px;
 }
 
 table {
@@ -238,7 +239,9 @@ button.button {
 .left {
   float: left;
 }
-.clear {
+.clear::after {
+  content: "";
+  display: block;
   clear: both;
 }
 
@@ -334,6 +337,7 @@ button.button {
   box-sizing: border-box;
   padding-top: 108px;
 }
+
 .container .profile {
   width: 320px;
   float: left;
@@ -456,4 +460,22 @@ div.new-form-footer {
   position: absolute;
   width: 100%;
   bottom: 34px;
+}
+
+@media screen and (max-width: 1024px) {
+
+  .wrapper {
+    width: 100% !important;
+  }
+
+  header .wrap{
+    width: 100% !important;
+  }
+
+  header a.logo{
+    width: 100px;
+    height: auto;
+    margin-left: 30px;
+  }
+
 }
