@@ -3,10 +3,16 @@
   padding: 0;
   outline: none;
   border: 0;
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x:hidden;
 }
 
 html, body {
   height: 100%;
+  width: 100%;
 }
 
 hr {
@@ -116,7 +122,6 @@ header nav.main-nav {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 30px;
 }
 
 table {
@@ -217,7 +222,7 @@ button.button {
   height: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: start;
 }
 .card {
   position: relative;
@@ -335,7 +340,12 @@ button.button {
 .container {
   height: 100%;
   box-sizing: border-box;
-  padding-top: 108px;
+  padding-top: 160px;
+}
+
+.container.fixed{
+  width: 1024px;
+  margin: 0 auto;
 }
 
 .container .profile {
@@ -462,6 +472,24 @@ div.new-form-footer {
   bottom: 34px;
 }
 
+/* hero */
+.hero {
+  width: 800px;
+  margin: 0 auto;
+}
+
+.hero .moto{
+  width: 700px;
+  margin: 0 auto;
+  font-weight:normal;
+}
+
+.hero .subtitle{
+  position: relative;
+}
+
+
+
 @media screen and (max-width: 1024px) {
 
   .wrapper {
@@ -469,13 +497,66 @@ div.new-form-footer {
   }
 
   header .wrap{
+    padding: 0 20px;
     width: 100% !important;
   }
 
   header a.logo{
     width: 100px;
     height: auto;
-    margin-left: 30px;
   }
 
+  .container{
+    padding-top: 110px !important;
+  }
+
+  .container.fixed{
+    width: 100%;
+  }
+
+ 
+
+}
+
+@media screen and (max-width: 800px) {
+  
+  .hero {
+    width: 100%;
+    padding: 0 10px;
+  }
+
+  .hero .moto {
+    width: 100%;
+  }
+
+  .hero .subtitle .jira::after{
+    top: 26px;
+    left: -64px;
+  }
+
+}
+
+@media screen and (max-width: 411px){
+  .slack {
+    width: 100% !important;
+    right: 0px !important;
+  }
+}
+
+@media screen and (max-width: 380px) {
+
+  .hero .subtitle .jira::after{
+    top: -102px;
+    left: -96px;
+  }
+  
+}
+
+@media screen and (max-width: 320px) {
+
+  .hero .subtitle .jira::after{
+    top: -102px;
+    left: -116px;
+  }
+  
 }
