@@ -1,6 +1,8 @@
 GO ?= go
 
 test: lint
+	@echo '  -> running test'
+	@$(GO) test -race -coverprofile=coverage.txt -covermode=atomic ./...
 	@echo '  -> running test' @$(GO) test -race -coverprofile=coverage.txt -covermode=atomic ./...
 	@echo
 .PHONY: test
