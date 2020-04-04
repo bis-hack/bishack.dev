@@ -123,7 +123,7 @@
 {{end}}
 {{define "content"}}
     {{if .User}}
-        <div class="container">
+          <div class="wrap">
             <div class="profile">
                 {{template "user-card.tmpl" .User}}
                 <p style="margin-bottom:0;margin-top:32px">
@@ -136,7 +136,7 @@
             <div class="content">
                 {{template "posts" .Posts}}
             </div>
-        </div>
+          </div>
     {{else}}
         <div class="center-flex-box">
             <div class="hero center">
