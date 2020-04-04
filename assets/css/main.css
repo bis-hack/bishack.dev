@@ -349,10 +349,11 @@ button.button {
 }
 
 .container .profile {
-  width: 320px;
+  width: 304px;
   float: left;
   box-sizing: border-box;
 }
+
 .container .content {
   width: 720px;
   float: right;
@@ -514,7 +515,19 @@ div.new-form-footer {
     width: 100%;
   }
 
- 
+  .container .profile{
+    width: 100%;
+  }
+
+  .container .content {
+    width: 100%;
+    padding: 0;
+  }
+
+  .container .wrap{
+    width: 800px;
+    margin: 0 auto;
+  }
 
 }
 
@@ -534,6 +547,9 @@ div.new-form-footer {
     left: -64px;
   }
 
+  .container .wrap{
+    width: 100%;
+  }
 }
 
 @media screen and (max-width: 411px){
