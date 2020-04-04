@@ -46,44 +46,40 @@
     setCount();
 {{end}}
 {{define "content"}}
-    <div class="container">
-        <div class="profile">
-            <div style="margin-right:24px;">
-                <p style="text-align:center">
-                    <img style="border-radius:10000px"width="200px;margin:0 auto" src="{{.User.Picture}}" alt="pic">
-                </p>
-                <p>
-                </p>
-            </div>
-        </div>
-        <div class="content" style="background-color: #FFFFFF;padding: 24px">
-            <form id="profile-form" action="/profile" method="post">
-                {{ .csrfField }}
-                <p>
-                    <label for="name" style="font-weight:bold;display:inline-block;margin-bottom:12px">Name</label>
-                    <input type="text" plceholder="Enter your name" name="name" value="{{.User.Name}}" />
-                </p>
-                <br>
-                <p>
-                    <label for="profile" style="font-weight:bold;display:inline-block;margin-bottom:12px">Bio</label>
-                    <textarea placeholder="Make it as bitchin' as possible" name="profile"/>{{.User.Bio}}</textarea>
-                    <br><small style="color: blue"><strong class="chars">128</strong> characters left</small>
-                </p>
-                <br>
-                <p>
-                    <label for="locale" style="font-weight:bold;display:inline-block;margin-bottom:12px">Location</label>
-                    <input type="text" placeholder="i.e: 127.0.0.1" name="locale" value="{{.User.Location}}" />
-                </p>
-                <br>
-                <p>
-                    <label for="website" style="font-weight:bold;display:inline-block;margin-bottom:12px">Website</label>
-                    <input type="text" placeholder="https://about.me" name="website" value="{{.User.Website}}" />
-                </p>
-                <br>
-                <p>
-                    <button type="submit" class="button primary"><span>Update Profile</span></button>
-                </p>
-            </form>
-        </div>
-    </div>
+<div class="wrap">
+  <div class="profile">
+    <p style="text-align:center">
+      <img style="border-radius:10000px"width="200px;margin:0 auto" src="{{.User.Picture}}" alt="pic">
+    </p>
+  </div>
+  <div class="content" style="background-color: #FFFFFF;padding: 24px">
+    <form id="profile-form" action="/profile" method="post">
+      {{ .csrfField }}
+      <p>
+          <label for="name" style="font-weight:bold;display:inline-block;margin-bottom:12px">Name</label>
+          <input type="text" plceholder="Enter your name" name="name" value="{{.User.Name}}" />
+      </p>
+      <br>
+      <p>
+          <label for="profile" style="font-weight:bold;display:inline-block;margin-bottom:12px">Bio</label>
+          <textarea placeholder="Make it as bitchin' as possible" name="profile"/>{{.User.Bio}}</textarea>
+          <br><small style="color: blue"><strong class="chars">128</strong> characters left</small>
+      </p>
+      <br>
+      <p>
+          <label for="locale" style="font-weight:bold;display:inline-block;margin-bottom:12px">Location</label>
+          <input type="text" placeholder="i.e: 127.0.0.1" name="locale" value="{{.User.Location}}" />
+      </p>
+      <br>
+      <p>
+          <label for="website" style="font-weight:bold;display:inline-block;margin-bottom:12px">Website</label>
+          <input type="text" placeholder="https://about.me" name="website" value="{{.User.Website}}" />
+      </p>
+      <br>
+      <p>
+          <button type="submit" class="button primary"><span>Update Profile</span></button>
+      </p>
+    </form>
+  </div>
+</div>
 {{end}}
