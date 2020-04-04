@@ -461,16 +461,14 @@ textarea.new-form {
   font-size:18px;
   font-family:monospace;
   color:black;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  margin-bottom: 128px;
-  margin-top: 195px;
 }
 div.new-form-footer {
-  position: absolute;
   width: 100%;
   bottom: 34px;
+}
+
+.new-form-footer .form-cover{
+  width: 75%;
 }
 
 /* hero */
@@ -548,6 +546,10 @@ div.new-form-footer {
   }
 
   .container .wrap{
+    width: 100%;
+  }
+
+  .new-form-footer .form-cover{
     width: 100%;
   }
 }
