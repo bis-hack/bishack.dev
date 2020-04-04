@@ -8,6 +8,9 @@ import (
 	"strings"
 	"time"
 
+	// autoload env
+	_ "github.com/joho/godotenv/autoload"
+
 	"gitlab.com/golang-commonmark/markdown"
 )
 

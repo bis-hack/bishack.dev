@@ -132,7 +132,8 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 
 	// check for oauth code from github
 	if code != "" {
-		resp, err := client.PostForm(utils.GithubEndpoint(code), url.Values{})
+		ep := utils.GithubEndpoint(code)
+		resp, err := client.PostForm(ep, url.Values{})
 		if err != nil {
 			sess.SetFlash(w, r, "error", "Invalid or expired code")
 			http.Redirect(w, r, r.RequestURI, http.StatusSeeOther)

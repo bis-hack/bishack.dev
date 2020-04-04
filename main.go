@@ -47,13 +47,15 @@ func main() {
 	r.Get("/verify", handler.Verify)
 	r.Get("/login", handler.LoginForm)
 	r.Get("/logout", handler.Logout)
-	r.Get("/slack-invite", handler.SlackInvite)
 	r.Post("/signup", handler.FinishSignup)
 	r.Post("/login", handler.Login)
 
 	// profile
 	r.Get("/profile", handler.Profile)
 	r.Post("/profile", handler.UpdateProfile)
+
+	// like
+	r.Put("/like/{id}", handler.ToggleLike)
 
 	// slack
 	r.Get("/slack-invite", handler.SlackInvite)
@@ -64,12 +66,7 @@ func main() {
 	r.Get("/new", handler.New)
 	r.Post("/new", handler.CreatePost)
 	r.Get("/{username}/{id}", handler.GetPost)
-
-	// user
 	r.Get("/{username}", handler.GetUserPosts)
-
-	// like
-	r.Put("/like/{id}", handler.ToggleLike)
 
 	// on local
 	if !isLive {
@@ -90,6 +87,14 @@ func main() {
 	port := ":" + os.Getenv("PORT")
 	log.Fatal(http.ListenAndServe(
 		port,
-		protect(mw.Context(mw.Token(mw.SessionUser(mw.AuthRedirects(r))))),
+		protect(
+			mw.Context(
+				mw.Token(
+					mw.SessionUser(
+						mw.AuthRedirects(r),
+					),
+				),
+			),
+		),
 	))
 }

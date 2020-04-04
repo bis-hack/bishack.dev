@@ -1,8 +1,7 @@
 GO ?= go
 
 test: lint
-	@echo '  -> running test'
-	@$(GO) test -race -coverprofile=coverage.txt -covermode=atomic ./...
+	@echo '  -> running test' @$(GO) test -race -coverprofile=coverage.txt -covermode=atomic ./...
 	@echo
 .PHONY: test
 
@@ -26,7 +25,7 @@ setup:
 	@echo
 	@echo ' [Docker]'
 	@echo ' -> [dynamodb] setting up service...'
-	# @docker rm -f dynamo > /dev/null 2>&1
+	@docker rm -f dynamo > /dev/null 2>&1
 	@docker run --name dynamo -d -p 8000:8000 amazon/dynamodb-local -jar DynamoDBLocal.jar -inMemory -sharedDb > /dev/null
 	@echo ' -> [dynamodb] rock en roll!'
 	@echo
@@ -44,12 +43,8 @@ lint:
 	@echo
 .PHONY: lint
 
-start: up.json
-	@up start
-.PHONY: start
-
-dev: up.json
-	@up start -c 'air'
+dev:
+	@air
 .PHONY: dev
 
 

@@ -32,6 +32,7 @@ func New(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// UpdatePost ...
 func UpdatePost(w http.ResponseWriter, r *http.Request) {
 	_ = r.ParseForm()
 

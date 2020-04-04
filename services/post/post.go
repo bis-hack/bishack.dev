@@ -44,7 +44,7 @@ func (c *Client) GetCount() int64 {
 	return *resp.Table.ItemCount
 }
 
-// UpdatePost
+// UpdatePost ...
 func (c *Client) UpdatePost(
 	id,
 	cover,

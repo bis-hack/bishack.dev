@@ -6,6 +6,9 @@ import (
 	"os"
 	"strings"
 
+	// autoload env
+	_ "github.com/joho/godotenv/autoload"
+
 	"github.com/gorilla/sessions"
 )
 
