@@ -70,3 +70,14 @@ func (m *MockedUserService) UpdateUserAttributes(in *cip.UpdateUserAttributesInp
 
 	return resp.(*cip.UpdateUserAttributesOutput), args.Error(1)
 }
+
+func (m *MockedUserService) ChangePassword(in *cip.ChangePasswordInput) (*cip.ChangePasswordOutput, error) {
+	args := m.Called(in)
+
+	resp := args.Get(0)
+	if resp == nil {
+		return nil, args.Error(1)
+	}
+
+	return resp.(*cip.ChangePasswordOutput), args.Error(1)
+}
