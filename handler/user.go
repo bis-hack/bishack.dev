@@ -133,3 +133,63 @@ func UpdateProfile(w http.ResponseWriter, r *http.Request) {
 	sess.SetFlash(w, r, "success", "Profile Updated")
 	http.Redirect(w, r, "/profile", http.StatusSeeOther)
 }
+
+// Security ...
+func Security(w http.ResponseWriter, r *http.Request) {
+
+	sess := context.Get(r, "session").(interface {
+		GetFlash(w http.ResponseWriter, r *http.Request) *session.Flash
+	})
+
+	// get user details from context
+	user := context.Get(r, "user")
+
+	if user == nil {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	utils.Render(w, "main", "security-form", map[string]interface{}{
+		"Title":          "Change Password",
+		"Flash":          sess.GetFlash(w, r),
+		"User":           user,
+		csrf.TemplateTag: csrf.TemplateField(r),
+	})
+}
+
+// ChangePassword ...
+func ChangePassword(w http.ResponseWriter, r *http.Request) {
+	token := context.Get(r, "token")
+	if token == nil {
+		http.Redirect(w, r, "/login", http.StatusSeeOther)
+		return
+	}
+
+	_ = r.ParseForm()
+
+	oldpass := r.FormValue("old")
+	newpass := r.FormValue("new")
+	confirmpass := r.FormValue("confirm")
+	sess := context.Get(r, "session").(interface {
+		SetFlash(w http.ResponseWriter, r *http.Request, t, v string)
+	})
+
+	if newpass != confirmpass {
+		sess.SetFlash(w, r, "error", "Password confirmation doesn't match the password")
+		http.Redirect(w, r, "/security", http.StatusSeeOther)
+		return
+	}
+
+	us := context.Get(r, "userService").(interface {
+		ChangePassword(token, previous, proposed string) (*cip.ChangePasswordOutput, error)
+	})
+
+	if _, err := us.ChangePassword(token.(string), oldpass, newpass); err != nil {
+		sess.SetFlash(w, r, "error", err.Error())
+		http.Redirect(w, r, "/security", http.StatusSeeOther)
+		return
+	}
+
+	sess.SetFlash(w, r, "success", "Password Successfully Updated")
+	http.Redirect(w, r, "/security", http.StatusSeeOther)
+}

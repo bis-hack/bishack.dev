@@ -64,6 +64,17 @@ func (o *userServiceMock) UpdateUser(token string, attrs map[string]string) (*ci
 	return resp.(*cip.UpdateUserAttributesOutput), args.Error(1)
 }
 
+func (o *userServiceMock) ChangePassword(token, previous, proposed string) (*cip.ChangePasswordOutput, error) {
+	args := o.Called(token, previous, proposed)
+
+	resp := args.Get(0)
+	if resp == nil {
+		return nil, args.Error(1)
+	}
+
+	return resp.(*cip.ChangePasswordOutput), args.Error(1)
+}
+
 func (o *userServiceMock) GetUser(username string) *user.User {
 	args := o.Called(username)
 
