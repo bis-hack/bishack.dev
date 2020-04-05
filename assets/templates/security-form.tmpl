@@ -1,0 +1,77 @@
+{{define "style"}}
+{{end}}
+{{define "script"}}
+    const form = document.querySelector('form#security-form');
+    form && form.addEventListener('submit', (e) => {
+        console.log("Hello!!!")
+        const om = e.target.old;
+        const nm = e.target.new;
+        const cm = e.target.confirm;
+
+        const old = om.value.trim();
+        const newpass = nm.value.trim();
+        const confirm = cm.value.trim();
+
+        om.style.borderColor = 'blue'; // reset color
+        if (!old) {
+            om.style.borderColor = 'red';
+            om.focus();
+            e.preventDefault();
+            return false;
+        }
+
+        nm.style.borderColor = 'blue'; // reset color
+        if (!newpass || !newpass.match(/[0-9]/g) || !newpass.match(/[a-zA-Z]/g)) {
+            nm.style.borderColor = 'red';
+            nm.focus();
+            e.preventDefault();
+            return false;
+        }
+
+        cm.style.borderColor = 'blue'; // reset color
+        if (!confirm || !confirm.match(/[0-9]/g) || !confirm.match(/[a-zA-Z]/g)) {
+            cm.style.borderColor = 'red';
+            cm.focus();
+            e.preventDefault();
+            return false;
+        }
+
+    });
+
+{{end}}
+{{define "content"}}
+    <div class="container">
+        <div class="profile">
+            <div style="margin-right:24px;">
+                <p style="text-align:center">
+                    <img style="border-radius:10000px"width="200px;margin:0 auto" src="{{.User.Picture}}" alt="pic">
+                </p>
+                <p>
+                </p>
+            </div>
+        </div>
+        <div class="content" style="background-color: #FFFFFF;padding: 24px">
+            <form id="security-form" action="/security" method="post">
+                {{ .csrfField }}
+                <p>
+                    <label for="old" style="font-weight:bold;display:inline-block;margin-bottom:12px">Old password</label>
+                    <input type="password" name="old" />
+                </p>
+                <br>
+                <p>
+                    <label for="new" style="font-weight:bold;display:inline-block;margin-bottom:12px">New password</label>
+                    <input type="password" name="new"/>
+                </p>
+                <br>
+                <p>
+                    <label for="confirm" style="font-weight:bold;display:inline-block;margin-bottom:12px">Confirm new password</label>
+                    <input type="password" name="confirm"/>
+                </p>
+                <br>
+                <p>
+                    <button type="submit" class="button primary"><span>Update Password</span></button>
+                </p>
+            </form>
+        </div>
+    </div>
+{{end}}
