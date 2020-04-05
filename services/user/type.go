@@ -10,6 +10,7 @@ type Provider interface {
 	GetUser(*cip.GetUserInput) (*cip.GetUserOutput, error)
 	AdminGetUser(*cip.AdminGetUserInput) (*cip.AdminGetUserOutput, error)
 	UpdateUserAttributes(*cip.UpdateUserAttributesInput) (*cip.UpdateUserAttributesOutput, error)
+	ChangePassword(*cip.ChangePasswordInput) (*cip.ChangePasswordOutput, error)
 }
 
 // Client main struct
