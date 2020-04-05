@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awserr"
 	cip "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -210,6 +211,76 @@ func TestGetToken(t *testing.T) {
 
 		assert.Nil(t, err)
 		assert.Equal(t, "testing", token)
+		to.AssertExpectations(t)
+	})
+}
+
+func TestChangePassword(t *testing.T) {
+	t.Run("wrong pass", func(t *testing.T) {
+		to := new(MockedUserService)
+		client := New("id", "secret")
+		client.Provider = to
+
+		to.On(
+			"ChangePassword",
+			mock.MatchedBy(func(in *cip.ChangePasswordInput) bool {
+				return true
+			}),
+		).Return(&cip.ChangePasswordOutput{}, awserr.New(cip.ErrCodeNotAuthorizedException, "some error message", nil))
+
+		_, err := client.ChangePassword("some_token", "wrongpassword", "newpassword")
+		assert.NotNil(t, err)
+	})
+
+	t.Run("invalid pass format", func(t *testing.T) {
+		to := new(MockedUserService)
+		client := New("id", "secret")
+		client.Provider = to
+
+		to.On(
+			"ChangePassword",
+			mock.MatchedBy(func(in *cip.ChangePasswordInput) bool {
+				return true
+			}),
+		).Return(&cip.ChangePasswordOutput{}, awserr.New(cip.ErrCodeInvalidPasswordException, "some error message", nil))
+
+		_, err := client.ChangePassword("some_token", "correctpassword", "short")
+
+		assert.NotNil(t, err)
+	})
+
+	t.Run("request limit exceeded", func(t *testing.T) {
+		to := new(MockedUserService)
+		client := New("id", "secret")
+		client.Provider = to
+
+		to.On(
+			"ChangePassword",
+			mock.MatchedBy(func(in *cip.ChangePasswordInput) bool {
+				return true
+			}),
+		).Return(&cip.ChangePasswordOutput{}, awserr.New(cip.ErrCodeLimitExceededException, "some error message", nil))
+
+		_, err := client.ChangePassword("some_token", "correctpassword", "short")
+
+		assert.NotNil(t, err)
+	})
+
+	t.Run("ok", func(t *testing.T) {
+		to := new(MockedUserService)
+		client := New("id", "secret")
+		client.Provider = to
+		to.On(
+			"ChangePassword",
+			mock.MatchedBy(func(in *cip.ChangePasswordInput) bool {
+				return true
+			}),
+		).Return(&cip.ChangePasswordOutput{}, nil)
+
+		o, err := client.ChangePassword("some_token", "oldpassword", "newpassword")
+
+		assert.NotNil(t, o)
+		assert.Nil(t, err)
 		to.AssertExpectations(t)
 	})
 }

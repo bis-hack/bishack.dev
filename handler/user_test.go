@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"regexp"
 	"testing"
 
@@ -205,5 +206,171 @@ func TestUpdateProfile(t *testing.T) {
 		UpdateProfile(w, r)
 
 		assert.Equal(t, http.StatusSeeOther, w.Code)
+	})
+}
+
+func TestChangePassword(t *testing.T) {
+	t.Run("show form", func(t *testing.T) {
+		s := new(sessionMock)
+		w := httptest.NewRecorder()
+		r, _ := http.NewRequest(http.MethodGet, "/security", nil)
+
+		context.Set(r, "session", s)
+		context.Set(r, "user", map[string]string{})
+
+		s.On("GetFlash", mock.MatchedBy(func(w http.ResponseWriter) bool {
+			return true
+		}), mock.MatchedBy(func(r *http.Request) bool {
+			return true
+		})).Return(nil)
+
+		Security(w, r)
+
+		assert.Regexp(t, regexp.MustCompile("security-form"), w.Body.String())
+		s.AssertExpectations(t)
+	})
+
+	t.Run("user nil", func(t *testing.T) {
+		s := new(sessionMock)
+		w := httptest.NewRecorder()
+		r, _ := http.NewRequest(http.MethodGet, "/security", nil)
+
+		context.Set(r, "session", s)
+		context.Set(r, "user", nil)
+
+		s.On("GetFlash", mock.MatchedBy(func(w http.ResponseWriter) bool {
+			return true
+		}), mock.MatchedBy(func(r *http.Request) bool {
+			return true
+		})).Return(nil)
+
+		Security(w, r)
+
+		assert.Equal(t, http.StatusSeeOther, w.Code)
+	})
+
+	t.Run("nil token", func(t *testing.T) {
+		w := httptest.NewRecorder()
+		r, _ := http.NewRequest(http.MethodPost, "/security", nil)
+
+		ChangePassword(w, r)
+
+		assert.Equal(t, http.StatusSeeOther, w.Code)
+	})
+
+	t.Run("password mismatch", func(t *testing.T) {
+		s := new(sessionMock)
+
+		w := httptest.NewRecorder()
+		r, _ := http.NewRequest(http.MethodPost, "/security", nil)
+
+		form := url.Values{}
+		form.Add("old", "old_password")
+		form.Add("new", "new_password")
+		form.Add("confirm", "new_passw0rd")
+		r.PostForm = form
+
+		context.Set(r, "token", "test")
+		context.Set(r, "session", s)
+
+		s.On("SetFlash", mock.MatchedBy(func(w http.ResponseWriter) bool {
+			return true
+		}), mock.MatchedBy(func(r *http.Request) bool {
+			return true
+		}), "error", "Password confirmation doesn't match the password")
+
+		ChangePassword(w, r)
+		s.AssertExpectations(t)
+		assert.Equal(t, http.StatusSeeOther, w.Code)
+	})
+
+	t.Run("incorrect password", func(t *testing.T) {
+		s := new(sessionMock)
+		u := new(userServiceMock)
+
+		w := httptest.NewRecorder()
+		r, _ := http.NewRequest(http.MethodPost, "/security", nil)
+
+		form := url.Values{}
+		form.Add("old", "incorrect_password")
+		form.Add("new", "new_password")
+		form.Add("confirm", "new_password")
+		r.PostForm = form
+
+		context.Set(r, "token", "test")
+		context.Set(r, "session", s)
+		context.Set(r, "userService", u)
+
+		u.On("ChangePassword", "test", "incorrect_password", "new_password").Return(nil, errors.New("Incorrect Password"))
+		s.On("SetFlash", mock.MatchedBy(func(w http.ResponseWriter) bool {
+			return true
+		}), mock.MatchedBy(func(r *http.Request) bool {
+			return true
+		}), "error", "Incorrect Password")
+
+		ChangePassword(w, r)
+
+		u.AssertExpectations(t)
+		s.AssertExpectations(t)
+	})
+
+	t.Run("invalid password", func(t *testing.T) {
+		s := new(sessionMock)
+		u := new(userServiceMock)
+
+		w := httptest.NewRecorder()
+		r, _ := http.NewRequest(http.MethodPost, "/security", nil)
+
+		form := url.Values{}
+		form.Add("old", "pass")
+		form.Add("new", "passs")
+		form.Add("confirm", "passs")
+		r.PostForm = form
+
+		context.Set(r, "token", "test")
+		context.Set(r, "session", s)
+		context.Set(r, "userService", u)
+
+		u.On("ChangePassword", "test", "pass", "passs").Return(nil, errors.New("Invalid Password"))
+		s.On("SetFlash", mock.MatchedBy(func(w http.ResponseWriter) bool {
+			return true
+		}), mock.MatchedBy(func(r *http.Request) bool {
+			return true
+		}), "error", "Invalid Password")
+
+		ChangePassword(w, r)
+
+		u.AssertExpectations(t)
+		s.AssertExpectations(t)
+	})
+
+	t.Run("ok", func(t *testing.T) {
+		s := new(sessionMock)
+		u := new(userServiceMock)
+
+		w := httptest.NewRecorder()
+		r, _ := http.NewRequest(http.MethodPost, "/security", nil)
+
+		form := url.Values{}
+		form.Add("old", "old_password")
+		form.Add("new", "new_password")
+		form.Add("confirm", "new_password")
+		r.PostForm = form
+
+		context.Set(r, "token", "test")
+		context.Set(r, "session", s)
+		context.Set(r, "userService", u)
+
+		u.On("ChangePassword", "test", "old_password", "new_password").Return(&cip.ChangePasswordOutput{}, nil)
+		s.On("SetFlash", mock.MatchedBy(func(w http.ResponseWriter) bool {
+			return true
+		}), mock.MatchedBy(func(r *http.Request) bool {
+			return true
+		}), "success", "Password Successfully Updated")
+
+		ChangePassword(w, r)
+
+		u.AssertExpectations(t)
+		s.AssertExpectations(t)
 	})
 }

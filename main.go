@@ -54,6 +54,10 @@ func main() {
 	r.Get("/profile", handler.Profile)
 	r.Post("/profile", handler.UpdateProfile)
 
+	// security
+	r.Get("/security", handler.Security)
+	r.Post("/security", handler.ChangePassword)
+
 	// like
 	r.Put("/like/{id}", handler.ToggleLike)
 

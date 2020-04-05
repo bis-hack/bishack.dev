@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/session"
 	cip "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
 	"github.com/pkg/errors"
@@ -150,6 +151,35 @@ func (c *Client) UpdateUser(token string, attributes map[string]string) (*cip.Up
 	input.SetUserAttributes(userAttributes)
 
 	return c.Provider.UpdateUserAttributes(input)
+}
+
+// ChangePassword ...
+func (c *Client) ChangePassword(
+	token,
+	previous,
+	proposed string) (*cip.ChangePasswordOutput, error) {
+
+	input := &cip.ChangePasswordInput{}
+	input.SetAccessToken(token)
+	input.SetPreviousPassword(previous)
+	input.SetProposedPassword(proposed)
+
+	out, err := c.Provider.ChangePassword(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			var errmsg string
+			switch aerr.Code() {
+			case cip.ErrCodeNotAuthorizedException:
+				errmsg = "Password is incorrect"
+			case cip.ErrCodeInvalidPasswordException:
+				errmsg = "Password must be atleast six characters"
+			case cip.ErrCodeLimitExceededException:
+				errmsg = "Change password request limit reached, try again later"
+			}
+			return out, errors.New(errmsg)
+		}
+	}
+	return out, nil
 }
 
 //
