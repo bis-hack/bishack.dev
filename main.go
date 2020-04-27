@@ -11,6 +11,7 @@ import (
 	mw "bishack.dev/middleware"
 
 	// autoload env
+	"github.com/aws/aws-xray-sdk-go/xray"
 	_ "github.com/joho/godotenv/autoload"
 
 	"github.com/gorilla/csrf"
@@ -91,11 +92,14 @@ func main() {
 	port := ":" + os.Getenv("PORT")
 	log.Fatal(http.ListenAndServe(
 		port,
-		protect(
-			mw.Context(
-				mw.Token(
-					mw.SessionUser(
-						mw.AuthRedirects(r),
+		xray.Handler(
+			xray.NewFixedSegmentNamer("bishack.dev"),
+			protect(
+				mw.Context(
+					mw.Token(
+						mw.SessionUser(
+							mw.AuthRedirects(r),
+						),
 					),
 				),
 			),
