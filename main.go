@@ -94,15 +94,7 @@ func main() {
 		port,
 		xray.Handler(
 			xray.NewFixedSegmentNamer("bishack.dev"),
-			protect(
-				mw.Context(
-					mw.Token(
-						mw.SessionUser(
-							mw.AuthRedirects(r),
-						),
-					),
-				),
-			),
+			protect(mw.Context(mw.Token(mw.SessionUser(mw.AuthRedirects(r))))),
 		),
 	))
 }
