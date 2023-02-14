@@ -3,7 +3,7 @@ module bishack.dev
 go 1.12
 
 require (
-	github.com/aws/aws-sdk-go v1.30.14
+	github.com/aws/aws-sdk-go v1.34.0
 	github.com/aws/aws-xray-sdk-go v1.0.0
 	github.com/gorilla/context v1.1.1
 	github.com/gorilla/csrf v1.5.1
