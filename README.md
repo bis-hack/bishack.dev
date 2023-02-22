@@ -34,7 +34,6 @@
 &nbsp;
 
 
-### Foreword
 
 This application heavily relies on managed external services like: Cognito, DynamoDB, Lambda et cetera. So setting up a local development environment for this project needs a bit of an extra work.
 
