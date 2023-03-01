@@ -50,7 +50,7 @@ dev:
 .PHONY: dev
 
 
-deploy: test up clean
+deploy: test clean
 	@echo "  -> done ✓"
 .PHONY: deploy
 
